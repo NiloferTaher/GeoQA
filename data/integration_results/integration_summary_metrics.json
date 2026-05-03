@@ -1,0 +1,41 @@
+{
+  "run_date": "2026-03-18",
+  "profiles": [
+    {
+      "name": "natural_earth_countries_crs",
+      "status": "ok",
+      "run_date": "2026-03-18",
+      "started_at": "2026-03-18T16:59:37",
+      "duration_seconds": 4.194,
+      "memory_before_mb": null,
+      "memory_after_mb": null,
+      "expected_behavior": [
+        "Dataset should load successfully.",
+        "CRS validation should complete and write a report even when no issues are found."
+      ],
+      "dataset_metrics": {
+        "dataset_path": "G:\\My Drive\\Python-G-drive\\GeoQA\\data\\public_samples\\natural_earth\\ne_110m_admin_0_countries\\ne_110m_admin_0_countries.shp",
+        "file_size_bytes": 180924,
+        "feature_count": 177,
+        "column_count": 169,
+        "crs": "EPSG:4326",
+        "geometry_types": {
+          "Polygon": 148,
+          "MultiPolygon": 29
+        }
+      },
+      "thermal_snapshot_post": {
+        "max_temp_c": 61.0,
+        "avg_temp_c": 59.285714285714285,
+        "sensor_count": 14,
+        "source": "coretemp"
+      },
+      "result": {
+        "issues": [],
+        "report_path": "G:\\My Drive\\Python-G-drive\\GeoQA\\data\\integration_results\\natural_earth_countries_crs.json",
+        "fixed": false,
+        "expected_crs": "EPSG:4326"
+      }
+    }
+  ]
+}

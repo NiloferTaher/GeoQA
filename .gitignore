@@ -1,0 +1,4 @@
+data/large_public_samples/ 
+__pycache__/ 
+.geoqa_cache/ 
+"*.pyc" 

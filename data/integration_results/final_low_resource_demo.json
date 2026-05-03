@@ -1,0 +1,165 @@
+{
+  "validation_rule_version": "2026.03",
+  "issue_count": 2,
+  "summary": {
+    "validation_rule_version": "2026.03",
+    "issue_count": 2,
+    "total_issues": 2,
+    "actionable": 2,
+    "informational": 0,
+    "actionable_ratio": 1.0,
+    "by_problem": {
+      "duplicate_vertex": 1,
+      "missing_or_stale_spatial_index": 1
+    },
+    "problem_breakdown": [
+      {
+        "name": "duplicate_vertex",
+        "count": 1,
+        "percent": 50.0
+      },
+      {
+        "name": "missing_or_stale_spatial_index",
+        "count": 1,
+        "percent": 50.0
+      }
+    ],
+    "by_severity": {
+      "high": 1,
+      "medium": 1
+    },
+    "severity_distribution": [
+      {
+        "name": "high",
+        "count": 1,
+        "percent": 50.0
+      },
+      {
+        "name": "medium",
+        "count": 1,
+        "percent": 50.0
+      }
+    ],
+    "by_issue_class": {
+      "data_issue": 2
+    },
+    "by_validator": {
+      "duplicate_vertex": 1,
+      "missing_or_stale_spatial_index": 1
+    },
+    "by_iso_category": {
+      "Logical Consistency": 2
+    },
+    "by_root_cause": {
+      "geometry": 1,
+      "integrity": 1
+    },
+    "by_priority_band": {
+      "high": 1,
+      "medium": 1
+    },
+    "top_issues": [
+      {
+        "problem_name": "duplicate_vertex",
+        "count": 1,
+        "percent": 50.0
+      },
+      {
+        "problem_name": "missing_or_stale_spatial_index",
+        "count": 1,
+        "percent": 50.0
+      }
+    ],
+    "top_actionable": [
+      {
+        "problem_name": "duplicate_vertex",
+        "feature_id": 1,
+        "severity": "high",
+        "confidence": "high",
+        "priority_score": 75
+      },
+      {
+        "problem_name": "missing_or_stale_spatial_index",
+        "feature_id": null,
+        "severity": "medium",
+        "confidence": "medium",
+        "priority_score": 40
+      }
+    ],
+    "suppressed_issue_count": 0,
+    "execution_status": "full",
+    "execution_reason": null,
+    "validators_attempted": [
+      "duplicate_vertex",
+      "null_geometry",
+      "self_intersection",
+      "invalid_crs",
+      "missing_crs",
+      "missing_spatial_index",
+      "outdated_index"
+    ],
+    "validators_completed": [
+      "duplicate_vertex",
+      "null_geometry",
+      "self_intersection",
+      "invalid_crs",
+      "missing_crs",
+      "missing_spatial_index",
+      "outdated_index"
+    ],
+    "validators_deferred": [],
+    "partial_result": false,
+    "operator_next_steps": [
+      "Review the highest-volume issue first: duplicate_vertex.",
+      "Low-resource mode favors actionable checks first; rerun without it if you need the fullest audit signal."
+    ]
+  },
+  "issues": [
+    {
+      "problem_name": "duplicate_vertex",
+      "severity": "high",
+      "description": "Two consecutive vertices are identical, creating redundant geometry and potential validity issues.",
+      "solution_hint": "Remove repeated points using QGIS, FME, or PostGIS ST_RemoveRepeatedPoints.",
+      "feature_id": 1,
+      "geometry": "LINESTRING (0 0, 1 1, 1 1, 2 2)",
+      "issue_id": "7ce4fcfdacb187c2",
+      "validation_rule_version": "2026.03",
+      "validator_name": "duplicate_vertex",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "geometry",
+        "profile": "generic_quick",
+        "family": "geometry"
+      },
+      "iso_category": "Logical Consistency",
+      "confidence": "high",
+      "actionable": true,
+      "priority_score": 75
+    },
+    {
+      "problem_name": "missing_or_stale_spatial_index",
+      "severity": "medium",
+      "description": "The layer does not appear to have a usable spatial index.",
+      "solution_hint": "Create or rebuild the spatial index before running large spatial queries or overlays.",
+      "feature_id": null,
+      "geometry": null,
+      "issue_id": "0fa8c5e577b91a39",
+      "validation_rule_version": "2026.03",
+      "validator_name": "missing_or_stale_spatial_index",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "integrity",
+        "profile": "generic_quick",
+        "family": "integrity"
+      },
+      "iso_category": "Logical Consistency",
+      "confidence": "medium",
+      "actionable": true,
+      "priority_score": 40
+    }
+  ]
+}

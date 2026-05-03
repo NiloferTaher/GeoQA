@@ -1,0 +1,75 @@
+{
+  "dataset": "C:\\Users\\admin\\Downloads\\Training-Data\\Batinah_North\\Small_Network_Assets\\DMA_Edited\\dma_batinah_north_aug_2025.shp",
+  "dataset_type": "crs",
+  "profile": "dma_runtime_crs_quick",
+  "feature_count": 49,
+  "first_issue_count": 0,
+  "second_issue_count": 0,
+  "issues": [],
+  "events": [
+    {
+      "index": 1,
+      "total": 2,
+      "validator_name": "missing_crs",
+      "status": "started",
+      "issue_count": null,
+      "cache_hit": false
+    },
+    {
+      "index": 2,
+      "total": 2,
+      "validator_name": "invalid_crs",
+      "status": "started",
+      "issue_count": null,
+      "cache_hit": false
+    },
+    {
+      "index": 1,
+      "total": 2,
+      "validator_name": "missing_crs",
+      "status": "completed",
+      "issue_count": 0,
+      "cache_hit": false
+    },
+    {
+      "index": 2,
+      "total": 2,
+      "validator_name": "invalid_crs",
+      "status": "completed",
+      "issue_count": 0,
+      "cache_hit": false
+    },
+    {
+      "index": 1,
+      "total": 2,
+      "validator_name": "missing_crs",
+      "status": "started",
+      "issue_count": null,
+      "cache_hit": false
+    },
+    {
+      "index": 1,
+      "total": 2,
+      "validator_name": "missing_crs",
+      "status": "completed",
+      "issue_count": 0,
+      "cache_hit": true
+    },
+    {
+      "index": 2,
+      "total": 2,
+      "validator_name": "invalid_crs",
+      "status": "started",
+      "issue_count": null,
+      "cache_hit": false
+    },
+    {
+      "index": 2,
+      "total": 2,
+      "validator_name": "invalid_crs",
+      "status": "completed",
+      "issue_count": 0,
+      "cache_hit": true
+    }
+  ]
+}

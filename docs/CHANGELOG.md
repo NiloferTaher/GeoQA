@@ -1,0 +1,584 @@
+# GeoQA Changelog
+
+This changelog is the public-facing summary of notable project changes.
+
+For the full internal build history, design rationale, and implementation notes, see:
+- `journal.md` in the project root
+
+## Unreleased
+
+### Added
+- `docs/before_after_showcase.md` with a verified public before/after cleaning story using the existing duplicate-vertex sample.
+- `docs/workflows/water_network_ml_prep.md` describing where GeoQA fits in a utility-network-to-ML preparation workflow.
+- A clean public Python API layer:
+  - `geoqa.validate(...)`
+  - `geoqa.score(...)`
+  - `GeoQAReport`
+  - `geoqa.expect.valid_crs(...)`
+  - `geoqa.expect.no_null_geometry(...)`
+  - `geoqa.expect.no_self_intersections(...)`
+  - `geoqa.check(path)...`
+- Scalable expectation namespaces:
+  - `geoqa.expect.geometry.valid(...)`
+  - `geoqa.expect.geometry.clean(...)`
+  - `geoqa.expect.topology.clean(...)`
+  - `geoqa.expect.topology.connected(...)`
+  - `geoqa.expect.attributes.complete(...)`
+  - `geoqa.expect.attributes.unique(...)`
+  - `geoqa.expect.crs.valid(...)`
+- `examples/basic_usage.py` showing the new top-level Python API.
+- `examples/story_geoai_prep.py` showing the report-oriented workflow.
+- `examples/before_after_cleaning.py` showing the validate -> inspect -> clean -> export story.
+
+### Changed
+- README, Start Here, and supporting docs now position GeoQA more explicitly as the data-quality layer before downstream GeoAI/ML work.
+- future-only architecture and staged execution notes now live under `docs/future/` so shipped guidance stays separate from speculative planning
+- `geoqa.validate(...)` now returns a first-class `GeoQAReport` object instead of exposing the raw execution result directly.
+- `GeoQAReport` now behaves more like a data object:
+  - `report.summary` is a property
+  - `report.issues` is a property
+  - `report.score(method=...)` reuses the existing issues without rerunning validation
+  - `report.fix()` returns a conservative exportable fixed-layer wrapper
+- planning docs now record a later explicit `run_plugins_on_partial` option for best-effort domain validation on budget-/thermal-limited runs, while keeping current default plugin execution conservative
+  - `GeoQAFixedLayer.export(...)` can infer output format from the target path
+- Added `report.clean()` as a readable alias for `report.fix()`.
+- README, Start Here, and benchmark story now lead with the simpler one-line positioning:
+  - GeoQA prepares geospatial datasets for AI by detecting, explaining, and fixing data quality issues.
+- Expectation calls now return a consistent list-like `ExpectationResult` with a no-argument `.count()` helper.
+- Top-level `geoqa` exports are now centered on the simple public API while keeping a small compatibility bridge for older thermal/script imports.
+- Direct `input()` prompts were removed from `geoqa.agent` and `geoqa.interactive_validation` entrypoints so the core library no longer depends on interactive terminal input.
+- Latest targeted API verification (kept lightweight to avoid thermal pressure on the maintainer workstation):
+  - `python -m unittest tests.test_public_api`
+  - result: `OK` (`10` tests)
+
+### Added
+- Water-network pack summaries now include:
+  - junction counts
+  - terminal-endpoint counts
+  - threshold values
+  - clearer schema-coverage explanations
+- Adaptive accuracy tuning tests in:
+  - `tests.test_accuracy_validation`
+
+### Changed
+- Low-resource execution now uses cost-aware validator ordering so high-value lower-cost checks are attempted earlier on constrained runs.
+- Precision validation is now more context-aware:
+  - coordinate precision can adapt to CRS and dataset extent
+  - XY tolerance checks can adapt to CRS and dataset extent
+- Positional-accuracy checks now try to use a reference-layer spatial index before falling back to full scans.
+- README, Start Here, benchmark story, tests ledger, checklist, and plan now highlight the strongest public proof point more clearly:
+  - Natural Earth roads
+  - `56,600` features
+  - low-resource benchmark
+  - `49` findings
+  - full completion on the maintainer workstation
+- Current verified automated baseline is now:
+  - `python -m unittest discover -s tests -p 'test_*.py'`
+  - result: `OK` (`144` tests)
+
+### Added
+- First-class low-resource CLI mode for:
+  - `python -m geoqa validate ... --low-resource`
+  - `python -m geoqa benchmark ... --low-resource`
+- New constrained-run CLI controls:
+  - `--max-issues`
+  - `--stop-after-actionable`
+  - `--progress-interval-seconds`
+- Structured partial-run reporting fields in execution summaries and JSON reports:
+  - `execution_status`
+  - `execution_reason`
+  - `validators_completed`
+  - `validators_deferred`
+  - `partial_result`
+  - `operator_next_steps`
+- Human-readable profile listing and profile-detail output by default for:
+  - `geoqa profiles list`
+  - `geoqa profiles show ...`
+- New built-in profile variants:
+  - `generic_audit`
+  - `boundaries_quick`
+  - `boundaries_strict`
+  - `boundaries_audit`
+  - `land_use_quick`
+  - `land_use_strict`
+  - `land_use_audit`
+- `docs/solo_operator_guide.md` with practical weak-hardware rerun commands and operator guidance.
+
+### Changed
+- Execution planning can now stop honestly on:
+  - runtime budget
+  - issue-count budget
+  - actionable-findings budget
+- When those stop conditions are enabled, validator execution now prefers a safer sequential path so partial-run semantics stay trustworthy.
+- Water-network execution summaries now include pack-specific operator rollups for:
+  - disconnected endpoints
+  - isolated segments
+  - near-miss endpoints
+  - self-intersections
+  - short segments
+  - sharp cutbacks
+- README, Start Here, benchmark story, tests ledger, and user guide now explain:
+  - low-resource mode
+  - honest partial execution
+  - constrained-hardware use
+  - anonymized local/private evidence
+- Current verified automated baseline is now:
+  - `python -m unittest discover -s tests -p 'test_*.py'`
+  - result: `OK` (`140` tests)
+
+### Fixed
+- Fixed multipart-line handling in network endpoint extraction so water-network topology validation no longer crashes on line layers containing multi-part geometries.
+- Removed thermal-wait coupling from the core geometry validators so execution tests and small validation runs no longer block on workstation heat.
+- Wired profile-level threshold options through the runtime wrappers for:
+  - `coordinate_precision`
+  - `xy_tolerance`
+  - `positional_accuracy`
+- Added a test-only thermal-guard bypass path for CLI subprocess verification via `GEOQA_DISABLE_THERMAL_GUARD`.
+- Anonymized private local-dataset references in the project-facing ledgers and integration-results manifest so local test materials are recorded by operational characteristics rather than source dataset names.
+- Re-verified the current Streamlit preview code after a stale `min_lon` map-warning report.
+- Confirmed `streamlit_app.py` compiles cleanly and the full automated suite passes from the GeoQA repo root:
+  - `python -m py_compile streamlit_app.py`
+  - `python -m unittest discover -s tests -p 'test_*.py'`
+  - result: `OK` (`117` tests)
+
+### Added
+- Explicit profile-level calibration fields:
+  - `downgrade_rules`
+  - `suppression_rules`
+- Report summary enrichments:
+  - `severity_distribution`
+  - `problem_breakdown`
+- Human-readable CLI report summaries for:
+  - `geoqa report summarize`
+  - `geoqa report stats`
+- `docs/benchmark_story.md` as a credibility-focused benchmark narrative built only from recorded public runs
+- a CLI benchmark smoke test covering `python -m geoqa benchmark ...`
+- explicit CLI coverage for:
+  - `geoqa validate --fail-on-error`
+  - `geoqa report stats ...`
+  - `geoqa validate ...` with runtime/cache/progress flags exercised together
+
+### Changed
+- Consolidated planning and governance docs so they now match the shipped engine state more closely:
+  - `plan_of_action.md`
+  - `docs/checklist.md`
+  - `docs/security.md`
+  - `ARCHITECTURE.md`
+  - `docs/api_policy.md`
+  - `CONTRIBUTING.md`
+- Reduced stale roadmap duplication and clarified:
+  - what is shipped
+  - what is partial
+  - what is still missing
+  - how constrained-hardware operation fits into the current product
+- Verified a heavier public low-resource benchmark end to end:
+  - `python -m geoqa benchmark data/public_samples/natural_earth/ne_10m_roads/ne_10m_roads.shp --profile generic_quick --low-resource --max-runtime-seconds 180 --cache .geoqa_cache --cache-tag roads_low_resource_2026_03_20 --progress`
+  - completed successfully in about `121.9` seconds on the maintainer workstation
+  - surfaced `49` actionable issues with `execution_status: full`
+- Verified the current CLI/runtime path against a private external water-network test folder:
+  - a medium private point layer completed successfully with CRS/integrity findings
+  - a very large private point layer completed successfully with null-geometry, CRS, and integrity findings
+  - a very large private line layer now passes the previously failing multipart-line topology step, but still does not complete inside a bounded 30-minute CLI run on this workstation
+- The automated baseline after the signal-calibration/reporting pass is now:
+  - `python -m unittest discover -s tests -p 'test_*.py'`
+  - result: `OK` (`135` tests)
+- `profiles show` now exposes explicit downgrade and suppression configuration in addition to the broader problem-policy payload.
+- Report summaries are now easier to use operationally without requiring raw JSON inspection.
+- Report reloading now preserves provenance and suppression metadata, so CLI summaries can retain root-cause grouping from JSON reports.
+- Human-readable report summaries now show actionable ratio as a percentage and include root-cause groups when provenance data is available.
+- Fresh adaptive reruns on the heaviest public road and zoning samples now show a clearer runtime story:
+  - no thermal-limit trip in the recorded logs during the reruns
+  - but still no full completion inside a one-hour execution budget
+  - current blocker is now throughput more than immediate thermal aborts
+
+### Added
+- Structured domain-pack packages under:
+  - `geoqa/packs/water_network/`
+  - `geoqa/packs/boundaries/`
+  - `geoqa/packs/land_use/`
+- Water-network pack variants:
+  - `water_network_quick`
+  - `water_network`
+  - `water_network_strict`
+  - `water_network_audit`
+- Water-network schema detection and centralized thresholds for:
+  - snap tolerance
+  - near-miss tolerance
+  - minimum length
+  - angle thresholds
+  - allowed terminal values
+- New deterministic validators for:
+  - `below_minimum_feature_length`
+  - `sharp_angle_cutback`
+  - `feature_not_split_at_intersection`
+  - `isolated_network_segment`
+  - `suspicious_near_miss_endpoints`
+  - `unsnapped_endpoints_within_tolerance`
+- First water-network pack regression suite in:
+  - `tests.test_water_network_pack`
+
+### Changed
+- The automated baseline after the structured domain-pack pass is now:
+  - `python -m unittest discover -s tests -p 'test_*.py'`
+  - result: `OK` (`126` tests)
+- Built-in profiles now include:
+  - `water_network_quick`
+  - `water_network_strict`
+  - `water_network_audit`
+- Runtime execution now accepts pack/profile extra context without pushing business logic into CLI or UI layers.
+
+### Added
+- Computed `priority_score` on `ValidationIssue` for more consistent triage.
+- Report summaries now include:
+  - `by_priority_band`
+  - `top_actionable`
+- First adaptive chunk-resizing slice on top of geometry-weighted chunking:
+  - chunk sizes can shrink under thermal/runtime pressure
+  - runtime messages now record those adjustments
+- First domain-pack layer under:
+  - `geoqa/packs/water_network/`
+  - `geoqa/packs/boundaries/`
+  - `geoqa/packs/land_use/`
+- New deterministic topology validators for:
+  - same-layer duplicate geometry
+  - line dangles
+  - polygon gaps
+- Runtime progress events now include:
+  - progress percent
+  - ETA seconds
+  - chunk index / chunk total placeholders
+- `validate` and `benchmark` CLI paths now support:
+  - `--max-runtime-seconds`
+- Execution results can now stop safely on runtime budget limits and emit a structured `runtime_limit_exceeded` issue instead of failing opaquely.
+- Report summaries now include:
+  - actionable vs informational split
+  - actionable ratio
+  - root-cause grouping
+  - top-issue percentages
+- Validation-report outputs now carry `validation_rule_version` so JSON, CSV, summaries, and execution results can be tied back to a rule-set revision.
+- First signal-calibration slice in the core engine:
+  - `ValidationIssue.confidence`
+  - `ValidationIssue.actionable`
+  - profile-level per-problem policies for severity, confidence, actionable state, and suppression
+- First adaptive chunking slice in the agent/runtime path:
+  - geometry-weighted validation chunks using target vertex budgets
+  - chunking recommendations can now include a suggested target-vertices-per-chunk value
+- stronger built-in calibration for:
+  - `generic_strict`
+  - `water_network`
+  - `boundaries`
+
+### Added
+- A first-class CLI surface:
+  - `python -m geoqa validate`
+  - `python -m geoqa profiles`
+  - `python -m geoqa convert`
+  - `python -m geoqa report`
+  - `python -m geoqa benchmark`
+- `geoqa.execution.validate_dataset_with_profile(...)` for profile-driven dataset validation.
+- `geoqa.problem_registry` backed by `raw_problems_with_sources.json`.
+- `geoqa.profile_registry` with built-in GeoQA profiles:
+  - `geometry`
+  - `generic_quick`
+  - `generic_strict`
+  - `water_network`
+  - `boundaries`
+- richer issue metadata in reports, including:
+  - issue id
+  - issue class
+  - validator name/version
+  - ISO category
+  - provenance and suppression fields
+- report loading and summary helpers:
+  - `load_report(...)`
+  - `summarize_issues(...)`
+  - `summarize_report(...)`
+- contributor-facing docs:
+  - `CONTRIBUTING.md`
+  - `ARCHITECTURE.md`
+  - `docs/api_policy.md`
+
+### Changed
+- The automated baseline after the priority-scoring and adaptive-resizing pass is now:
+  - `python -m unittest discover -s tests -p 'test_*.py'`
+  - result: `OK` (`119` tests)
+- The automated baseline after the domain-pack, runtime-feedback, and reporting pass is now:
+  - `python -m unittest discover -s tests -p 'test_*.py'`
+  - result: `OK` (`117` tests)
+- Repositioned the top-level docs around GeoQA as a deterministic geospatial QA engine.
+- Moved the recommended entry order to:
+  - CLI
+  - library/runtime
+  - Streamlit app
+- Updated the automated suite baseline after the runtime-calibration and adaptive-chunking pass:
+  - `python -m unittest discover -s tests -p 'test_*.py'`
+  - result: `OK` (`110` tests)
+- Clarified the roadmap into phased delivery bands:
+  - immediate stability and scale
+  - enterprise and standards
+  - GeoAI maturity
+  - ecosystem and integration
+- Explicitly kept ArcGIS integration as a later contributor-facing item unless it can be verified in a real ArcGIS environment.
+
+### Added
+- Core validation engine with structured `ValidationIssue` results.
+- Validation modules for:
+  - geometry
+  - topology
+  - attributes
+  - CRS
+  - metadata
+  - accuracy
+  - integrity
+- Report generation for CSV and JSON outputs.
+- Interactive validation entry point for validation-family workflows.
+- Agent workflow for dataset-type routing, sample-first fix review, and final reporting.
+- Conservative built-in fix helpers for:
+  - null geometries
+  - duplicate consecutive vertices
+- Optional AI-oriented support in `geoai/`:
+  - JSON/TOON serialization
+  - JAX/NumPy numerical backend
+  - PyQGIS conversion helpers
+- Wrapper package layout for:
+  - `geoqa.agents`
+  - `geoqa.automation`
+  - `geoqa.interactive`
+  - `geoqa.fix`
+  - `geoqa.serialization`
+- User guide in `docs/user_guide.md`.
+- Public sample datasets under `data/public_samples/` for real-dataset testing, including Natural Earth, Data.gov/Philadelphia, and a small OpenStreetMap extract.
+- Integration-result artifacts under `data/integration_results/` from the first real-dataset test pass.
+- Dedicated test ledger in `docs/tests.md`.
+- Separate local-data test ledger in `docs/local_data_tests.md`.
+- A basic runtime dependency manifest in `requirements.txt`.
+- A packaging/development setup with:
+  - `pyproject.toml`
+  - `requirements-dev.txt`
+- Repeatable integration runner script in `scripts/run_integration_samples.py`.
+- Synthetic edge-case sample area under `data/public_samples/edge_cases/`.
+- `geoqa.ml` helpers for QA annotations, ML-ready exports, and issue-feature generation.
+- Deterministic vector conversion helpers and a first Streamlit app entry point.
+- A lightweight onboarding layer with:
+  - `docs/START_HERE.md`
+  - `examples/geoqa_quickstart.ipynb`
+- A dedicated remaining-work checklist in:
+  - `docs/checklist.md`
+- A spreadsheet-style project tracking file in:
+  - `docs/project_schedule.xlsx`
+- Expanded public-sample coverage with larger datasets:
+  - Natural Earth admin-1 states/provinces
+  - Natural Earth roads
+  - Natural Earth lakes
+  - a derived GeoPackage variant for admin-1 CRS testing
+- Staged larger future chunking datasets under:
+  - `data/large_public_samples/`
+  - including New Jersey, Pennsylvania, and New York OSM PBF extracts
+- Local private-data integration artifacts under:
+  - `data/integration_results/`
+  - including inventory and run summaries for anonymized private local shapefiles
+
+### Changed
+- Thermal safeguards were hardened with more conservative defaults and explicit `balanced`, `cool`, and `strict` guard profiles.
+- Agent workflows now support:
+  - batched full-dataset fix application
+  - lightweight sample-fix geometry previews
+  - fix-action audit logging
+  - optional recommendation hooks
+  - chunking recommendation and interactive rerun after thermal/runtime pressure
+- The Streamlit upload flow now accepts:
+  - zipped Shapefile bundles
+  - complete multi-file Shapefile uploads
+  - raw OSM/PBF uploads with source-layer selection for multi-layer datasets
+- The Streamlit preview now uses a PyDeck-based map path instead of depending on Folium.
+- The Streamlit app now caches loaded and cleaned layers in session state so download actions do not rerun the geometry-fix pass.
+- The Streamlit table preview now renders geometry as WKT text to avoid geometry/Arrow conversion failures in the UI.
+- The Streamlit preview now separates map and GeoJSON views into tabs, with parsed and raw GeoJSON views for easier inspection.
+- GeoParquet input is now accepted in the conversion layer and Streamlit uploader.
+- GeoParquet export now uses uncompressed output to avoid optional compression-codec failures.
+- CSV export now rewrites geometry from a plain pandas frame to avoid noisy GeoPandas geometry-column warnings during app exports.
+- Added `zstandard` to the runtime environment after confirming Streamlit's download/export path needed it in this setup.
+- Interactive validation now supports:
+  - geometry
+  - topology
+  - attributes
+  - CRS
+  - metadata
+  - accuracy
+  - integrity
+- Validation/report serialization now safely converts geometry payloads into JSON-friendly output.
+- Geometry self-intersection checks now also catch non-simple self-crossing linework.
+- Project guidance now explicitly separates deterministic spatial computation from AI-assisted reasoning through a hybrid execution model.
+- GeoQA now includes a vector-first local conversion and deterministic geometry-cleaning workflow for UI use.
+- The real-dataset testing baseline now includes additional larger shapefile and GeoPackage runs.
+- The real-dataset testing baseline now also includes local private-data runs against large water-network and polygon shapefiles.
+- Agent workflows now support chunked validation with optional sleep-based pauses between validation chunks.
+
+### Documentation
+- Added and maintained:
+  - `README.md`
+  - `AGENTS.md`
+  - `SKILLS.md`
+  - `plan_of_action.md`
+  - `docs/user_guide.md`
+  - `docs/CHANGELOG.md`
+  - `docs/tests.md`
+- Expanded `docs/user_guide.md` with:
+  - workflow context before examples
+  - interactive vs non-interactive guidance
+  - reusable fix-helper explanations
+  - CRS automation examples for both review and auto-fix use
+  - custom agentic script guidance
+- Streamlit export delivery now uses a direct browser download link instead of the default Streamlit download widget to avoid environment-specific `zstandard` runtime failures during export.
+- CSV vector loading now supports WKT geometry columns, so GeoQA-exported CSV files can be re-opened in the app without requiring separate longitude/latitude columns.
+- The Streamlit app now shows a processing-feedback section before the dataset summary, including requested fix steps, step-by-step outcomes, row removal counts, and geometry-change counts.
+- The Streamlit app now separates `Inspect / Fix` from `Convert / Export`, and can offer chunked continuation after a thermal-stop during fix processing.
+- Streamlit fix feedback now includes row-level change details for geometry edits and removals, with before/after snippets and a per-step explanation.
+- The map preview now fits the current layer bounds more closely and row-level fix feedback can show before/after map previews for changed features.
+- GeoQA now includes a reference-boundary mismatch validator for comparing a layer against an authoritative reference dataset instead of visually trusting a basemap.
+- The Streamlit app now supports opening `.pbf` / `.osm` vector sources by selecting an exposed OGR layer such as `multipolygons`, `lines`, or `points`, and warns when `keep original` export is not available for raw OSM/PBF sources.
+- The Streamlit app now shows a visible processing-status indicator around upload, layer inspection, layer opening, fix execution, and preview refresh so larger datasets no longer look idle while the app is working.
+- Streamlit row-level before/after change maps now coerce NumPy-style scalar values to plain JSON-safe Python types before building preview GeoJSON, avoiding `int32 is not JSON serializable` crashes.
+- Streamlit row-level before/after change maps now recursively normalize the full preview GeoJSON payload, including geometry coordinates, so NumPy-backed values no longer break serialization; the app also now uses the non-deprecated `width="stretch"` dataframe option.
+- The Streamlit app now supports a direct local-file-path mode so larger on-disk datasets can be opened without browser upload, which avoids frontend `AxiosError: Network Error` failures on some local files.
+- The Streamlit local-path mode now accepts pasted Windows paths wrapped in single or double quotes instead of treating the quotes as part of the filesystem path.
+- CSV point loading now recognizes additional public-data coordinate column names such as `INTPTLAT_num` / `INTPTLONG_num`, and rows with missing coordinates are preserved as null geometry instead of crashing the loader.
+- The Streamlit map preview now renders point layers with an explicit visible point radius so point datasets are inspectable instead of appearing empty at normal zoom levels.
+- The Streamlit preview now uses a darker map style, adds an attributes-only tab and a clearer full-table preview, and surfaces an inferred preview label plus a simple legend with dataset-aware point symbols for common themes such as cities, roads, water networks, and boundaries.
+- Fixed a Streamlit preview indentation regression introduced during the theme/legend update so row-level before/after preview tabs render correctly again.
+  - testing guidance for unit tests, integration tests, and public dataset sources
+- Expanded `docs/tests.md` with:
+  - run dates
+  - command snippets for each real integration run
+  - expected behavior notes for each recorded test
+- Expanded testing documentation with integration-runner metrics and edge-case fixture notes.
+- Added ML-helper testing coverage and documentation.
+- Added conversion-helper coverage and documented the Streamlit app layer.
+- Added Shapefile upload-bundle coverage for the conversion layer and documented the Streamlit app upload requirements.
+- Added `requirements.txt` and updated install guidance in the main docs and onboarding files.
+- Added `pyproject.toml`, `requirements-dev.txt`, and editable-install guidance.
+- Added a prioritized next-sprint plan covering:
+  - adaptive chunking
+  - ML demo completion
+  - CI/CD quality gates
+  - ISO 19157 alignment
+  - Streamlit advanced controls
+- Improved `docs/tests.md` scanability with:
+  - environment details
+  - a top summary table
+  - rerun guidance
+  - explicit `interactive`, `fixes applied`, and issue-type notes per integration run
+- Improved the onboarding entry file by:
+  - renaming it to `docs/START_HERE.md`
+  - adding setup instructions
+  - adding a short why-this-matters section
+  - adding example output
+  - adding a what-just-happened explanation
+- Added a separate checklist document so actionable remaining work stays distinct from the strategic roadmap.
+- Added a spreadsheet-style schedule so project status is easier to review in a management-friendly format.
+- Improved `docs/project_schedule.xlsx` readability with color-coded workstreams, status highlighting, and icon-style status markers.
+- Cleaned the `docs/project_schedule.xlsx` status labels so the status column now shows a single readable label instead of duplicated marker-plus-text wording.
+- Expanded `docs/tests.md` and the integration-results manifest to record the larger Natural Earth test pass.
+- Expanded `docs/tests.md`, `docs/checklist.md`, and the integration-results manifest to record the private local-data test pass.
+- Separated local/internal dataset testing into `docs/local_data_tests.md` so `docs/tests.md` stays focused on the public baseline.
+- Added chunked-validation notes to the project docs and test ledger.
+- Added documentation for chunking recommendation and chunked rerun behavior in the agent workflow.
+- Added beginner-facing chunking guidance to:
+  - `docs/START_HERE.md`
+  - `docs/user_guide.md`
+- Added a manifest for large staged datasets intended for future chunked-processing work.
+
+### Testing
+- Test coverage now includes:
+  - thermal guard behavior
+  - validation modules
+  - report generation
+  - agent workflows
+  - wrapper package imports
+- The next recommended project phase is real-dataset integration testing across multiple geospatial formats and dataset types.
+- That testing phase has now started with local runs against Natural Earth and Philadelphia open-data samples.
+
+## 2026-03-19
+
+### Changed
+- Clarified project status in the docs so roadmap items are now described more precisely as:
+  - already shipped first slices
+  - partially implemented runtime features
+  - still-missing larger platform features
+- Explicitly documented that the following remain incomplete despite first core-runtime progress:
+  - broader spatial indexing
+  - broader safe parallel validation
+  - richer progress streaming
+  - expanded heavy GIS format support
+  - fuller custom validator/repair packaging
+  - fuller PyQGIS and ArcGIS integration
+  - archive hardening and geometry-complexity protections
+- The Streamlit preview now uses a lighter inspection-oriented basemap instead of the earlier overly dark map style.
+- Point-based datasets now render with stronger visible markers in the preview map.
+- The duplicate `Attributes` preview tab was removed so the app keeps one combined attribute/geometry table instead of showing two table surfaces for the same data.
+- Point-based datasets now show feature labels when a usable name-like field exists.
+- The preview map frame now has a stronger white border and a slightly darkened gray-toned appearance to sit better inside the Streamlit dark UI.
+- Dense point datasets no longer force permanent label boxes for every feature; small point sets can show labels directly, while larger point sets now rely on hover tooltips to keep the map readable.
+- The preview map now supports click selection through Streamlit/PyDeck state, and selected features are shown in a detail panel below the map.
+- Dense point layers now prefer click-based inspection over hover tooltips, while only very small point sets keep direct permanent labels.
+- The Streamlit sidebar now includes a `Point labels` control (`On / Auto / Off`) so point-layer label density can be adjusted explicitly.
+- The selected-feature area is now always visible below the map so it is clearer where clicked-point details are supposed to appear.
+
+### Changed
+- The Streamlit preview map now uses Folium/Leaflet-style interaction for the main inspection view instead of relying on PyDeck point selection.
+- Point markers now use real clickable map popups, which makes feature inspection much easier on dense point layers.
+- Permanent point labels now work through Leaflet marker tooltips when enabled, while the sidebar `Point labels` control still governs density.
+- Added `streamlit-folium` to runtime package metadata because the Streamlit preview now depends on it directly.
+- Repaired the `streamlit-folium` runtime install after the package was found in an incomplete namespace-only state.
+- Updated the Streamlit preview map call to use `use_container_width=True` with `st_folium(...)`, matching the actual package signature.
+- Fixed a Folium preview fit-bounds bug in `streamlit_app.py` where polygon layers could fail with `cannot access local variable 'min_lon'` during map extent setup.
+- Hardened the Folium preview fit-bounds logic further so map extent setup now uses an explicit prebuilt bounds object instead of conditionally bound local variables.
+- Added a broader agreed roadmap for core-library improvement covering:
+  - spatial indexing
+  - bounded parallel validation
+  - caching
+  - real-time runtime feedback
+  - broader format-support planning
+  - custom-rule registration
+  - configuration-driven validation
+  - PyQGIS-first GIS integration
+  - exploratory ArcGIS integration planning
+- Implemented the first part of that roadmap in the actual codebase:
+  - `geoqa/validation_runtime.py`
+  - custom validator registration
+  - validation profiles
+  - progress callback events
+  - conservative in-memory caching hooks
+  - integration into the interactive/core validation entry points
+- Extended that runtime slice with:
+  - bounded parallel validator execution through `max_workers`
+  - spatial-index-aware topology/reference validation for layers that expose a usable spatial index
+- Added regression coverage for the new runtime behavior in `tests/test_validation_runtime.py`.
+- Added topology regression coverage for the spatial-index path in `tests/test_additional_validations.py`.
+- Extended the runtime slice again with:
+  - `FileValidationCache` for persistent cache reuse between runs
+  - `ValidationLimits` for feature-count, column-count, and source-file-size guardrails
+- Added runtime regression coverage for:
+  - file-backed cache reuse
+  - preflight dataset limit failures
+- Updated `docs/tests.md` and `docs/local_data_tests.md` so the test ledgers now reflect:
+  - the new validation-runtime coverage
+  - the latest suite count
+  - the distinction between public baseline runs and local runs that predate the newest runtime slices
+- Added fresh recorded reruns for:
+  - a public Natural Earth CRS baseline
+  - a local DMA CRS runtime-capability check using `ValidationProfile`, `FileValidationCache`, and `ValidationLimits`
+- Added fresh chunked thermal rerun records for:
+  - Natural Earth roads under a strict thermal profile
+  - a large private line-network layer under a cool thermal profile
+- Added `docs/security.md` with GeoQA-specific security risks, current mitigations, and near-term hardening priorities.
+# Unreleased
+
+- added additive `geoqa.plugins` architecture with registry-based DMA plugins
+- converted legacy DMA polygon QA logic into deterministic plugins for:
+  - same-name equal/nested duplicates
+  - cross-name equal/nested conflicts
+  - cross-name overlap conflicts
+  - multipart / fragmented DMA polygons
+- integrated plugin execution into the normal GeoQA validation path after core profile validation
+- added DMA plugin analysis documentation and synthetic regression coverage

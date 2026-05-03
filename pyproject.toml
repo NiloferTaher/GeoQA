@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "geoqa"
+version = "0.3.0"
+description = "Geospatial data quality validation, conservative fixes, reporting, and local QA workflows."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "geopandas",
+    "shapely",
+    "pyproj",
+    "psutil",
+    "streamlit",
+    "folium",
+    "streamlit-folium",
+    "zstandard",
+]
+
+[project.optional-dependencies]
+dev = [
+    "jupyter",
+    "build",
+]
+geoai-jax = [
+    "jax",
+]
+
+[project.scripts]
+geoqa = "geoqa.cli.main:run"
+
+[tool.setuptools.packages.find]
+include = ["geoqa*", "geoai*"]

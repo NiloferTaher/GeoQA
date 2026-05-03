@@ -1,0 +1,2 @@
+ID,name,geometry
+1,duplicate_vertex_line,"LINESTRING (0 0, 1 1, 1 1, 2 2)"

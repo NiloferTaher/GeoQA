@@ -1,0 +1,139 @@
+{
+  "validation_rule_version": "2026.03",
+  "issue_count": 2,
+  "summary": {
+    "validation_rule_version": "2026.03",
+    "issue_count": 2,
+    "total_issues": 2,
+    "actionable": 2,
+    "informational": 0,
+    "actionable_ratio": 1.0,
+    "by_problem": {
+      "invalid_spatial_reference": 1,
+      "missing_or_stale_spatial_index": 1
+    },
+    "problem_breakdown": [
+      {
+        "name": "invalid_spatial_reference",
+        "count": 1,
+        "percent": 50.0
+      },
+      {
+        "name": "missing_or_stale_spatial_index",
+        "count": 1,
+        "percent": 50.0
+      }
+    ],
+    "by_severity": {
+      "critical": 1,
+      "medium": 1
+    },
+    "severity_distribution": [
+      {
+        "name": "critical",
+        "count": 1,
+        "percent": 50.0
+      },
+      {
+        "name": "medium",
+        "count": 1,
+        "percent": 50.0
+      }
+    ],
+    "by_issue_class": {
+      "data_issue": 2
+    },
+    "by_validator": {
+      "invalid_spatial_reference": 1,
+      "missing_or_stale_spatial_index": 1
+    },
+    "by_iso_category": {
+      "Logical Consistency": 1,
+      "Positional Accuracy": 1
+    },
+    "by_root_cause": {
+      "crs": 1,
+      "integrity": 1
+    },
+    "by_priority_band": {
+      "critical": 1,
+      "medium": 1
+    },
+    "top_issues": [
+      {
+        "problem_name": "invalid_spatial_reference",
+        "count": 1,
+        "percent": 50.0
+      },
+      {
+        "problem_name": "missing_or_stale_spatial_index",
+        "count": 1,
+        "percent": 50.0
+      }
+    ],
+    "top_actionable": [
+      {
+        "problem_name": "invalid_spatial_reference",
+        "feature_id": null,
+        "severity": "critical",
+        "confidence": "high",
+        "priority_score": 100
+      },
+      {
+        "problem_name": "missing_or_stale_spatial_index",
+        "feature_id": null,
+        "severity": "medium",
+        "confidence": "medium",
+        "priority_score": 40
+      }
+    ]
+  },
+  "issues": [
+    {
+      "problem_name": "invalid_spatial_reference",
+      "severity": "critical",
+      "description": "The layer CRS is EPSG:32640, but the expected CRS is EPSG:4326.",
+      "solution_hint": "Reproject or redefine the layer so it uses the expected authoritative CRS.",
+      "feature_id": null,
+      "geometry": null,
+      "issue_id": "52bd189c5ff32627",
+      "validation_rule_version": "2026.03",
+      "validator_name": "invalid_spatial_reference",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "crs",
+        "profile": "generic_quick",
+        "family": "crs"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "high",
+      "actionable": true,
+      "priority_score": 100
+    },
+    {
+      "problem_name": "missing_or_stale_spatial_index",
+      "severity": "medium",
+      "description": "The layer does not appear to have a usable spatial index.",
+      "solution_hint": "Create or rebuild the spatial index before running large spatial queries or overlays.",
+      "feature_id": null,
+      "geometry": null,
+      "issue_id": "0fa8c5e577b91a39",
+      "validation_rule_version": "2026.03",
+      "validator_name": "missing_or_stale_spatial_index",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "integrity",
+        "profile": "generic_quick",
+        "family": "integrity"
+      },
+      "iso_category": "Logical Consistency",
+      "confidence": "medium",
+      "actionable": true,
+      "priority_score": 40
+    }
+  ]
+}
