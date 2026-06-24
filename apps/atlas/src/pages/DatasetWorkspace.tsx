@@ -61,14 +61,14 @@ export default function DatasetWorkspace() {
     setSelectedIssueId(issueId)
     const feature = issues?.features.find((item) => item.properties?.issue_id === issueId) as Feature<Geometry> | undefined
     if (feature) {
-      setFocusFeature(feature)
+      setFocusFeature({ ...feature })
     }
   }
 
   function selectIssueFeature(feature: Feature<Geometry>) {
     const issueId = String(feature.properties?.issue_id ?? "")
     setSelectedIssueId(issueId)
-    setFocusFeature(feature)
+    setFocusFeature({ ...feature })
     setDrawerOpen(true)
   }
 

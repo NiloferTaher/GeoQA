@@ -3256,3 +3256,18 @@
 
 - The project needed a public-facing product demo that explains GeoQA quickly without replacing internals or making Streamlit the lead experience.
 - Atlas gives reviewers a map-first way to understand GeoQA reports, while the CLI and Python package remain the authoritative validation surface.
+
+## 2026-06-24 13 45 +04 GeoQA Atlas parcel focus and badge readability
+
+### What changed
+
+- Tightened parcel issue focus behavior so very small polygon findings zoom to the selected feature center at a higher level.
+- Switched selected issue focus updates to clone the GeoJSON feature so clicking Show on map again can retrigger the map movement.
+- Increased map and tile maximum zoom settings for detailed parcel review.
+- Narrowed the issue detail span selector so severity badge text is not affected by muted feature-label styling.
+- Forced Medium severity badge text to near-black with a bright yellow badge background.
+
+### Why this change was made
+
+- The parcel workspace still felt too broad after clicking Show on map for a selected polygon issue.
+- The Medium badge was not readable enough in the issue drawer screenshot because surrounding muted text styles could visually dominate the label.

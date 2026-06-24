@@ -83,6 +83,8 @@ For the full internal build history, design rationale, and implementation notes,
   - result: `OK` (`144` tests)
 
 ### Fixed
+- GeoQA Atlas parcel issue zoom now focuses tiny polygon findings more tightly and retriggers when the same issue is selected again.
+- GeoQA Atlas Medium severity badges now force near-black label color so broader card text styles cannot wash them out.
 - Polygon and parcel issue focus in GeoQA Atlas now uses a reusable geometry bounds helper for selected-feature map zoom.
 - Medium severity badges in GeoQA Atlas now use a bright yellow background with near-black high-weight text.
 

@@ -68,3 +68,7 @@ export function boundsCenter(bounds: BoundsTuple): [number, number] {
 export function isPointLikeBounds(bounds: BoundsTuple) {
   return Math.abs(bounds[0] - bounds[2]) < 0.000001 && Math.abs(bounds[1] - bounds[3]) < 0.000001
 }
+
+export function boundsSpan(bounds: BoundsTuple) {
+  return Math.max(Math.abs(bounds[0] - bounds[2]), Math.abs(bounds[1] - bounds[3]))
+}

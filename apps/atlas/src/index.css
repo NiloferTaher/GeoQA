@@ -930,7 +930,7 @@ h2 {
   box-shadow: 0 0 0 1px rgba(255, 210, 31, 0.2), 0 0 26px rgba(255, 210, 31, 0.14);
 }
 
-.issue-detail-top span {
+.issue-detail-top > div > span {
   color: var(--muted);
   font-size: 0.8rem;
 }
@@ -1036,15 +1036,17 @@ h2 {
 .severity-pill {
   min-width: 74px;
   padding: 6px 9px;
-  color: #081016;
+  color: #061216 !important;
   font-weight: 800;
   text-transform: capitalize;
   background: var(--amber);
+  -webkit-text-fill-color: #061216;
 }
 
 .severity-pill.medium {
-  color: #061216;
+  color: #061216 !important;
   background: #ffd21f;
+  -webkit-text-fill-color: #061216;
 }
 
 .severity-pill.high,

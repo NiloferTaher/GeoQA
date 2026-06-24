@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import L from "leaflet"
 import { GeoJSON, MapContainer, TileLayer, useMap } from "react-leaflet"
 import type { Feature, FeatureCollection, GeoJsonObject, Geometry } from "geojson"
-import { boundsCenter, featureBounds, isPointLikeBounds } from "../lib/geometry"
+import { boundsCenter, boundsSpan, featureBounds, isPointLikeBounds } from "../lib/geometry"
 
 type MapPanelProps = {
   raw?: FeatureCollection
@@ -34,14 +34,14 @@ function FocusIssue({ feature }: { feature?: Feature<Geometry> | null }) {
   useEffect(() => {
     if (!feature) return
     const bounds = featureBounds(feature)
-    if (bounds && isPointLikeBounds(bounds)) {
-      map.flyTo(boundsCenter(bounds), 15, { duration: 0.8 })
+    if (bounds && (isPointLikeBounds(bounds) || boundsSpan(bounds) < 0.002)) {
+      map.flyTo(boundsCenter(bounds), 18, { duration: 0.8 })
       return
     }
     if (bounds) {
       const fitted = L.latLngBounds([bounds[1], bounds[0]], [bounds[3], bounds[2]])
       if (fitted.isValid()) {
-        map.fitBounds(fitted.pad(0.65), { maxZoom: 15, animate: true })
+        map.flyToBounds(fitted.pad(0.2), { maxZoom: 17, animate: true, duration: 0.8 })
       }
     }
   }, [feature, map])
@@ -113,10 +113,12 @@ export default function MapPanel({
 }: MapPanelProps) {
   return (
     <div className="map-shell">
-      <MapContainer className="map" center={[39.5, -98.35]} zoom={4} scrollWheelZoom>
+      <MapContainer className="map" center={[39.5, -98.35]} zoom={4} maxZoom={20} scrollWheelZoom>
         <TileLayer
           attribution='&copy; OpenStreetMap contributors &copy; CARTO'
           url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          maxZoom={20}
+          maxNativeZoom={18}
         />
         <FitBounds bounds={bounds} />
         <FocusIssue feature={focusFeature} />
