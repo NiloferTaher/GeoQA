@@ -17,6 +17,7 @@ export default function LayerToggleBar({
   onIssuesChange,
   onCleanedChange,
 }: LayerToggleBarProps) {
+  const cleanedChecked = cleanedAvailable && showCleaned
   return (
     <div className="layer-toolbar" aria-label="Map layer toggles">
       <label>
@@ -30,12 +31,13 @@ export default function LayerToggleBar({
       <label className={!cleanedAvailable ? "disabled-control" : ""}>
         <input
           type="checkbox"
-          checked={showCleaned}
+          checked={cleanedChecked}
           disabled={!cleanedAvailable}
           onChange={(event) => onCleanedChange(event.target.checked)}
         />
         Cleaned layer
       </label>
+      {!cleanedAvailable ? <span className="layer-helper">No cleaned layer is available for this demo.</span> : null}
     </div>
   )
 }

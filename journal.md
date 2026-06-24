@@ -3294,3 +3294,24 @@
 - The gallery needed to feel complete and more marketable.
 - Demo provenance needed to stay honest, especially for the synthetic water-network sample.
 - Atlas should stay visually compelling without moving validation logic out of GeoQA.
+
+## 2026-06-24 14 52 +04 GeoQA Atlas runtime issue overlay semantics
+
+### What changed
+
+- Audited the Atlas dataset workspace map, issue drawer, layer toggles, and issue overlay data flow.
+- Added a frontend issue classification helper for operational issue types.
+- Treated `validation_runtime_error` as an operational issue rather than a normal defect geometry overlay.
+- Excluded runtime errors from the default yellow issue overlay layer.
+- Kept runtime errors visible in the issue drawer with explicit operational copy.
+- Disabled the Show on map action for runtime errors because their geometry is optional context, not a cleaned or invalid geometry.
+- Prevented stale cleaned layer state when changing datasets.
+- Kept the cleaned layer disabled when no real cleaned layer is available and added the message `No cleaned layer is available for this demo.`
+- Verified `npm run build` passed from a clean Atlas source copy.
+- Ran a dataset smoke check across all six demos confirming runtime issue features are separable from normal overlays and cleaned-layer files only exist where configured.
+
+### Why this change was made
+
+- Runtime errors describe validation completeness, not feature geometry validity.
+- Showing runtime geometry as a normal defect overlay made Atlas imply a false geometry problem.
+- The map needed to preserve feature-level issue review while keeping operational report issues honest.

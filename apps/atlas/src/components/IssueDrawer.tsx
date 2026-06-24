@@ -2,6 +2,7 @@ import { ChevronDown, ChevronRight, Copy, FileJson, LocateFixed, PanelRightClose
 import { useMemo, useState } from "react"
 import type { Issue } from "../types"
 import { displayIssueName, getIssueCopy } from "./issueCopy"
+import { isOperationalIssue } from "../lib/issues"
 
 type IssueDrawerProps = {
   issues: Issue[]
@@ -72,6 +73,7 @@ export default function IssueDrawer({ issues, command, isOpen, selectedIssueId, 
               </button>
               <div className="issue-group-meta">
                 <span className={`severity-pill ${group.severity.toLowerCase()}`}>{group.severity}</span>
+                {isOperationalIssue({ problem_name: group.name }) ? <span className="operational-pill">Operational issue</span> : null}
                 <span>Affected features {group.issues.length}</span>
                 <span>{group.name === "coordinate_precision_not_fit_for_use" ? "Low actionability" : "Actionability high"}</span>
               </div>
@@ -121,6 +123,7 @@ function IssueDetail({
 }) {
   const [showJson, setShowJson] = useState(false)
   const copy = getIssueCopy(issue.problem_name)
+  const operational = isOperationalIssue(issue)
   return (
     <article className={`issue-detail-card ${selected ? "selected" : ""}`}>
       <div className="issue-detail-top">
@@ -130,13 +133,14 @@ function IssueDetail({
         </div>
         <span className={`severity-pill ${issue.severity.toLowerCase()}`}>{issue.severity}</span>
       </div>
+      {operational ? <span className="operational-pill inline">Operational issue</span> : null}
       <p>{copy.description}</p>
       <p className="why-copy">{copy.why}</p>
       <p className="recommendation">{copy.recommendation}</p>
       <div className="issue-detail-actions">
-        <button className="mini-button" type="button" onClick={() => onShowIssue(issue)}>
+        <button className="mini-button" type="button" disabled={operational} onClick={() => onShowIssue(issue)}>
           <LocateFixed size={15} />
-          Show on map
+          {operational ? "Drawer only" : "Show on map"}
         </button>
         <button className="mini-button ghost" type="button" onClick={() => setShowJson((current) => !current)}>
           <FileJson size={15} />

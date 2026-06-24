@@ -11,6 +11,7 @@ import LayerToggleBar from "../components/LayerToggleBar"
 import LoadingState from "../components/LoadingState"
 import MapPanel from "../components/MapPanel"
 import SummaryCards from "../components/SummaryCards"
+import { isOperationalIssue, isOperationalIssueFeature } from "../lib/issues"
 
 export default function DatasetWorkspace() {
   const { datasetId } = useParams()
@@ -32,6 +33,9 @@ export default function DatasetWorkspace() {
     if (!datasetId) return
     setLoading(true)
     setError("")
+    setSelectedIssueId(null)
+    setFocusFeature(null)
+    setShowCleaned(false)
     Promise.all([getDataset(datasetId), getDatasetGeojson(datasetId), getIssues(datasetId), getReport(datasetId)])
       .then(async ([datasetPayload, rawPayload, issuePayload, reportPayload]) => {
         setDataset(datasetPayload)
@@ -51,14 +55,24 @@ export default function DatasetWorkspace() {
 
   const issueFeatures = useMemo(() => {
     if (!issues) return undefined
-    return { type: "FeatureCollection", features: issues.features } as FeatureCollection
+    return {
+      type: "FeatureCollection",
+      features: issues.features.filter((feature) => !isOperationalIssueFeature(feature as Feature<Geometry>)),
+    } as FeatureCollection
   }, [issues])
 
   const issueRows = report?.issues ?? issues?.issues ?? []
+  const selectedIssue = issueRows.find((issue) => issue.issue_id === selectedIssueId)
+  const selectedIssueIsOperational = isOperationalIssue(selectedIssue)
+  const cleanedAvailable = Boolean(cleaned)
 
   function showIssueOnMap(issue: Issue) {
     const issueId = issue.issue_id ?? null
     setSelectedIssueId(issueId)
+    if (isOperationalIssue(issue)) {
+      setFocusFeature(null)
+      return
+    }
     const feature = issues?.features.find((item) => item.properties?.issue_id === issueId) as Feature<Geometry> | undefined
     if (feature) {
       setFocusFeature({ ...feature })
@@ -68,6 +82,11 @@ export default function DatasetWorkspace() {
   function selectIssueFeature(feature: Feature<Geometry>) {
     const issueId = String(feature.properties?.issue_id ?? "")
     setSelectedIssueId(issueId)
+    if (isOperationalIssueFeature(feature)) {
+      setFocusFeature(null)
+      setDrawerOpen(true)
+      return
+    }
     setFocusFeature({ ...feature })
     setDrawerOpen(true)
   }
@@ -120,8 +139,8 @@ export default function DatasetWorkspace() {
           <LayerToggleBar
             showRaw={showRaw}
             showIssues={showIssues}
-            showCleaned={showCleaned}
-            cleanedAvailable={Boolean(cleaned)}
+            showCleaned={cleanedAvailable && showCleaned && !selectedIssueIsOperational}
+            cleanedAvailable={cleanedAvailable}
             onRawChange={setShowRaw}
             onIssuesChange={setShowIssues}
             onCleanedChange={setShowCleaned}
@@ -133,7 +152,7 @@ export default function DatasetWorkspace() {
             bounds={dataset.bounds}
             showRaw={showRaw}
             showIssues={showIssues}
-            showCleaned={showCleaned}
+            showCleaned={cleanedAvailable && showCleaned && !selectedIssueIsOperational}
             selectedIssueId={selectedIssueId}
             focusFeature={focusFeature}
             onIssueSelect={selectIssueFeature}

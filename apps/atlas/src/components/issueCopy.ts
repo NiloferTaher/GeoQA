@@ -43,9 +43,10 @@ export const issueCopy: Record<string, { description: string; recommendation: st
     why: "Unsnapped endpoints can fragment a utility or road network and hide service gaps.",
   },
   validation_runtime_error: {
-    description: "Validation was interrupted or limited by runtime, thermal, or budget constraints.",
+    description:
+      "Operational issue. Validation was interrupted or limited by runtime, thermal, or budget constraints.",
     recommendation: "Rerun with low-resource mode, chunking, cache reuse, or a longer runtime budget.",
-    why: "The report may contain useful partial findings, but it should not be treated as a full clean validation.",
+    why: "This does not mean the selected geometry itself is invalid or cleaned. It means validation did not complete fully.",
   },
 }
 

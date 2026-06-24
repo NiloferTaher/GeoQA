@@ -622,6 +622,14 @@ h2 {
   opacity: 0.5;
 }
 
+.layer-helper {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
 .map-shell {
   height: min(78vh, 780px);
   min-height: 590px;
@@ -783,6 +791,11 @@ h2 {
   color: var(--muted);
 }
 
+.mini-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
 .icon-only {
   width: 38px;
   height: 38px;
@@ -882,6 +895,24 @@ h2 {
   padding: 0 10px 10px;
   color: var(--muted);
   font-size: 0.74rem;
+}
+
+.operational-pill {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 25px;
+  padding: 0 9px;
+  border: 1px solid rgba(255, 210, 31, 0.36);
+  border-radius: 999px;
+  color: #ffe58a;
+  font-size: 0.74rem;
+  font-weight: 850;
+  background: rgba(255, 210, 31, 0.08);
+}
+
+.operational-pill.inline {
+  margin-top: -2px;
 }
 
 .issue-group-body {

@@ -88,6 +88,10 @@ For the full internal build history, design rationale, and implementation notes,
   - result: `OK` (`144` tests)
 
 ### Fixed
+- GeoQA Atlas no longer renders `validation_runtime_error` findings as normal defect geometry overlays.
+- GeoQA Atlas now labels runtime errors as operational issues in the drawer and keeps them drawer-only by default.
+- GeoQA Atlas cleaned layer controls now stay disabled when no real cleaned layer exists and show a clear unavailable message.
+- Latest Atlas verification passed with `npm run build` and a six-dataset overlay and cleaned-layer smoke check.
 - GeoQA Atlas parcel issue zoom now focuses tiny polygon findings more tightly and retriggers when the same issue is selected again.
 - GeoQA Atlas Medium severity badges now force near-black label color so broader card text styles cannot wash them out.
 - Polygon and parcel issue focus in GeoQA Atlas now uses a reusable geometry bounds helper for selected-feature map zoom.
