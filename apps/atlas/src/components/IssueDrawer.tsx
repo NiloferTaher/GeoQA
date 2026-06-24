@@ -75,13 +75,14 @@ export default function IssueDrawer({ issues, command, isOpen, selectedIssueId, 
                 <span className={`severity-pill ${group.severity.toLowerCase()}`}>{group.severity}</span>
                 {isOperationalIssue({ problem_name: group.name }) ? <span className="operational-pill">Operational issue</span> : null}
                 <span>Affected features {group.issues.length}</span>
-                <span>{group.name === "coordinate_precision_not_fit_for_use" ? "Low actionability" : "Actionability high"}</span>
+                <span>{issueClassLabel(group.name)}</span>
               </div>
               {expanded ? (
                 <div className="issue-group-body">
                   <InfoBlock title="What GeoQA found" value={copy.description} />
                   <InfoBlock title="Why it matters" value={copy.why} />
                   <InfoBlock title="How to fix" value={copy.recommendation} />
+                  {copy.note ? <InfoBlock title="QA note" value={copy.note} /> : null}
                   <h3 className="examples-heading">Example affected features</h3>
                   <div className="issue-preview-list">
                     {group.issues.slice(0, 4).map((issue) => (
@@ -137,6 +138,7 @@ function IssueDetail({
       <p>{copy.description}</p>
       <p className="why-copy">{copy.why}</p>
       <p className="recommendation">{copy.recommendation}</p>
+      {copy.note ? <p className="qa-note">{copy.note}</p> : null}
       <div className="issue-detail-actions">
         <button className="mini-button" type="button" disabled={operational} onClick={() => onShowIssue(issue)}>
           <LocateFixed size={15} />
@@ -173,4 +175,10 @@ function highestSeverity(issues: Issue[]) {
   return issues
     .map((issue) => issue.severity)
     .sort((left, right) => (rank[right.toLowerCase()] ?? 0) - (rank[left.toLowerCase()] ?? 0))[0]
+}
+
+function issueClassLabel(problemName: string) {
+  if (isOperationalIssue({ problem_name: problemName })) return "Operational review"
+  if (problemName === "coordinate_precision_not_fit_for_use") return "QA finding"
+  return "Fixable geometry review"
 }

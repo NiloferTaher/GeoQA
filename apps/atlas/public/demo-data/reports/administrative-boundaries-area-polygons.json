@@ -53,7 +53,8 @@
       }
     ],
     "by_issue_class": {
-      "data_issue": 4
+      "data_geometry_issue": 2,
+      "data_issue": 2
     },
     "by_validator": {
       "polygon_gap_same_layer": 1,
@@ -77,37 +78,41 @@
       "issue_id": "boundary-001",
       "problem_name": "polygon_gap_same_layer",
       "severity": "high",
-      "feature_id": "ADM-002/ADM-003",
+      "feature_id": "Pennsylvania",
       "description": "Adjacent administrative boundary polygons leave a narrow gap between districts.",
       "solution_hint": "Review the shared edge and close the gap before publication or overlay analysis.",
-      "priority_score": 78
+      "priority_score": 78,
+      "issue_class": "data_geometry_issue"
     },
     {
       "issue_id": "boundary-002",
       "problem_name": "coordinate_precision_not_fit_for_use",
       "severity": "medium",
-      "feature_id": "ADM-001",
+      "feature_id": "New Jersey",
       "description": "Boundary coordinates should be normalized before delivery.",
       "solution_hint": "Align export precision with the intended publication tolerance.",
-      "priority_score": 52
+      "priority_score": 52,
+      "issue_class": "data_geometry_issue"
     },
     {
       "issue_id": "boundary-003",
       "problem_name": "crs_metadata_missing_or_ambiguous",
       "severity": "medium",
-      "feature_id": "layer",
+      "feature_id": "Delaware",
       "description": "The boundary layer should declare CRS metadata before downstream use.",
       "solution_hint": "Confirm the source CRS and write explicit metadata with the export.",
-      "priority_score": 48
+      "priority_score": 48,
+      "issue_class": "data_issue"
     },
     {
       "issue_id": "boundary-004",
       "problem_name": "missing_or_stale_spatial_index",
       "severity": "medium",
-      "feature_id": "layer",
+      "feature_id": "Maryland",
       "description": "The boundary layer should rebuild its spatial index after editing.",
       "solution_hint": "Rebuild the spatial index before delivery or heavier spatial joins.",
-      "priority_score": 42
+      "priority_score": 42,
+      "issue_class": "data_issue"
     }
   ]
 }

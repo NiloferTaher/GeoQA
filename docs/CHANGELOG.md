@@ -38,9 +38,12 @@ For the full internal build history, design rationale, and implementation notes,
 
 ### Changed
 - GeoQA Atlas now presents a balanced six-card dataset gallery on desktop.
+- GeoQA Atlas now uses public preview sources for the administrative-boundary and flood-zone demo cards.
+- GeoQA Atlas Run QA copy now separates browser preview format support from broader GeoQA Python backend format support.
+- GeoQA Atlas coordinate precision copy now explains that flagged examples are QA findings and not automatic fixes.
 - GeoQA Atlas docs now clarify that the water-network demo is synthetic and designed to demonstrate water-network QA behavior.
 - `docs/geoqa_atlas_product_brief.md` now describes the six demo datasets and the current preview-only Run QA status.
-- Latest Atlas verification passed with `npm run build` and `python -m unittest tests.test_public_api`.
+- Latest Atlas verification passed with `npm run build` from a clean Atlas source copy, `npm run lint --if-present`, `npm run typecheck --if-present`, `npm test --if-present`, a six-dataset metadata smoke check, and `python -m unittest tests.test_public_api`.
 - Root README now introduces GeoQA Atlas without replacing the CLI and Python engine story.
 - README, Start Here, and supporting docs now position GeoQA more explicitly as the data-quality layer before downstream GeoAI/ML work.
 - future-only architecture and staged execution notes now live under `docs/future/` so shipped guidance stays separate from speculative planning
@@ -88,6 +91,8 @@ For the full internal build history, design rationale, and implementation notes,
   - result: `OK` (`144` tests)
 
 ### Fixed
+- GeoQA Atlas cleaned-layer metadata is now explicit per dataset and controls the cleaned layer toggle state.
+- GeoQA Atlas runtime-error explanations now frame those findings as operational partial-run issues rather than geometry defects.
 - GeoQA Atlas no longer renders `validation_runtime_error` findings as normal defect geometry overlays.
 - GeoQA Atlas now labels runtime errors as operational issues in the drawer and keeps them drawer-only by default.
 - GeoQA Atlas cleaned layer controls now stay disabled when no real cleaned layer exists and show a clear unavailable message.

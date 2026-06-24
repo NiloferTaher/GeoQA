@@ -23,7 +23,7 @@ The first audience is GIS analysts, geospatial data engineers, utility teams, mu
 - Vite React frontend under `apps/atlas`.
 - Leaflet map viewer with static demo GeoJSON.
 - Precomputed GeoQA style report JSON.
-- Six demo datasets covering roads, zoning polygons, administrative boundaries, flood risk polygons, synthetic water utility lines, and places.
+- Six demo datasets covering roads, zoning polygons, public administrative boundaries, public flood risk polygons, synthetic water utility lines, and places.
 - Run QA workflow preview with local GeoJSON map preview.
 - No public arbitrary validation backend in v1.
 - No Streamlit.
@@ -39,12 +39,16 @@ The first audience is GIS analysts, geospatial data engineers, utility teams, mu
 - Water network / utility lines
 - Places or facilities points
 
-The water-network, administrative-boundary, and flood-zone samples are synthetic GeoQA demos. They are designed to show domain-specific QA behavior without implying public source provenance.
+The administrative-boundary sample uses Natural Earth Admin 1 states and provinces.
+The flood-zone sample uses the Philadelphia FEMA flood plain 2023 public fixture.
+The water-network sample remains a synthetic GeoQA demo and is labeled that way.
 
 ## Current Status
 
 - Static demo gallery works with six balanced cards.
 - Selected-feature issue review works through map overlays and the problem drawer.
+- Runtime errors are labeled operational and are not drawn as normal defect geometries.
+- Cleaned layer controls are enabled only where static cleaned output exists.
 - Run QA is preview-only and does not validate uploaded files yet.
 - GeoQA Python remains the validation source of truth.
 

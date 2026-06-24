@@ -630,6 +630,10 @@ h2 {
   font-size: 0.84rem;
 }
 
+.layer-helper.available {
+  color: var(--green);
+}
+
 .map-shell {
   height: min(78vh, 780px);
   min-height: 590px;
@@ -972,6 +976,11 @@ h2 {
 
 .issue-detail-card .why-copy {
   color: #bdd5dc;
+}
+
+.issue-detail-card .qa-note {
+  color: #d8efe6;
+  font-size: 0.82rem;
 }
 
 .examples-heading {

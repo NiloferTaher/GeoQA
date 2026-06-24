@@ -3315,3 +3315,31 @@
 - Runtime errors describe validation completeness, not feature geometry validity.
 - Showing runtime geometry as a normal defect overlay made Atlas imply a false geometry problem.
 - The map needed to preserve feature-level issue review while keeping operational report issues honest.
+
+## 2026-06-24 15 34 +04 GeoQA Atlas gallery and layer semantics polish
+
+### What changed
+
+- Re-read the Atlas correction instructions from `C:\Users\admin\Python\Projects\GeoQA Atlas\Instructions.md`.
+- Kept the Atlas app on the existing `atlas-product-layer` branch.
+- Rebuilt the administrative-boundary preview from the Natural Earth Admin 1 states and provinces public sample already staged in `data/public_samples`.
+- Rebuilt the flood-zone preview from the Philadelphia FEMA flood plain 2023 public sample already staged in `data/public_samples`.
+- Kept the water-network demo labeled as a synthetic GeoQA utility sample.
+- Added explicit cleaned-layer metadata to each Atlas demo dataset.
+- Kept the six-card dataset gallery balanced at three columns on desktop, two columns on tablet, and one column on mobile.
+- Updated the cleaned-layer toolbar so unavailable cleaned output is disabled and explained with `No cleaned layer is available for this demo.`
+- Added cleaned-layer copy for supported geometry fixes only when a cleaned preview exists.
+- Updated runtime error copy so `validation_runtime_error` is an operational issue and not a normal geometry defect.
+- Updated coordinate precision copy so flagged features are explained as QA findings rather than automatic fixes.
+- Clarified Run QA format support so Atlas browser preview support is separate from broader GeoQA Python backend support.
+- Updated the Atlas README, demo-data notes, product brief, root README, and changelog.
+- Verified the Atlas package with `npm run lint --if-present`, `npm run typecheck --if-present`, and `npm test --if-present`.
+- Verified `npm run build` from a clean Atlas source copy because the Google Drive worktree could not complete a local `node_modules` install or NTFS junction.
+- Confirmed the app metadata has six datasets, two cleaned previews, and four disabled cleaned-layer demos.
+- Verified the lightweight Python public API suite with `python -m unittest tests.test_public_api`.
+
+### Why this change was made
+
+- Atlas needed the gallery to feel complete while using honest public provenance where public fixtures were available.
+- Cleaned-layer behavior needed to communicate whether an actual cleaned output exists.
+- Runtime errors and coordinate precision findings needed clearer product semantics for non-expert GIS users.

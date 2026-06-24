@@ -31,12 +31,18 @@ npm run preview
 The v1 app uses static demo data in `public/demo-data`.
 It includes roads, zoning polygons, administrative boundaries, flood risk polygons, water utility lines, and places samples.
 Reports and issue overlays are precomputed JSON files shaped like GeoQA outputs.
-The water-network, administrative-boundary, and flood-zone demos are synthetic GeoQA samples made to show QA behavior without claiming public source provenance.
+The administrative-boundary demo uses a compact Natural Earth Admin 1 states and provinces preview.
+The flood-zone demo uses a compact Philadelphia FEMA flood plain 2023 preview.
+The water-network demo is a synthetic GeoQA sample made to show utility-network QA behavior without claiming public source provenance.
+Cleaned previews appear only when a real cleaned layer file exists.
+Runtime errors are operational findings in Atlas, not normal defect overlays.
 
 ## Backend Note
 
 The Run QA page previews the upload workflow and can display a local GeoJSON layer in the browser.
 Full validation requires a backend service that calls the GeoQA Python package.
+Atlas preview supports GeoJSON and zipped Shapefile where browser parsing is available.
+Full GeoQA validation through the Python backend can support additional GeoPandas-readable formats such as Shapefile, GeoPackage, CSV, GeoJSON, and GeoParquet.
 
 ## Root Project
 

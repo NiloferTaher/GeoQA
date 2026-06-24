@@ -53,7 +53,8 @@
       }
     ],
     "by_issue_class": {
-      "data_issue": 4
+      "data_geometry_issue": 3,
+      "data_issue": 1
     },
     "by_validator": {
       "self_intersection": 1,
@@ -78,7 +79,8 @@
       "feature_id": "W-005",
       "description": "Loop segment crosses itself near the center of the service area.",
       "solution_hint": "Reshape or split the line before tracing network connectivity.",
-      "priority_score": 82
+      "priority_score": 82,
+      "issue_class": "data_geometry_issue"
     },
     {
       "issue_id": "water-002",
@@ -87,7 +89,8 @@
       "feature_id": "W-003/W-004",
       "description": "Two service endpoints stop close to each other but do not share a vertex.",
       "solution_hint": "Confirm whether the endpoints are the same junction and snap if appropriate.",
-      "priority_score": 58
+      "priority_score": 58,
+      "issue_class": "data_geometry_issue"
     },
     {
       "issue_id": "water-003",
@@ -96,7 +99,8 @@
       "feature_id": "W-006/W-007",
       "description": "Lateral endpoints fall within snapping tolerance but remain separate.",
       "solution_hint": "Snap the endpoints after confirming they are the same service connection.",
-      "priority_score": 55
+      "priority_score": 55,
+      "issue_class": "data_geometry_issue"
     },
     {
       "issue_id": "water-004",
@@ -105,7 +109,8 @@
       "feature_id": "layer",
       "description": "The water network layer should rebuild its spatial index after editing.",
       "solution_hint": "Rebuild the spatial index before publishing or running heavier QA.",
-      "priority_score": 40
+      "priority_score": 40,
+      "issue_class": "data_issue"
     }
   ]
 }

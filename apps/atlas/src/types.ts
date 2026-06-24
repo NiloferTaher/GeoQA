@@ -9,7 +9,11 @@ export type Dataset = {
   geometry_type: string
   profile: string
   issue_count: number
+  hasCleanedLayer?: boolean
+  cleanedLayerNote?: string
+  cleanedGeoJsonPath?: string
   has_cleaned_layer?: boolean
+  cleaned_layer_note?: string
   cleaned_geojson?: string
   geojson?: string
   report?: string

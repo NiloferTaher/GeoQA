@@ -1,10 +1,11 @@
-export const issueCopy: Record<string, { description: string; recommendation: string; why: string }> = {
+export const issueCopy: Record<string, { description: string; recommendation: string; why: string; note?: string }> = {
   coordinate_precision_not_fit_for_use: {
     description:
-      "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail.",
+      "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format.",
     recommendation:
       "Review driver precision settings and align export precision with use-case tolerances. Snap coordinates to an appropriate grid before delivery when required.",
     why: "Precision drift can make files heavier, create inconsistent delivery outputs, or hide meaningful tolerances.",
+    note: "This is a QA finding. Atlas does not automatically change this feature unless a conservative clean operation is available and explicitly applied.",
   },
   missing_or_stale_spatial_index: {
     description:
@@ -44,9 +45,9 @@ export const issueCopy: Record<string, { description: string; recommendation: st
   },
   validation_runtime_error: {
     description:
-      "Operational issue. Validation was interrupted or limited by runtime, thermal, or budget constraints.",
+      "Validation was interrupted or limited by runtime, thermal, or budget constraints.",
     recommendation: "Rerun with low-resource mode, chunking, cache reuse, or a longer runtime budget.",
-    why: "This does not mean the selected geometry itself is invalid or cleaned. It means validation did not complete fully.",
+    why: "The report may contain useful partial findings, but this issue does not mean the selected geometry itself is invalid or cleaned. It means the validation run did not complete fully.",
   },
 }
 

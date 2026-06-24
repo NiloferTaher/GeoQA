@@ -5,9 +5,22 @@ const API_BASE = import.meta.env.VITE_API_BASE ?? ""
 const STATIC_BASE = "/demo-data"
 
 function normalizeDataset(dataset: Dataset): Dataset {
+  const cleanedGeojson = dataset.cleaned_geojson ?? dataset.cleanedGeoJsonPath
+  const hasCleanedLayer = dataset.has_cleaned_layer ?? dataset.hasCleanedLayer ?? Boolean(cleanedGeojson)
+  const cleanedLayerNote =
+    dataset.cleaned_layer_note ??
+    dataset.cleanedLayerNote ??
+    (hasCleanedLayer
+      ? "Cleaned preview available for supported geometry fixes only."
+      : "No cleaned layer is available for this demo.")
   return {
     ...dataset,
-    has_cleaned_layer: dataset.has_cleaned_layer ?? Boolean(dataset.cleaned_geojson),
+    cleaned_geojson: cleanedGeojson,
+    cleanedGeoJsonPath: cleanedGeojson,
+    has_cleaned_layer: hasCleanedLayer,
+    hasCleanedLayer,
+    cleaned_layer_note: cleanedLayerNote,
+    cleanedLayerNote,
   }
 }
 

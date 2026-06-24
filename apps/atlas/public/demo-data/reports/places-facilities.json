@@ -41,7 +41,8 @@
       }
     ],
     "by_issue_class": {
-      "data_issue": 13
+      "data_geometry_issue": 12,
+      "data_issue": 1
     },
     "by_validator": {
       "coordinate_precision_not_fit_for_use": 12,
@@ -93,7 +94,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -114,7 +115,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -135,7 +136,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -156,7 +157,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -177,7 +178,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -198,7 +199,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -219,7 +220,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -240,7 +241,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -261,7 +262,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -282,7 +283,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -303,7 +304,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -324,7 +325,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"

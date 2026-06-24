@@ -141,6 +141,7 @@ export default function DatasetWorkspace() {
             showIssues={showIssues}
             showCleaned={cleanedAvailable && showCleaned && !selectedIssueIsOperational}
             cleanedAvailable={cleanedAvailable}
+            cleanedLayerNote={dataset.cleaned_layer_note}
             onRawChange={setShowRaw}
             onIssuesChange={setShowIssues}
             onCleanedChange={setShowCleaned}

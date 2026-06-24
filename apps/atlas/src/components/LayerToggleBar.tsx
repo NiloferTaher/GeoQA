@@ -3,6 +3,7 @@ type LayerToggleBarProps = {
   showIssues: boolean
   showCleaned: boolean
   cleanedAvailable: boolean
+  cleanedLayerNote?: string
   onRawChange: (value: boolean) => void
   onIssuesChange: (value: boolean) => void
   onCleanedChange: (value: boolean) => void
@@ -13,6 +14,7 @@ export default function LayerToggleBar({
   showIssues,
   showCleaned,
   cleanedAvailable,
+  cleanedLayerNote,
   onRawChange,
   onIssuesChange,
   onCleanedChange,
@@ -37,7 +39,12 @@ export default function LayerToggleBar({
         />
         Cleaned layer
       </label>
-      {!cleanedAvailable ? <span className="layer-helper">No cleaned layer is available for this demo.</span> : null}
+      <span className={`layer-helper ${cleanedAvailable ? "available" : ""}`}>
+        {cleanedLayerNote ??
+          (cleanedAvailable
+            ? "Cleaned preview available for supported geometry fixes only."
+            : "No cleaned layer is available for this demo.")}
+      </span>
     </div>
   )
 }

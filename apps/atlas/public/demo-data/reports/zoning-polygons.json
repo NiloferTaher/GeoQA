@@ -47,7 +47,9 @@
       }
     ],
     "by_issue_class": {
-      "data_issue": 36
+      "data_geometry_issue": 34,
+      "data_issue": 1,
+      "operational_issue": 1
     },
     "by_validator": {
       "coordinate_precision_not_fit_for_use": 34,
@@ -113,7 +115,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -134,7 +136,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -155,7 +157,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -176,7 +178,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -197,7 +199,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -218,7 +220,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -239,7 +241,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -260,7 +262,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -281,7 +283,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -302,7 +304,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -323,7 +325,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -344,7 +346,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -365,7 +367,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -386,7 +388,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -407,7 +409,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -428,7 +430,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -449,7 +451,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -470,7 +472,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -491,7 +493,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -512,7 +514,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -533,7 +535,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -554,7 +556,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -575,7 +577,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -596,7 +598,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -617,7 +619,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -638,7 +640,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -659,7 +661,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -680,7 +682,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -701,7 +703,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -722,7 +724,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -743,7 +745,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -764,7 +766,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -785,7 +787,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -806,7 +808,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -848,7 +850,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "validation_runtime_error",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "operational_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": null

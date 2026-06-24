@@ -29,7 +29,10 @@ npm run dev
 
 The v1 app serves precomputed reports and static GeoJSON previews for public demo use.
 The Run QA page previews the upload workflow and clearly marks full validation as a backend-connected step.
-Current demo cards cover roads, zoning polygons, administrative boundaries, flood risk zones, synthetic water utility lines, and places.
+Atlas preview supports GeoJSON and zipped Shapefile where browser parsing is available.
+Full GeoQA validation through the Python backend can support additional GeoPandas-readable formats such as Shapefile, GeoPackage, CSV, GeoJSON, and GeoParquet.
+Current demo cards cover roads, zoning polygons, public administrative boundaries, public flood risk zones, synthetic water utility lines, and places.
+Runtime errors are labeled operational in Atlas and cleaned layers appear only when real cleaned output exists.
 Screenshots can be added under `docs/assets/` after the Atlas preview is captured.
 
 ## Front-and-Center Proof

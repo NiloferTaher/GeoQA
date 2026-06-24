@@ -79,15 +79,17 @@ export default function RunQaPage() {
         <p className="eyebrow">Atlas workflow preview</p>
         <h1>Run QA on your own layer</h1>
         <p>
-          Upload a dataset, choose a GeoQA profile, review findings on the map, apply conservative fixes, and download
-          the report or cleaned layer.
+          Preview a browser-readable layer, choose a GeoQA profile, and see how the backend-connected validation flow
+          will return findings, reports, and any conservative cleaned output.
         </p>
       </section>
 
       <section className="run-notice">
         <ShieldCheck size={20} />
         <p>
-          Today upload preview and workflow demo. Next backend-connected validation using the GeoQA Python engine.
+          Atlas preview supports GeoJSON and zipped Shapefile where browser parsing is available. Full GeoQA validation
+          through the Python backend can support additional GeoPandas-readable formats such as Shapefile, GeoPackage,
+          CSV, GeoJSON, and GeoParquet.
         </p>
       </section>
 
@@ -159,7 +161,7 @@ export default function RunQaPage() {
           <h2>What the backend will add</h2>
           <p>
             The connected backend will call the GeoQA Python engine, write a structured JSON report, return issue
-            overlays, and expose any conservative cleaned output for download.
+            overlays, and expose any conservative cleaned output for supported geometry fixes.
           </p>
         </div>
       </section>

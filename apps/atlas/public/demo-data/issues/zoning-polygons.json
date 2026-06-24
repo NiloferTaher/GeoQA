@@ -9,7 +9,8 @@
         "severity": "medium",
         "feature_id": 0,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -71,7 +72,8 @@
         "severity": "medium",
         "feature_id": 1,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -121,7 +123,8 @@
         "severity": "medium",
         "feature_id": 2,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -231,7 +234,8 @@
         "severity": "medium",
         "feature_id": 3,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -269,7 +273,8 @@
         "severity": "medium",
         "feature_id": 4,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -327,7 +332,8 @@
         "severity": "medium",
         "feature_id": 5,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -365,7 +371,8 @@
         "severity": "medium",
         "feature_id": 6,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -411,7 +418,8 @@
         "severity": "medium",
         "feature_id": 7,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -629,7 +637,8 @@
         "severity": "medium",
         "feature_id": 8,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -675,7 +684,8 @@
         "severity": "medium",
         "feature_id": 9,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -789,7 +799,8 @@
         "severity": "medium",
         "feature_id": 10,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -875,7 +886,8 @@
         "severity": "medium",
         "feature_id": 11,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -989,7 +1001,8 @@
         "severity": "medium",
         "feature_id": 12,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -1063,7 +1076,8 @@
         "severity": "medium",
         "feature_id": 13,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -1109,7 +1123,8 @@
         "severity": "medium",
         "feature_id": 14,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -1207,7 +1222,8 @@
         "severity": "medium",
         "feature_id": 15,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -1285,7 +1301,8 @@
         "severity": "medium",
         "feature_id": 16,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -1323,7 +1340,8 @@
         "severity": "medium",
         "feature_id": 17,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -1361,7 +1379,8 @@
         "severity": "medium",
         "feature_id": 18,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -1435,7 +1454,8 @@
         "severity": "medium",
         "feature_id": 19,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -3589,7 +3609,8 @@
         "severity": "medium",
         "feature_id": 20,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -3743,7 +3764,8 @@
         "severity": "medium",
         "feature_id": 21,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -3833,7 +3855,8 @@
         "severity": "medium",
         "feature_id": 22,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -4175,7 +4198,8 @@
         "severity": "medium",
         "feature_id": 23,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -4281,7 +4305,8 @@
         "severity": "medium",
         "feature_id": 24,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -4323,7 +4348,8 @@
         "severity": "medium",
         "feature_id": 25,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -4505,7 +4531,8 @@
         "severity": "medium",
         "feature_id": 26,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -4559,7 +4586,8 @@
         "severity": "medium",
         "feature_id": 27,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -4877,7 +4905,8 @@
         "severity": "medium",
         "feature_id": 28,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -4915,7 +4944,8 @@
         "severity": "medium",
         "feature_id": 29,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -4953,7 +4983,8 @@
         "severity": "medium",
         "feature_id": 30,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -5251,7 +5282,8 @@
         "severity": "medium",
         "feature_id": 31,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -5409,7 +5441,8 @@
         "severity": "medium",
         "feature_id": 32,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -5467,7 +5500,8 @@
         "severity": "medium",
         "feature_id": 33,
         "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
-        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+        "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+        "issue_class": "data_geometry_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -5649,7 +5683,8 @@
         "severity": "medium",
         "feature_id": 34,
         "description": "A feature class lacks an effective spatial index or its index is stale after heavy edits, degrading spatial query performance. Diagnose with index validation/rebuild tools and recalculate the spatial index when query performance drops.",
-        "solution_hint": "Rebuild or recreate the spatial index after bulk edits or loads."
+        "solution_hint": "Rebuild or recreate the spatial index after bulk edits or loads.",
+        "issue_class": "data_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -5847,7 +5882,8 @@
         "severity": "high",
         "feature_id": 35,
         "description": "validation runtime error",
-        "solution_hint": "Inspect the record and correct the issue using GIS validation or data-cleaning tools."
+        "solution_hint": "Inspect the record and correct the issue using GIS validation or data-cleaning tools.",
+        "issue_class": "operational_issue"
       },
       "geometry": {
         "type": "Polygon",
@@ -5906,7 +5942,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -5927,7 +5963,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -5948,7 +5984,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -5969,7 +6005,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -5990,7 +6026,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6011,7 +6047,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6032,7 +6068,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6053,7 +6089,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6074,7 +6110,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6095,7 +6131,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6116,7 +6152,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6137,7 +6173,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6158,7 +6194,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6179,7 +6215,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6200,7 +6236,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6221,7 +6257,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6242,7 +6278,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6263,7 +6299,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6284,7 +6320,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6305,7 +6341,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6326,7 +6362,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6347,7 +6383,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6368,7 +6404,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6389,7 +6425,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6410,7 +6446,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6431,7 +6467,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6452,7 +6488,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6473,7 +6509,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6494,7 +6530,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6515,7 +6551,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6536,7 +6572,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6557,7 +6593,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6578,7 +6614,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6599,7 +6635,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "coordinate_precision_not_fit_for_use",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "data_geometry_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": "accuracy"
@@ -6641,7 +6677,7 @@
       "validation_rule_version": "2026.03",
       "validator_name": "validation_runtime_error",
       "validator_version": "1",
-      "issue_class": "data_issue",
+      "issue_class": "operational_issue",
       "suppression": null,
       "provenance": {
         "catalog_category": null
