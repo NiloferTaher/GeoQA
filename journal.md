@@ -3238,3 +3238,21 @@
   - dissolve-by-name behavior
 - Added `geoqa.plugins` as an additive layer rather than altering validator internals.
 - Hooked plugins into `validate_dataset_with_profile(...)` only after core validation completes, so the engine remains the center and plugin rules stay optional/additive.
+
+## 2026-06-24 12 50 +04 GeoQA Atlas product layer
+
+### What changed
+
+- Added GeoQA Atlas under `apps/atlas` as the public WebGIS demo layer for the existing GeoQA engine.
+- Added a Vite React and Leaflet interface with landing, dataset gallery, dataset workspace, issue drawer, layer toggles, report downloads, GitHub links, and static demo fallback data.
+- Added a Run QA workflow preview page with GeoJSON upload preview, profile selection, and the command users would run through the GeoQA CLI.
+- Added a water-network utility-line demo using `water_network_quick` with self-intersection, near-miss endpoint, unsnapped endpoint, and spatial-index issue examples.
+- Added reusable frontend geometry bounds handling for selected issue focus so polygon and parcel issue zoom uses the actual feature coordinates.
+- Improved Medium severity badge readability with bright yellow background, near-black text, and heavier type.
+- Added root and app documentation for Atlas, including `docs/geoqa_atlas_product_brief.md` and `apps/atlas/docs/demo-data.md`.
+- Kept GeoQA validation logic inside the Python engine and treated Atlas as a report and workflow presentation layer.
+
+### Why this change was made
+
+- The project needed a public-facing product demo that explains GeoQA quickly without replacing internals or making Streamlit the lead experience.
+- Atlas gives reviewers a map-first way to understand GeoQA reports, while the CLI and Python package remain the authoritative validation surface.

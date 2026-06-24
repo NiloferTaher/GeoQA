@@ -11,6 +11,25 @@ More precisely: GeoQA validates, audits, and prepares geospatial datasets for re
 GeoQA is designed for imperfect machines and imperfect data.
 It prioritizes useful results over complete runs when necessary.
 
+## GeoQA Atlas
+
+GeoQA Atlas is the public WebGIS demo layer for this engine.
+It lives in `apps/atlas` and shows GeoQA reports through a dark map-first interface with demo datasets, issue overlays, report downloads, and an upload workflow preview.
+
+Atlas does not replace the GeoQA internals.
+The deterministic CLI and Python package remain the source of validation logic, profiles, reports, and conservative fixes.
+
+Run the Atlas demo with these commands.
+
+```powershell
+cd apps/atlas
+npm install
+npm run dev
+```
+
+The v1 app serves precomputed reports and static GeoJSON previews for public demo use.
+The Run QA page previews the upload workflow and clearly marks full validation as a backend-connected step.
+
 ## Front-and-Center Proof
 
 One of the clearest current proof points is already in the repo:

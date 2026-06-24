@@ -8,6 +8,11 @@ For the full internal build history, design rationale, and implementation notes,
 ## Unreleased
 
 ### Added
+- GeoQA Atlas visual demo and product layer under `apps/atlas`.
+- Map-first demo dataset pages for roads, zoning polygons, water utility lines, and places.
+- Run QA upload workflow preview with GeoJSON map preview and profile selection.
+- `docs/geoqa_atlas_product_brief.md` for public product positioning.
+- Water-network demo dataset using the `water_network_quick` profile and issue copy for topology review.
 - `docs/before_after_showcase.md` with a verified public before/after cleaning story using the existing duplicate-vertex sample.
 - `docs/workflows/water_network_ml_prep.md` describing where GeoQA fits in a utility-network-to-ML preparation workflow.
 - A clean public Python API layer:
@@ -31,6 +36,7 @@ For the full internal build history, design rationale, and implementation notes,
 - `examples/before_after_cleaning.py` showing the validate -> inspect -> clean -> export story.
 
 ### Changed
+- Root README now introduces GeoQA Atlas without replacing the CLI and Python engine story.
 - README, Start Here, and supporting docs now position GeoQA more explicitly as the data-quality layer before downstream GeoAI/ML work.
 - future-only architecture and staged execution notes now live under `docs/future/` so shipped guidance stays separate from speculative planning
 - `geoqa.validate(...)` now returns a first-class `GeoQAReport` object instead of exposing the raw execution result directly.
@@ -75,6 +81,10 @@ For the full internal build history, design rationale, and implementation notes,
 - Current verified automated baseline is now:
   - `python -m unittest discover -s tests -p 'test_*.py'`
   - result: `OK` (`144` tests)
+
+### Fixed
+- Polygon and parcel issue focus in GeoQA Atlas now uses a reusable geometry bounds helper for selected-feature map zoom.
+- Medium severity badges in GeoQA Atlas now use a bright yellow background with near-black high-weight text.
 
 ### Added
 - First-class low-resource CLI mode for:

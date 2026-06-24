@@ -1,0 +1,111 @@
+{
+  "dataset_id": "water-network-utility-lines",
+  "issue_count": 4,
+  "summary": {
+    "validation_rule_version": "2026.03",
+    "issue_count": 4,
+    "total_issues": 4,
+    "actionable": 4,
+    "informational": 0,
+    "actionable_ratio": 1,
+    "by_problem": {
+      "self_intersection": 1,
+      "suspicious_near_miss_endpoints": 1,
+      "unsnapped_endpoints_within_tolerance": 1,
+      "missing_or_stale_spatial_index": 1
+    },
+    "by_severity": {
+      "high": 1,
+      "medium": 3
+    },
+    "severity_distribution": [
+      {
+        "name": "medium",
+        "count": 3,
+        "percent": 75
+      },
+      {
+        "name": "high",
+        "count": 1,
+        "percent": 25
+      }
+    ],
+    "top_issues": [
+      {
+        "problem_name": "self_intersection",
+        "count": 1,
+        "percent": 25
+      },
+      {
+        "problem_name": "suspicious_near_miss_endpoints",
+        "count": 1,
+        "percent": 25
+      },
+      {
+        "problem_name": "unsnapped_endpoints_within_tolerance",
+        "count": 1,
+        "percent": 25
+      },
+      {
+        "problem_name": "missing_or_stale_spatial_index",
+        "count": 1,
+        "percent": 25
+      }
+    ],
+    "by_issue_class": {
+      "data_issue": 4
+    },
+    "by_validator": {
+      "self_intersection": 1,
+      "suspicious_near_miss_endpoints": 1,
+      "unsnapped_endpoints_within_tolerance": 1,
+      "missing_or_stale_spatial_index": 1
+    },
+    "by_root_cause": {
+      "topology": 3,
+      "integrity": 1
+    },
+    "by_priority_band": {
+      "high": 1,
+      "medium": 3
+    }
+  },
+  "issues": [
+    {
+      "issue_id": "water-001",
+      "problem_name": "self_intersection",
+      "severity": "high",
+      "feature_id": "W-005",
+      "description": "Loop segment crosses itself near the center of the service area.",
+      "solution_hint": "Reshape or split the line before tracing network connectivity.",
+      "priority_score": 82
+    },
+    {
+      "issue_id": "water-002",
+      "problem_name": "suspicious_near_miss_endpoints",
+      "severity": "medium",
+      "feature_id": "W-003/W-004",
+      "description": "Two service endpoints stop close to each other but do not share a vertex.",
+      "solution_hint": "Confirm whether the endpoints are the same junction and snap if appropriate.",
+      "priority_score": 58
+    },
+    {
+      "issue_id": "water-003",
+      "problem_name": "unsnapped_endpoints_within_tolerance",
+      "severity": "medium",
+      "feature_id": "W-006/W-007",
+      "description": "Lateral endpoints fall within snapping tolerance but remain separate.",
+      "solution_hint": "Snap the endpoints after confirming they are the same service connection.",
+      "priority_score": 55
+    },
+    {
+      "issue_id": "water-004",
+      "problem_name": "missing_or_stale_spatial_index",
+      "severity": "medium",
+      "feature_id": "layer",
+      "description": "The water network layer should rebuild its spatial index after editing.",
+      "solution_hint": "Rebuild the spatial index before publishing or running heavier QA.",
+      "priority_score": 40
+    }
+  ]
+}

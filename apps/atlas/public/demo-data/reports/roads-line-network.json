@@ -1,0 +1,1956 @@
+{
+  "validation_rule_version": "2026.03",
+  "issue_count": 88,
+  "summary": {
+    "validation_rule_version": "2026.03",
+    "issue_count": 88,
+    "total_issues": 88,
+    "actionable": 2,
+    "informational": 86,
+    "actionable_ratio": 0.0227,
+    "by_problem": {
+      "coordinate_precision_not_fit_for_use": 86,
+      "missing_or_stale_spatial_index": 1,
+      "validation_runtime_error": 1
+    },
+    "problem_breakdown": [
+      {
+        "name": "coordinate_precision_not_fit_for_use",
+        "count": 86,
+        "percent": 97.73
+      },
+      {
+        "name": "missing_or_stale_spatial_index",
+        "count": 1,
+        "percent": 1.14
+      },
+      {
+        "name": "validation_runtime_error",
+        "count": 1,
+        "percent": 1.14
+      }
+    ],
+    "by_severity": {
+      "high": 1,
+      "medium": 87
+    },
+    "severity_distribution": [
+      {
+        "name": "medium",
+        "count": 87,
+        "percent": 98.86
+      },
+      {
+        "name": "high",
+        "count": 1,
+        "percent": 1.14
+      }
+    ],
+    "by_issue_class": {
+      "data_issue": 88
+    },
+    "by_validator": {
+      "coordinate_precision_not_fit_for_use": 86,
+      "missing_or_stale_spatial_index": 1,
+      "validation_runtime_error": 1
+    },
+    "by_iso_category": {
+      "Logical Consistency": 1,
+      "Positional Accuracy": 86
+    },
+    "by_root_cause": {
+      "accuracy": 86,
+      "integrity": 1
+    },
+    "by_priority_band": {
+      "high": 1,
+      "low": 86,
+      "medium": 1
+    },
+    "top_issues": [
+      {
+        "problem_name": "coordinate_precision_not_fit_for_use",
+        "count": 86,
+        "percent": 97.73
+      },
+      {
+        "problem_name": "missing_or_stale_spatial_index",
+        "count": 1,
+        "percent": 1.14
+      },
+      {
+        "problem_name": "validation_runtime_error",
+        "count": 1,
+        "percent": 1.14
+      }
+    ],
+    "top_actionable": [
+      {
+        "problem_name": "validation_runtime_error",
+        "feature_id": 87,
+        "severity": "high",
+        "confidence": "medium",
+        "priority_score": 60
+      },
+      {
+        "problem_name": "missing_or_stale_spatial_index",
+        "feature_id": 86,
+        "severity": "medium",
+        "confidence": "medium",
+        "priority_score": 40
+      }
+    ]
+  },
+  "issues": [
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 0,
+      "geometry": "LINESTRING (-100.505428 42.807529, -100.534951 42.788427, -100.54016 42.637343, -100.536687 42.527938, -100.54537 42.361225, -100.528004 42.329966, -100.533214 42.251819, -100.526268 42.178882, -100.54016 42.100735, -100.541897 41.982647, -100.557526 41.98091, -100.554053 41.939232, -100.562736 41.89929, -100.557526 41.857612, -100.547107 41.83851, -100.543634 41.810724, -100.526268 41.774256, -100.522794 41.75168, -100.508902 41.732577, -100.514111 41.685689, -100.501955 41.654431, -100.489799 41.600596, -100.500219 41.545025, -100.503692 41.446039, -100.500219 41.421727, -100.559263 41.371366, -100.611361 41.319268, -100.628727 41.310585, -100.651302 41.275853, -100.677351 41.246331, -100.70861 41.220282, -100.748552 41.197706, -100.771127 41.102194)",
+      "issue_id": "1178dd782f5a6357",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 1,
+      "geometry": "LINESTRING (-87.274315 36.024391, -87.229164 35.96361, -87.161436 35.906303, -87.095446 35.855942, -87.036402 35.822946, -86.848849 35.831629, -86.75681 35.812527, -86.7516 35.824683, -86.742917 35.835102, -86.709922 35.845522, -86.531053 35.866361, -86.484165 35.875044, -86.478955 35.890673, -86.472798 35.893752)",
+      "issue_id": "e20e86ffcaf73f3e",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 2,
+      "geometry": "LINESTRING (-87.727566 44.151653, -87.573009 44.14818)",
+      "issue_id": "cacf4651561bb2b6",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 3,
+      "geometry": "MULTILINESTRING ((-74.759203 39.143013, -74.673585 39.233618, -74.6458 39.310028), (-74.644063 39.310028, -74.616278 39.346496, -74.55376 39.41075))",
+      "issue_id": "00c3f4590256878f",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 4,
+      "geometry": "LINESTRING (-104.450971 42.757168, -104.438815 42.790163, -104.402346 42.849208, -104.398873 42.882203, -104.40582 42.887413, -104.404083 42.908252, -104.360668 42.946457, -104.367615 43.03155, -104.365878 43.090594, -104.294678 43.255571, -104.303361 43.292039, -104.301624 43.304195, -104.228687 43.370186, -104.204375 43.410128, -104.199165 43.427494, -104.211321 43.451806, -104.211321 43.462225, -104.204375 43.498694, -104.193955 43.616782, -104.188745 43.774812, -104.183536 43.814754, -104.197428 43.851223, -104.187009 43.892901, -104.183536 43.929369, -104.199165 43.971048, -104.162696 44.017936, -104.15054 44.042248, -104.136648 44.08219, -104.131438 44.132551, -104.100179 44.137761, -104.072394 44.156863, -104.06892 44.170756, -104.055028 44.175966)",
+      "issue_id": "474455bf9e6d01a0",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 5,
+      "geometry": "LINESTRING (-104.053291 44.175966, -104.037662 44.177702, -104.037662 44.195068, -103.985564 44.205488, -103.959515 44.226327, -103.92131 44.2298, -103.92131 44.24022, -103.928256 44.243693, -103.92652 44.257586, -103.90568 44.281898, -103.867475 44.299264, -103.836217 44.292318, -103.820587 44.295791, -103.798012 44.314893, -103.799748 44.330523, -103.721601 44.379147, -103.714655 44.391303, -103.711182 44.426035, -103.733758 44.472923)",
+      "issue_id": "d350cbc94b00b8d6",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 6,
+      "geometry": "LINESTRING (-100.882269 25.587458, -100.86664 25.564883, -100.864904 25.531887, -100.873586 25.490209, -100.804123 25.436375, -100.79544 25.361701, -100.79544 25.309603, -100.781547 25.292237, -100.783284 25.260979, -100.738132 25.221037, -100.741605 25.205408)",
+      "issue_id": "00457ca4acd942b4",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 7,
+      "geometry": "LINESTRING (-105.83851 23.632053, -105.782939 23.652892, -105.744734 23.652892, -105.722158 23.663312, -105.732578 23.692834, -105.722158 23.711936, -105.678743 23.732775, -105.656168 23.736249, -105.590177 23.727566, -105.562392 23.737985, -105.541552 23.751878, -105.510294 23.760561, -105.501611 23.736249, -105.479035 23.722356, -105.437357 23.758824, -105.414781 23.762298, -105.404362 23.758824, -105.395679 23.765771, -105.392205 23.77619, -105.378313 23.784873, -105.357473 23.7814, -105.341844 23.795293, -105.329688 23.831761, -105.310585 23.850864, -105.27759 23.849127, -105.242858 23.856074, -105.228965 23.864757, -105.178604 23.86823, -105.107404 23.883859, -105.069199 23.885596, -105.010155 23.915118, -104.947637 23.918591, -104.935481 23.930747, -104.916378 23.935957, -104.881647 23.935957, -104.853861 23.927274, -104.850388 23.953323, -104.770505 23.984582, -104.706251 23.995001, -104.673255 24.022787, -104.655889 24.02626)",
+      "issue_id": "1fd7f89fa7e4a807",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 8,
+      "geometry": "LINESTRING (-120.545729 41.503347, -120.609983 41.505083, -120.651661 41.494664, -120.691603 41.50161, -120.705496 41.498137, -120.74891 41.473825, -120.783642 41.463405, -120.847896 41.454722, -120.931253 41.402624, -120.953829 41.373102, -120.948619 41.35921, -120.91215 41.34358, -120.893048 41.312321, -120.887838 41.286273, -120.908677 41.239384, -120.924306 41.216809, -120.945146 41.19597, -120.981614 41.169921, -121.028502 41.152555, -121.09102 41.145608, -121.132698 41.133452, -121.195215 41.086564, -121.207371 41.062252, -121.257733 41.070935, -121.271625 41.091774, -121.282045 41.09872, -121.295938 41.09872, -121.311567 41.090037, -121.32025 41.076145, -121.403607 41.046622, -121.436602 41.010154, -121.455704 40.997998, -121.492173 40.994525, -121.500856 41.001471, -121.513012 40.991051, -121.516485 40.978895, -121.523432 40.973686, -121.551217 40.978895, -121.573793 40.966739, -121.655413 40.890329, -121.683198 40.8747, -121.709247 40.872963, -121.730086 40.878173, -121.735296 40.86949, -121.735296 40.862543, -121.761345 40.852124, -121.87075 40.871226, -121.88638 40.867753, -121.924585 40.836495, -121.940214 40.810446, -121.943687 40.796553, -121.948897 40.791343, -121.971473 40.78787, -121.978419 40.780924, -122.006205 40.780924, -122.016624 40.760084, -122.023571 40.756611, -122.073932 40.742718, -122.086088 40.713196, -122.108664 40.692357, -122.152079 40.683674, -122.176391 40.669781, -122.275377 40.62984)",
+      "issue_id": "0ae58f3efde5fc1c",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 9,
+      "geometry": "LINESTRING (-123.364222 43.158321, -123.378114 43.168741, -123.374641 43.180897, -123.360749 43.205209, -123.352066 43.297249, -123.332963 43.354557, -123.341646 43.391025, -123.322543 43.502167, -123.313861 43.51606, -123.293021 43.536899, -123.284338 43.561211, -123.220084 43.611573, -123.218348 43.642831, -123.202718 43.6793, -123.200982 43.694929, -123.209665 43.715768, -123.200982 43.727924, -123.164513 43.753973, -123.114152 43.747027, -123.091576 43.752237, -123.044688 43.797388, -123.016903 43.866852, -123.00301 43.939789, -123.004747 43.99536, -123.044688 44.040511, -123.046425 44.070034)",
+      "issue_id": "7cf3fdc227cecdc5",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 10,
+      "geometry": "LINESTRING (-101.543912 48.312534, -101.649844 48.310797, -101.731464 48.326427, -101.788772 48.331636, -101.946802 48.322953, -102.023212 48.328163, -102.179506 48.32469, -102.295857 48.331636, -102.38616 48.307324, -102.568503 48.310797, -102.608444 48.326427, -102.721323 48.328163, -102.787314 48.340319, -103.627825 48.343793, -103.626089 48.218758, -103.631299 48.213548, -103.631299 48.177079, -103.67124 48.151031, -103.685133 48.145821, -103.742441 48.145821)",
+      "issue_id": "d247593f351fbbf7",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 11,
+      "geometry": "MULTILINESTRING ((-117.782807 41.397415, -117.906105 41.397415, -118.046769 41.406098, -118.262107 41.458195, -118.293366 41.482508, -118.416664 41.604069, -118.543435 41.770782, -118.566011 41.802041, -118.569484 41.859349, -118.59206 41.880188, -118.616372 41.946178, -118.649368 41.944442, -118.704939 41.918393, -118.727514 41.911447, -118.734461 41.902764, -118.736197 41.878451, -118.746617 41.869768, -118.777876 41.869768, -118.835183 41.887134, -118.882071 41.887134, -118.955008 41.913183, -118.970638 41.907973, -118.99495 41.881924, -119.050521 41.871505, -119.146034 41.9045, -119.264122 41.92013, -119.293644 41.963544, -119.3058 41.993066), (-119.3058 41.994803, -119.312747 41.998276, -119.39784 42.000013, -119.436045 42.012169, -119.475987 42.017379, -119.48467 42.024325, -119.489879 42.053847, -119.640963 42.090316, -119.675695 42.095526, -119.703481 42.093789, -119.736476 42.102472, -119.760788 42.114628, -119.781627 42.133731, -119.802466 42.164989, -119.823306 42.175409, -119.972653 42.185828, -120.042116 42.211877, -120.089005 42.222297, -120.12721 42.213614, -120.240088 42.22056, -120.318235 42.244873, -120.340811 42.257029))",
+      "issue_id": "6e1172bc3781f1b3",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 12,
+      "geometry": "LINESTRING (-119.057467 43.58726, -118.981057 43.585524, -118.812608 43.457016, -118.791768 43.444859, -118.611163 43.437913, -118.588587 43.413601, -118.59206 43.387552, -118.583377 43.279883, -118.487864 43.231258, -118.315942 43.175687, -118.239531 43.10275, -118.2048 43.083648, -118.171804 43.048916, -118.086711 43.003764, -118.043296 42.951667, -117.854007 42.779744)",
+      "issue_id": "e2180fc91194329d",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 13,
+      "geometry": "LINESTRING (-123.067264 45.615603, -123.115889 45.641652, -123.150621 45.650334, -123.213138 45.690276, -123.235714 45.707642, -123.24787 45.733691, -123.272182 45.747584, -123.312124 45.763213, -123.341646 45.780579, -123.376378 45.773633, -123.419793 45.773633, -123.430212 45.778842, -123.480574 45.804891, -123.496203 45.817048, -123.49794 45.827467, -123.529198 45.844833, -123.572613 45.863936, -123.596925 45.862199, -123.609082 45.883038, -123.617765 45.888248, -123.711541 45.909087, -123.760165 45.903877, -123.820946 45.909087, -123.869571 45.900404, -123.892146 45.91256, -123.902566 45.92819, -123.921669 45.936873)",
+      "issue_id": "5d401b67fbf25d81",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 14,
+      "geometry": "LINESTRING (-123.930352 45.164088, -123.925142 45.176244, -123.888673 45.20403, -123.848732 45.259601, -123.820946 45.28565, -123.834839 45.327328, -123.814 45.34643, -123.80358 45.377689, -123.836575 45.44368, -123.836575 45.490568, -123.840049 45.497514, -123.873044 45.518353, -123.886937 45.530509, -123.897356 45.551349, -123.883463 45.563505, -123.8852 45.570451, -123.919932 45.563505, -123.935561 45.579134, -123.939035 45.594763, -123.932088 45.634705, -123.918195 45.659017, -123.914722 45.685066, -123.906039 45.686803, -123.883463 45.681593, -123.864361 45.692013, -123.876517 45.707642, -123.902566 45.719798)",
+      "issue_id": "8a9dfa3adc7c06dd",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 15,
+      "geometry": "LINESTRING (-123.71675 41.99654, -123.718487 41.98091, -123.742799 41.973964, -123.749746 41.967018, -123.742799 41.947915, -123.772321 41.916656, -123.775795 41.89929, -123.869571 41.866295, -123.926878 41.836773, -123.980713 41.845456, -124.018918 41.845456, -124.036284 41.83851, -124.031074 41.824617, -124.05365 41.807251, -124.062333 41.789885, -124.112694 41.808987, -124.149162 41.796831)",
+      "issue_id": "6c9b86f3e8624bb4",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 16,
+      "geometry": "LINESTRING (-124.029337 41.34879, -123.991132 41.360946, -123.994606 41.392205, -124.008498 41.421727, -124.04323 41.475561, -124.032811 41.513766, -124.04844 41.550235, -124.110957 41.654431, -124.100538 41.682216, -124.102274 41.708265, -124.123114 41.732577, -124.159582 41.74647, -124.182158 41.765573, -124.178685 41.775992, -124.149162 41.796831)",
+      "issue_id": "a2925b78c015b06a",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 17,
+      "geometry": "LINESTRING (-116.912773 43.974521, -116.938822 43.91374, -116.949242 43.872062, -116.947505 43.839066, -116.935349 43.793915, -116.911037 43.762656, -116.912773 43.646304, -116.917983 43.621992, -116.930139 43.609836, -116.935349 43.59247, -116.930139 43.571631, -116.91451 43.559475, -116.893671 43.547319, -116.871095 43.550792, -116.851992 43.547319, -116.848519 43.536899, -116.862412 43.509113, -116.864149 43.483065, -116.860675 43.430967, -116.871095 43.410128, -116.917983 43.370186, -116.99613 43.27641, -117.027388 43.252097)",
+      "issue_id": "48ebeed8a43b9446",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 18,
+      "geometry": "LINESTRING (-117.742865 40.966739, -117.742865 40.980632, -117.70466 41.091774, -117.689031 41.150818, -117.683821 41.201179, -117.690768 41.26196, -117.695977 41.300165, -117.708133 41.324478, -117.782807 41.397415)",
+      "issue_id": "0fcdd389b9109b3f",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 19,
+      "geometry": "LINESTRING (-118.216956 49.015855, -118.326361 49.012381, -118.374986 49.033221, -118.411454 49.036694, -118.494811 49.024538, -118.52086 49.028011, -118.538226 49.03843, -118.545172 49.052323, -118.543435 49.109631, -118.548645 49.12526, -118.562538 49.140889, -118.581641 49.146099, -118.611163 49.142626, -118.645895 49.13047, -118.658051 49.116577, -118.66847 49.078372, -118.680626 49.061006, -118.718831 49.04364, -118.76572 49.010645, -118.790032 49.001962, -118.823027 49.001962, -118.861232 49.012381, -118.880335 49.026274, -118.890754 49.04885, -118.951535 49.050587, -118.986267 49.061006, -119.001896 49.061006)",
+      "issue_id": "2fb6ebf46282d1df",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 20,
+      "geometry": "LINESTRING (-121.356719 49.3597, -121.288991 49.321495, -121.24905 49.269397, -121.09102 49.219036, -121.025029 49.222509, -120.981614 49.210353, -120.965985 49.199934, -120.939936 49.166938, -120.889575 49.153046, -120.873945 49.144363, -120.866999 49.13047, -120.863526 49.109631, -120.854843 49.099211, -120.809691 49.087055, -120.750647 49.061006, -120.726335 49.066216, -120.566568 49.179094, -120.559622 49.19646, -120.582197 49.354491, -120.580461 49.401379, -120.535309 49.439584, -120.497104 49.462159)",
+      "issue_id": "e284331bb1b2a13e",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 21,
+      "geometry": "LINESTRING (-107.182634 41.788148, -107.217366 41.774256, -107.271201 41.779465, -107.319825 41.775992, -107.385816 41.791622, -107.401445 41.791622, -107.542109 41.755153, -107.703613 41.737787, -107.806072 41.710002, -107.840804 41.704792, -107.920687 41.701319, -107.995361 41.673533, -108.295791 41.633591, -108.422563 41.633591, -108.705628 41.649221, -108.750779 41.673533, -108.799404 41.687426, -108.849765 41.694372, -108.905336 41.694372, -108.931385 41.673533, -108.966117 41.666587, -109.035581 41.638801, -109.073786 41.633591, -109.195347 41.59365, -109.20403 41.602333, -109.223133 41.607543, -109.237026 41.602333, -109.256128 41.576284, -109.294333 41.562391, -109.375953 41.538079, -109.429788 41.529396, -109.488832 41.531132, -109.539193 41.558918, -109.554822 41.562391, -109.624286 41.543289, -109.867409 41.543289, -109.910824 41.546762)",
+      "issue_id": "5de092985d37be38",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 22,
+      "geometry": "LINESTRING (-110.544681 41.753416, -110.525579 41.826353, -110.525579 41.873241, -110.482164 41.876715, -110.459588 41.871505, -110.405754 41.895817, -110.369285 41.888871, -110.33629 41.89929, -110.212992 41.972227, -110.176523 42.003486, -110.160894 42.027798, -110.153947 42.050374, -110.153947 42.074686, -110.159157 42.090316, -110.181733 42.109418, -110.188679 42.130257, -110.197362 42.262239, -110.17826 42.333439, -110.127899 42.395956, -110.117479 42.418532, -110.114006 42.439371, -110.098376 42.444581, -110.087957 42.46021, -110.087957 42.474103, -110.09664 42.486259, -110.103586 42.514045, -110.103586 42.566143, -110.100113 42.583509, -110.070591 42.630397, -110.068854 42.649499, -110.079274 42.691177, -110.08101 42.712017, -110.056698 42.760641, -110.049752 42.819685, -110.053225 42.833578, -110.072328 42.852681, -110.074064 42.883939, -110.084484 42.948193, -110.100113 43.002028, -110.16263 43.071492, -110.166104 43.11317, -110.218201 43.140955, -110.232094 43.135746, -110.239041 43.149638, -110.247724 43.153112, -110.351919 43.158321, -110.388388 43.172214, -110.414437 43.2, -110.437012 43.243415, -110.475217 43.252097, -110.490847 43.243415, -110.534262 43.274673, -110.539471 43.290303, -110.568994 43.290303, -110.600252 43.285093, -110.659296 43.297249, -110.687082 43.316351, -110.725287 43.325034)",
+      "issue_id": "083ffd4473b20c9e",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 23,
+      "geometry": "LINESTRING (-111.046557 42.206668, -111.010089 42.203194, -110.987513 42.185828, -110.96841 42.142414, -110.945835 42.098999, -110.931942 42.046901, -110.935415 42.003486, -110.98404 41.82288, -110.945835 41.81767, -110.780858 41.824617, -110.704448 41.814197, -110.633248 41.812461, -110.593306 41.798568, -110.577677 41.779465, -110.568994 41.760363, -110.537735 41.748207)",
+      "issue_id": "d941d0a800fe4a3e",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 24,
+      "geometry": "LINESTRING (-112.434096 42.909988, -112.456672 42.913462, -112.50877 42.911725, -112.609492 42.887413, -112.691112 42.876993, -112.74321 42.847471, -112.800517 42.811002, -112.852615 42.767588, -112.89603 42.738066, -112.929025 42.70507, -112.991543 42.680758, -113.081846 42.62866, -113.267661 42.595665, -113.406589 42.581772, -113.498628 42.566143)",
+      "issue_id": "ec65102682793104",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 25,
+      "geometry": "LINESTRING (-113.502102 42.564406, -113.641029 42.559196, -113.759118 42.578299, -113.878943 42.586982, -114.073441 42.578299, -114.156798 42.585245, -114.285306 42.581772, -114.33393 42.593928, -114.410341 42.63908, -114.450282 42.644289)",
+      "issue_id": "f0ef6aed831b7527",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 26,
+      "geometry": "LINESTRING (-112.201392 41.710002, -112.241334 41.734314, -112.26391 41.769046, -112.293432 41.800305, -112.357686 41.819407, -112.41152 41.815934, -112.439306 41.83851, -112.453199 41.857612, -112.472301 41.874978, -112.517453 41.890607, -112.57476 41.901027, -112.614702 41.916656, -112.678956 41.953125, -112.710215 41.961808, -112.784888 41.967018, -112.807464 41.977437, -112.833513 42.000013, -113.001962 42.171936, -113.041904 42.203194, -113.04885 42.215351, -113.088792 42.246609, -113.166939 42.293497, -113.267661 42.380327, -113.39096 42.501889, -113.45695 42.531411, -113.507311 42.569616)",
+      "issue_id": "a4b7c9a27ad6923f",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 27,
+      "geometry": "LINESTRING (-114.040446 40.740982, -114.01266 40.749665, -113.979665 40.744455, -113.337125 40.728826, -113.128734 40.728826, -113.055797 40.742718, -112.981123 40.780924, -112.909923 40.822602, -112.897767 40.824338, -112.786625 40.763558, -112.741473 40.749665, -112.640751 40.744455, -112.468828 40.676728, -112.333374 40.664572, -112.298642 40.668045, -112.265646 40.680201, -112.137138 40.773977, -112.091987 40.772241, -112.01384 40.779187, -111.925274 40.765294, -111.906171 40.767031)",
+      "issue_id": "6fcacb350a413900",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 28,
+      "geometry": "LINESTRING (-118.430557 37.898177, -118.366303 37.941592, -118.335044 37.955484, -118.329834 37.965904, -118.315942 37.971114, -118.296839 37.993689, -118.279473 37.995426, -118.255161 38.018002, -118.19438 38.004109, -118.086711 38.004109, -117.994672 38.011055, -117.909578 38.030158, -117.88353 38.030158)",
+      "issue_id": "c26da56be635e65d",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 29,
+      "geometry": "LINESTRING (-94.715622 31.352952, -94.731252 31.300854, -94.77814 31.184502, -94.804189 31.135878, -94.812872 31.108092, -94.819818 31.029945, -94.812872 30.960482, -94.821555 30.913594, -94.871916 30.811135, -94.894492 30.781612, -94.932697 30.748617, -94.946589 30.713885, -94.957009 30.665261, -94.950063 30.585377, -94.957009 30.547172, -94.977848 30.514177, -95.033419 30.45166, -95.090727 30.350937)",
+      "issue_id": "032274ab48189b90",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 30,
+      "geometry": "LINESTRING (-95.523139 33.992576, -95.523139 33.956107, -95.517929 33.938741, -95.50751 33.924848, -95.479724 33.904009, -95.493617 33.871014)",
+      "issue_id": "b5e338f711e0e4fa",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 31,
+      "geometry": "LINESTRING (-98.645536 37.010777, -98.669848 36.592258, -98.879976 36.585311, -98.879976 36.427281, -98.918181 36.345661, -98.932074 36.149426, -98.579545 35.835102, -98.456247 35.831629, -98.418042 35.817736, -98.404149 35.795161, -98.39373 35.72917, -98.310373 35.631921, -98.294744 35.595452, -98.284324 35.548564)",
+      "issue_id": "169e8066d73672c7",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 32,
+      "geometry": "LINESTRING (-98.331212 35.534672, -98.3781 35.362749, -98.329476 35.317597, -98.284324 35.298495, -98.270431 35.282865, -98.265222 35.258553, -98.265222 35.208192, -98.260012 35.133518, -98.249592 35.067528, -98.253065 35.058845, -98.263485 35.053635, -98.327739 35.041479, -98.353788 35.032796, -98.390256 34.730628)",
+      "issue_id": "aeaf49244119b4d7",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 33,
+      "geometry": "LINESTRING (-95.394631 35.727434, -95.411997 35.689228, -95.457148 35.651023, -95.471041 35.602399, -95.512719 35.532935, -95.519666 35.505149, -95.519666 35.468681, -95.531822 35.454788)",
+      "issue_id": "4595fc4cb41ee3f5",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 34,
+      "geometry": "LINESTRING (-93.244727 37.121919, -93.246463 37.10108, -93.227361 37.042036, -93.223888 36.993411, -93.225624 36.944786, -93.237781 36.906581, -93.213468 36.852747, -93.211732 36.837117, -93.223888 36.798912, -93.223888 36.758971, -93.215205 36.646092, -93.222151 36.62178, -93.246463 36.576628, -93.249937 36.554053, -93.244727 36.536687, -93.220415 36.512374, -93.211732 36.496745)",
+      "issue_id": "58f71aff8bfb2f6f",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 35,
+      "geometry": "LINESTRING (-86.800225 37.385881, -86.782859 37.354623, -86.758546 37.337257, -86.749864 37.326837, -86.744654 37.304261, -86.74639 37.2539, -86.737707 37.227851, -86.66477 37.165334, -86.642195 37.135812, -86.633512 37.099343, -86.565784 37.040299, -86.508477 37.012513, -86.50153 36.984728, -86.503267 36.956942, -86.432067 36.913528)",
+      "issue_id": "45db071baf0b1bd5",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 36,
+      "geometry": "LINESTRING (-91.306687 40.006402, -91.322317 39.919573, -91.318844 39.891787, -91.33621 39.869211, -91.301478 39.822323, -91.296268 39.798011, -91.308424 39.787591, -91.308424 39.763279, -91.251116 39.73202, -91.193809 39.718128, -91.155604 39.726811, -91.117399 39.725074, -90.950686 39.686869, -90.822178 39.672976, -90.566898 39.683396, -90.341141 39.676449, -90.21437 39.686869, -90.162272 39.728547, -90.134486 39.735494, -89.825372 39.74244, -89.792377 39.75286, -89.766328 39.754596, -89.644767 39.738967)",
+      "issue_id": "5ec45f01f3ce2269",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 37,
+      "geometry": "LINESTRING (-88.580234 39.096427, -88.59239 39.000914, -88.60281 38.988758, -88.623649 38.974865, -88.838987 38.794259, -88.877192 38.77342, -88.92408 38.735215, -88.967495 38.705693, -88.969231 38.660542, -88.953602 38.551136, -88.962285 38.335798, -88.953602 38.29933, -88.927553 38.264598)",
+      "issue_id": "a818785c99a61424",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 38,
+      "geometry": "LINESTRING (-88.99528 37.604692, -88.976178 37.639424, -88.943182 37.771405, -88.943182 37.800927, -88.955339 37.865181, -88.957075 37.89644, -88.951865 37.919016, -88.932763 37.953748, -88.922343 38.044051, -88.901504 38.165612, -88.904977 38.238549, -88.911924 38.252442, -88.927553 38.269808, -88.92408 38.276754, -88.903241 38.278491)",
+      "issue_id": "1b0a9fde5e781944",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 39,
+      "geometry": "LINESTRING (-94.356147 38.611917, -94.356147 38.54419, -94.343991 38.488619, -94.345728 38.379213, -94.343991 38.316696, -94.349201 38.236813, -94.345728 38.210764, -94.357884 38.162139, -94.347464 38.087465, -94.350938 38.05447, -94.37525 38.019738, -94.378723 37.995426, -94.366567 37.910333, -94.349201 37.892967, -94.347464 37.849552, -94.326625 37.832186)",
+      "issue_id": "fd62bda16eb11121",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 40,
+      "geometry": "LINESTRING (-81.604334 38.377477, -81.580022 38.405262, -81.481036 38.471253, -81.442831 38.492092, -81.361211 38.518141, -81.303903 38.559819, -81.281327 38.571975, -81.243122 38.577185, -81.154556 38.575449, -81.092039 38.598024, -81.032994 38.601497, -81.019102 38.617127, -80.996526 38.618863, -80.975687 38.61018, -80.880174 38.6206, -80.822867 38.611917, -80.760349 38.61539, -80.737773 38.62581, -80.736037 38.639703, -80.741247 38.653595, -80.736037 38.669225, -80.701305 38.686591, -80.675256 38.693537, -80.664836 38.70743, -80.666573 38.719586, -80.678729 38.730005, -80.661363 38.811625, -80.6631 38.848094, -80.605792 38.901928, -80.565851 38.919294, -80.543275 38.938397, -80.506806 38.973129, -80.49465 39.006124, -80.477284 39.01307, -80.456445 39.014807, -80.437343 39.0287, -80.41303 39.035646, -80.402611 39.051275, -80.406084 39.073851, -80.393928 39.089481, -80.381772 39.131159, -80.34183 39.178047, -80.317518 39.195413, -80.301888 39.221462, -80.286259 39.26314, -80.277576 39.26835, -80.268893 39.282242)",
+      "issue_id": "2fffb2b06490c200",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 41,
+      "geometry": "LINESTRING (-81.543553 39.995983, -81.475826 40.016822, -81.408099 40.046344, -81.37163 40.05329, -81.265698 40.048081, -81.156293 40.0585, -81.029521 40.0585, -80.906223 40.075866, -80.878438 40.07413, -80.807237 40.055027, -80.753403 40.061973)",
+      "issue_id": "1310a05370427b40",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 42,
+      "geometry": "LINESTRING (-73.709775 41.029257, -73.647258 41.03794, -73.59516 41.057042, -73.487491 41.084828, -73.466652 41.093511, -73.424974 41.124769, -73.379823 41.135189, -73.319042 41.156028, -73.27389 41.164711, -73.232212 41.189023, -73.129753 41.197706, -73.108914 41.208126, -73.074182 41.241121, -73.056816 41.248067)",
+      "issue_id": "b489150d2af80270",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 43,
+      "geometry": "LINESTRING (-72.669555 41.67006, -72.667819 41.600596, -72.660872 41.57802, -72.64698 41.555445, -72.584462 41.503347, -72.553204 41.458195, -72.534101 41.439093, -72.459427 41.386995, -72.379544 41.341844)",
+      "issue_id": "2c7e145147f0a052",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 44,
+      "geometry": "LINESTRING (-78.431576 40.438814, -78.464571 40.235633, -78.480201 40.188745, -78.523615 40.121018, -78.532298 40.098442, -78.532298 40.086286, -78.513196 40.049817)",
+      "issue_id": "88bdcbd9a06d3186",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 45,
+      "geometry": "LINESTRING (-78.236258 39.982629, -78.275282 39.994246, -78.330853 40.009876, -78.438522 40.009876, -78.471518 40.022032, -78.513196 40.049817)",
+      "issue_id": "781cff3d1681214b",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 46,
+      "geometry": "LINESTRING (-77.170808 38.792523, -77.198594 38.735215, -77.224643 38.712639, -77.248955 38.677908, -77.285424 38.651859, -77.302789 38.629283, -77.342731 38.552873, -77.406985 38.478199, -77.429561 38.420892, -77.511181 38.320169, -77.519864 38.292384, -77.500761 38.22292, -77.516391 38.134354, -77.516391 38.104831, -77.502498 38.028421, -77.464293 37.898177, -77.46082 37.856498, -77.466029 37.797454, -77.446927 37.705415, -77.4504 37.632478, -77.457346 37.613375, -77.471239 37.590799)",
+      "issue_id": "c0e6d5fc4f43eebe",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 47,
+      "geometry": "LINESTRING (-75.116417 38.78384, -75.104261 38.827255, -75.073002 38.872406, -75.017431 38.93145, -74.96707 38.969655)",
+      "issue_id": "ee8dd09b44cb8f70",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 48,
+      "geometry": "LINESTRING (-75.095578 39.836216, -75.102524 39.82406, -75.116417 39.777172, -75.140729 39.73723, -75.140729 39.679923, -75.109471 39.629561, -75.074739 39.586147, -75.060846 39.554888, -75.074739 39.49237, -75.071266 39.462848, -75.057373 39.429853, -75.013958 39.405541, -75.008748 39.365599, -74.986172 39.322184, -74.934075 39.264877, -74.894133 39.231881, -74.842035 39.198886, -74.822933 39.174574, -74.789937 39.169364, -74.769098 39.155471, -74.756942 39.155471)",
+      "issue_id": "d2b32276b66080bb",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 49,
+      "geometry": "LINESTRING (-72.690395 41.624908, -72.745966 41.548498, -72.770278 41.531132, -72.818903 41.508557, -72.836268 41.489454, -72.857108 41.444303, -72.905732 41.402624, -72.938728 41.367892, -72.95783 41.352263, -72.994299 41.340107, -73.016874 41.326214, -73.055079 41.26196, -73.074182 41.242858)",
+      "issue_id": "9b94bfe47556b59b",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 50,
+      "geometry": "LINESTRING (-72.344812 41.340107, -72.374334 41.333161, -72.398647 41.314058, -72.421222 41.305375, -72.461164 41.296692, -72.792854 41.300165, -72.867527 41.291482, -72.883156 41.294956, -72.905732 41.308848, -72.919625 41.310585, -72.95783 41.293219, -72.994299 41.26717, -73.051606 41.242858)",
+      "issue_id": "1f909f75ef67bc2f",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 51,
+      "geometry": "LINESTRING (-75.903094 42.135467, -75.901358 42.191038, -75.906568 42.218824, -75.92046 42.243136, -75.92046 42.257029, -75.929143 42.272658, -75.927407 42.290024, -75.963875 42.31781, -75.977768 42.335176, -76.019446 42.404639, -76.036812 42.463684, -76.064598 42.493206, -76.081964 42.545304, -76.128852 42.592192, -76.161847 42.606084, -76.167957 42.612959)",
+      "issue_id": "b87e93d8740f0393",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 52,
+      "geometry": "LINESTRING (-75.901358 42.152833, -75.863153 42.161516, -75.779796 42.163253, -75.677337 42.196248, -75.606137 42.184092, -75.571405 42.194511, -75.510624 42.203194, -75.493258 42.227507, -75.468946 42.248346, -75.463736 42.291761, -75.387326 42.298707, -75.323072 42.316073, -75.269237 42.336912, -75.251871 42.354278, -75.194564 42.364698, -75.149412 42.390747, -75.13552 42.418532, -75.092105 42.449791, -75.007012 42.458474, -74.97228 42.482786, -74.918445 42.496679, -74.909762 42.508835, -74.906289 42.533147, -74.899343 42.540094, -74.838562 42.540094, -74.812513 42.54704, -74.762152 42.580035, -74.673585 42.616504, -74.638854 42.646026, -74.598912 42.649499, -74.56418 42.635606, -74.524238 42.646026, -74.468667 42.670338, -74.397467 42.677285, -74.291535 42.71028, -74.187339 42.734592, -74.149134 42.751958, -74.077934 42.765851, -74.019514 42.793343)",
+      "issue_id": "09c144f5b5775b7e",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 53,
+      "geometry": "LINESTRING (-75.823211 42.118101, -75.776323 42.024325, -75.745064 41.989593, -75.727698 41.878451, -75.694703 41.869768, -75.682547 41.852402, -75.679074 41.826353, -75.684283 41.770782, -75.668654 41.723894, -75.684283 41.678743, -75.663444 41.654431, -75.659971 41.642274, -75.644342 41.619699, -75.661708 41.531132, -75.679074 41.492927, -75.679074 41.477298, -75.663444 41.466878, -75.659971 41.458195, -75.635659 41.446039, -75.621766 41.428673, -75.60961 41.4252)",
+      "issue_id": "e2ca766068916110",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 54,
+      "geometry": "LINESTRING (-77.731728 40.938954, -77.742148 40.879909, -77.802929 40.843441, -77.863709 40.819129, -77.888022 40.813919, -77.915807 40.819129, -77.957486 40.841704, -77.993954 40.836495, -78.028686 40.819129, -78.06078 40.797263)",
+      "issue_id": "8e8ccc9bbe05c04c",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 55,
+      "geometry": "LINESTRING (-71.59113 43.425757, -71.566818 43.455279, -71.572028 43.476118, -71.610233 43.500431, -71.611969 43.507377, -71.60676 43.535162, -71.615443 43.575104, -71.613706 43.590733, -71.632808 43.606363, -71.643228 43.634148, -71.650174 43.707085, -71.684906 43.776549, -71.686643 43.802598, -71.653648 43.846013, -71.655384 43.852959, -71.676223 43.865115, -71.700536 43.910267, -71.698799 43.936316, -71.68317 43.962365, -71.67796 43.986677, -71.67796 44.045721, -71.671014 44.127341, -71.67796 44.169019, -71.697062 44.193332)",
+      "issue_id": "69623081c8bbfbaf",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 56,
+      "geometry": "LINESTRING (-70.858287 42.958613, -70.905175 42.974242, -70.952063 43.007238, -71.021527 43.012447, -71.129196 43.038496, -71.19345 43.04197, -71.249021 43.064545, -71.257704 43.057599, -71.290699 43.059336, -71.308065 43.043706, -71.334114 43.038496, -71.3619 43.028077, -71.410524 43.003764, -71.424417 42.984662)",
+      "issue_id": "f14cca872ad0305e",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 57,
+      "geometry": "LINESTRING (-72.389964 43.644568, -72.405593 43.701875, -72.450744 43.753973, -72.455954 43.790442, -72.497633 43.790442, -72.530628 43.819964, -72.54973 43.811281, -72.561887 43.813018, -72.568833 43.818227, -72.567096 43.825174, -72.591409 43.839066, -72.615721 43.880745, -72.613984 43.920686, -72.624404 43.960628, -72.624404 44.007516, -72.619194 44.030092, -72.605301 44.054404, -72.601828 44.137761, -72.579252 44.182912, -72.586199 44.247166, -72.693868 44.313157, -72.725126 44.32184, -72.758122 44.349625, -72.775488 44.358308, -72.806746 44.365255, -72.825849 44.360045, -72.902259 44.386094, -72.961303 44.394777, -72.987352 44.40346, -72.999508 44.420826, -73.03424 44.431245, -73.148855 44.439928, -73.187061 44.453821)",
+      "issue_id": "feb5b2275e6a8f9b",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 58,
+      "geometry": "LINESTRING (-70.509634 41.742864, -70.535281 41.762099, -70.554383 41.793358, -70.56133 41.836773, -70.594325 41.864558, -70.630793 41.92013, -70.665525 41.949652, -70.710677 41.963544, -70.734989 42.069477, -70.755828 42.100735, -70.847868 42.152833, -70.889546 42.164989, -70.95901 42.196248, -70.988532 42.204931, -71.004161 42.22577, -71.019791 42.227507)",
+      "issue_id": "2b15132fd4241d95",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 59,
+      "geometry": "LINESTRING (-71.712692 42.517518, -71.769999 42.550513, -71.870722 42.543567, -71.905454 42.545304, -71.99923 42.559196, -72.040908 42.55746, -72.082586 42.566143, -72.127738 42.571352, -72.14684 42.581772, -72.185046 42.578299, -72.261456 42.555723, -72.292714 42.55746, -72.351759 42.595665, -72.384754 42.607821, -72.424696 42.602611, -72.455954 42.581772, -72.469847 42.578299, -72.499369 42.606084, -72.593145 42.62866)",
+      "issue_id": "895cc5a5e03c26ea",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 60,
+      "geometry": "LINESTRING (-77.367043 42.3838, -77.354887 42.375117, -77.340995 42.340385, -77.328838 42.328229, -77.306263 42.31781, -77.252428 42.30739, -77.226379 42.293497, -77.219433 42.284814, -77.21075 42.253556, -77.196857 42.23619, -77.165599 42.210141, -77.141286 42.197985)",
+      "issue_id": "33b975f5e1d0a022",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 61,
+      "geometry": "LINESTRING (-72.327446 43.627202, -72.304871 43.693192, -72.277085 43.727924, -72.23367 43.769603, -72.214568 43.844276, -72.204148 43.866852, -72.185046 43.885954, -72.14684 43.90332, -72.132948 43.922423, -72.119055 44.012726, -72.091269 44.144707, -72.079113 44.169019, -72.073903 44.196805, -72.060011 44.309684, -72.023542 44.360045, -72.018332 44.413879)",
+      "issue_id": "ffd5034a33545950",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 62,
+      "geometry": "LINESTRING (-89.936514 46.47869, -89.808006 46.54989, -89.745489 46.54989, -89.604825 46.591569, -89.5562 46.598515, -89.491946 46.581149, -89.255769 46.530788, -89.179857 46.531938)",
+      "issue_id": "282928d496841d49",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 63,
+      "geometry": "LINESTRING (-86.979094 45.940346, -86.972148 46.00981, -86.982567 46.074064, -86.973884 46.190415, -87.036402 46.218201, -87.185749 46.317187, -87.210061 46.343236, -87.260422 46.424856, -87.277788 46.440485, -87.324676 46.466534, -87.335096 46.47869)",
+      "issue_id": "0d784b67ee8404f9",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 64,
+      "geometry": "LINESTRING (-86.256671 43.222575, -86.2011 43.236468)",
+      "issue_id": "6f593d35795d5919",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 65,
+      "geometry": "LINESTRING (-87.911645 43.019394, -86.260144 43.222575)",
+      "issue_id": "a1a847d056b8088d",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 66,
+      "geometry": "LINESTRING (-84.707628 44.584065, -84.697209 44.55107, -84.67116 44.519811, -84.59996 44.460767, -84.587803 44.384357, -84.537442 44.333996, -84.51313 44.31663, -84.492291 44.309684, -84.401988 44.309684, -84.329051 44.299264, -84.233538 44.248903, -84.209226 44.22459, -84.155391 44.144707, -84.082454 44.052668, -84.068562 44.047458, -84.056405 44.012726, -84.02341 43.988414)",
+      "issue_id": "8df8b10ed9ba6413",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 67,
+      "geometry": "LINESTRING (-77.13955 42.199721, -77.101345 42.171936, -77.059666 42.170199, -77.019725 42.135467, -77.000622 42.130257, -76.946788 42.145887, -76.896426 42.152833, -76.846065 42.164989, -76.809597 42.163253, -76.804387 42.112892, -76.781811 42.07816)",
+      "issue_id": "edc625f456366ee2",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 68,
+      "geometry": "LINESTRING (-84.98201 42.284814, -84.827453 42.290024, -84.721521 42.260502, -84.652057 42.269185, -84.434983 42.277868)",
+      "issue_id": "56d1b53c5e0abbe3",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 69,
+      "geometry": "LINESTRING (-78.971657 42.904779, -79.159209 42.890886, -79.273824 42.904779, -79.343288 42.887413, -79.357181 42.894359, -79.364127 42.904779, -79.364127 42.94472, -79.3676 42.96035, -79.393649 42.977716, -79.45443 42.988135, -79.641982 42.991608, -79.723602 42.977716, -80.169907 42.866574, -80.360932 42.835315, -80.439079 42.816212, -80.466865 42.826632, -80.485967 42.840525, -80.609265 42.838788, -80.624895 42.830105, -80.703041 42.849208, -80.762086 42.831842, -80.864545 42.762378, -81.152819 42.750222, -81.2136 42.774534, -81.274381 42.814476)",
+      "issue_id": "a58f4180448a0b0d",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 70,
+      "geometry": "LINESTRING (-77.648372 43.048916, -77.773407 43.047179, -77.874129 43.029813, -77.980061 43.033287, -78.046052 43.029813, -78.240551 43.005501, -78.370795 43.003764, -78.537508 42.986399, -78.781233 42.9761)",
+      "issue_id": "8d64867bb78abf01",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 71,
+      "geometry": "LINESTRING (-79.178312 42.524464, -79.21999 42.507098, -79.30682 42.444581, -79.615933 42.30218, -79.723602 42.248346, -79.724199 42.247983)",
+      "issue_id": "e2ec4a55d1185530",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 72,
+      "geometry": "LINESTRING (-79.185258 42.524464, -79.157472 42.524464, -79.124477 42.538357, -79.04633 42.600875, -78.966447 42.675548, -78.8171 42.750222, -78.803207 42.788427, -78.803207 42.814476)",
+      "issue_id": "2bee3eed6e66b4cc",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 73,
+      "geometry": "LINESTRING (-78.481937 35.364485, -78.407264 35.284602, -78.374268 35.227294, -78.303068 35.199509, -78.233604 35.152621, -78.184979 35.103996, -78.145038 35.048425, -78.125935 34.975488, -78.059945 34.9286, -78.025213 34.914707, -78.007847 34.885185, -78.004374 34.838297, -77.997427 34.820931, -77.974852 34.786199, -77.945329 34.76015, -77.936646 34.737575, -77.933173 34.650745, -77.93491 34.631642, -77.910598 34.576071, -77.879339 34.440617, -77.877602 34.298216, -77.900178 34.256538, -77.875866 34.244382)",
+      "issue_id": "8f30b482a01c06e7",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 74,
+      "geometry": "LINESTRING (-82.066268 39.325657, -82.097527 39.363862, -82.161781 39.402068, -82.186093 39.412487, -82.18783 39.424643, -82.243401 39.462848, -82.265977 39.468058, -82.290289 39.457639, -82.309391 39.469795, -82.328494 39.488897, -82.361489 39.506263, -82.377119 39.520156, -82.496944 39.553151, -82.526466 39.565307, -82.549041 39.594829, -82.57509 39.679923, -82.609822 39.728547, -82.625452 39.740703, -82.660183 39.754596, -82.724437 39.82927, -82.811267 39.851845, -82.847736 39.864002, -82.884204 39.886577, -82.927619 39.928256)",
+      "issue_id": "015b9cbd5699883c",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 75,
+      "geometry": "LINESTRING (-81.524451 31.825306, -81.45325 31.79752, -81.368157 31.799257)",
+      "issue_id": "41d2c6fa35de46c4",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 76,
+      "geometry": "LINESTRING (-80.819393 28.412898, -80.81071 28.381639, -80.796818 28.348644, -80.746456 28.300019, -80.725617 28.265287, -80.709988 28.206243, -80.701305 28.070788, -80.661363 28.043003, -80.617948 27.977012, -80.591899 27.884973, -80.591899 27.86587, -80.551958 27.817246, -80.546748 27.791197, -80.551958 27.766884, -80.543275 27.716523, -80.522436 27.660952, -80.513753 27.614064, -80.477284 27.563703, -80.442552 27.525498, -80.421713 27.480346, -80.392191 27.459507, -80.385245 27.445614, -80.383508 27.428248, -80.393928 27.398726)",
+      "issue_id": "a2cc456cfa9629cb",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 77,
+      "geometry": "LINESTRING (-92.999867 30.239795, -92.678597 30.250215, -92.598714 30.246741, -92.487572 30.232849, -92.372956 30.234585, -92.338225 30.236322, -92.270497 30.255424, -92.140253 30.246741, -92.075999 30.246741, -92.015218 30.260634)",
+      "issue_id": "61285cf00e53b91a",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 78,
+      "geometry": "LINESTRING (-94.139073 30.059189, -94.137336 30.097394, -94.074819 30.099131, -94.050507 30.106077, -94.010565 30.13039, -93.909843 30.132126, -93.866428 30.126916, -93.779598 30.107814, -93.729237 30.116497, -93.684085 30.137336, -93.590309 30.175541, -93.513899 30.199853, -93.432279 30.213746, -93.32461 30.218956, -93.275986 30.238058, -93.072804 30.248478, -92.999867 30.239795)",
+      "issue_id": "d30cc0a58abfd02c",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 79,
+      "geometry": "LINESTRING (-92.414635 31.335586, -92.381639 31.337323, -92.280917 31.365108, -92.230556 31.384211, -92.048213 31.500563, -92.013481 31.531821, -91.98728 31.565301)",
+      "issue_id": "c302e79e3fd2a507",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 80,
+      "geometry": "LINESTRING (-79.848637 34.195757, -79.93894 34.207913, -80.036189 34.211387, -80.100443 34.197494, -80.156014 34.195757, -80.211585 34.183601, -80.246317 34.190547, -80.525909 34.216596, -80.628368 34.216596, -80.664836 34.211387, -80.692622 34.19923, -80.751666 34.129767, -80.808974 34.093298, -80.841969 34.079405, -80.942692 34.072459)",
+      "issue_id": "d81e25ac966c81ab",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 81,
+      "geometry": "LINESTRING (-83.368081 35.438082, -83.370451 35.439159, -83.3965 35.433949, -83.403446 35.427003, -83.431231 35.421793, -83.4677 35.404427, -83.498959 35.380115, -83.502432 35.373168, -83.54411 35.369695, -83.558003 35.338436, -83.570159 35.334963, -83.578842 35.328017, -83.585788 35.333227, -83.62052 35.334963, -83.627467 35.329753, -83.634413 35.317597, -83.663935 35.291548, -83.70735 35.239451, -83.724716 35.227294, -83.743818 35.223821, -83.766394 35.204719, -83.780287 35.199509, -83.811546 35.209928, -83.830648 35.199509, -83.839331 35.202982, -83.881009 35.17867, -83.960893 35.156094, -83.976522 35.142201, -84.011254 35.098786, -84.113713 35.036269, -84.17623 35.013693, -84.19186 35.018903, -84.228328 35.017166, -84.238748 35.02064, -84.252641 35.01022, -84.266533 35.01543, -84.27348 35.01022, -84.316895 35.022376)",
+      "issue_id": "2f2a0f62d8096f56",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 82,
+      "geometry": "LINESTRING (-84.490554 33.763345, -84.560018 33.777238, -84.593013 33.777238, -84.627745 33.772028, -84.796195 33.71993, -84.98722 33.71993, -85.037581 33.712984, -85.101835 33.692145, -85.127884 33.686935, -85.30849 33.681725, -85.343222 33.676515, -85.443944 33.650467, -85.652336 33.64352, -85.777371 33.613998, -85.829468 33.605315)",
+      "issue_id": "8631cf249dd57ecf",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 83,
+      "geometry": "LINESTRING (-79.259931 33.367402, -79.240829 33.367402, -79.216517 33.374348, -79.176575 33.405607, -79.058487 33.548007, -78.976867 33.681725, -78.956027 33.702564, -78.929979 33.71993)",
+      "issue_id": "4ca128c2448a381f",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 84,
+      "geometry": "LINESTRING (-77.997427 34.232226, -78.033896 34.20965, -78.065154 34.195757, -78.08773 34.176655, -78.09815 34.136713, -78.112043 34.112401, -78.138091 34.088088, -78.193662 34.055093, -78.278756 34.015151, -78.459361 33.956107, -78.49583 33.947424, -78.563557 33.940478, -78.575713 33.931795, -78.600026 33.900536)",
+      "issue_id": "228fdbe36065a30e",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 85,
+      "geometry": "LINESTRING (-80.850652 35.812527, -80.859335 35.796897, -80.862808 35.774322, -80.854125 35.621501, -80.871491 35.506886, -80.868018 35.480837, -80.847179 35.42353, -80.841969 35.394007, -80.841969 35.354066, -80.854125 35.272446)",
+      "issue_id": "9e318ed89b116a0d",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 14
+    },
+    {
+      "problem_name": "missing_or_stale_spatial_index",
+      "severity": "medium",
+      "description": "A feature class lacks an effective spatial index or its index is stale after heavy edits, degrading spatial query performance. Diagnose with index validation/rebuild tools and recalculate the spatial index when query performance drops.",
+      "solution_hint": "Rebuild or recreate the spatial index after bulk edits or loads.",
+      "feature_id": 86,
+      "geometry": "LINESTRING (-79.779173 35.468681, -79.77049 35.376641, -79.744441 35.274182, -79.727075 35.237714)",
+      "issue_id": "1e0f84dc283e3385",
+      "validation_rule_version": "2026.03",
+      "validator_name": "missing_or_stale_spatial_index",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "integrity"
+      },
+      "iso_category": "Logical Consistency",
+      "confidence": "medium",
+      "actionable": true,
+      "priority_score": 40
+    },
+    {
+      "problem_name": "validation_runtime_error",
+      "severity": "high",
+      "description": "validation runtime error",
+      "solution_hint": "Inspect the record and correct the issue using GIS validation or data-cleaning tools.",
+      "feature_id": 87,
+      "geometry": "LINESTRING (-79.791329 34.952912, -79.772227 34.935546, -79.7045 34.902551, -79.673241 34.876502, -79.61767 34.855663, -79.584675 34.838297, -79.478742 34.758414, -79.463113 34.754941, -79.405805 34.754941, -79.37281 34.76015, -79.345025 34.742784, -79.320712 34.711526, -79.247775 34.668111, -79.200887 34.647272, -79.173102 34.622959, -79.140106 34.609067, -79.103638 34.60212)",
+      "issue_id": "7ec1b0ca49b40512",
+      "validation_rule_version": "2026.03",
+      "validator_name": "validation_runtime_error",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": null
+      },
+      "iso_category": null,
+      "confidence": "medium",
+      "actionable": true,
+      "priority_score": 60
+    }
+  ],
+  "dataset_id": "roads-line-network",
+  "sample_note": "Public demo report generated from curated sample features with GeoQA report utilities."
+}

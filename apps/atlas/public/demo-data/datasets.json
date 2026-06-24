@@ -1,0 +1,448 @@
+{
+  "datasets": [
+    {
+      "id": "roads-line-network",
+      "name": "Roads / line network",
+      "short_name": "Roads",
+      "description": "A transportation line sample for checking geometry precision and delivery readiness before network analysis.",
+      "feature_count": 700,
+      "geometry_type": "LineString",
+      "profile": "generic_quick",
+      "issue_count": 88,
+      "geojson": "geojson/roads-line-network.geojson",
+      "cleaned_geojson": "geojson/roads-line-network-cleaned.geojson",
+      "report": "reports/roads-line-network.json",
+      "command": "geoqa validate public-samples/roads-line-network.geojson --profile generic_quick --output-format json --report-path reports/roads-line-network",
+      "github_url": "https://github.com/NiloferTaher/GeoQA",
+      "source_label": "Natural Earth roads sample",
+      "source_url": "https://www.naturalearthdata.com/",
+      "bounds": [
+        -124.21168,
+        23.289944,
+        -64.717689,
+        53.812329
+      ],
+      "summary": {
+        "validation_rule_version": "2026.03",
+        "issue_count": 88,
+        "total_issues": 88,
+        "actionable": 2,
+        "informational": 86,
+        "actionable_ratio": 0.0227,
+        "by_problem": {
+          "coordinate_precision_not_fit_for_use": 86,
+          "missing_or_stale_spatial_index": 1,
+          "validation_runtime_error": 1
+        },
+        "problem_breakdown": [
+          {
+            "name": "coordinate_precision_not_fit_for_use",
+            "count": 86,
+            "percent": 97.73
+          },
+          {
+            "name": "missing_or_stale_spatial_index",
+            "count": 1,
+            "percent": 1.14
+          },
+          {
+            "name": "validation_runtime_error",
+            "count": 1,
+            "percent": 1.14
+          }
+        ],
+        "by_severity": {
+          "high": 1,
+          "medium": 87
+        },
+        "severity_distribution": [
+          {
+            "name": "medium",
+            "count": 87,
+            "percent": 98.86
+          },
+          {
+            "name": "high",
+            "count": 1,
+            "percent": 1.14
+          }
+        ],
+        "by_issue_class": {
+          "data_issue": 88
+        },
+        "by_validator": {
+          "coordinate_precision_not_fit_for_use": 86,
+          "missing_or_stale_spatial_index": 1,
+          "validation_runtime_error": 1
+        },
+        "by_iso_category": {
+          "Logical Consistency": 1,
+          "Positional Accuracy": 86
+        },
+        "by_root_cause": {
+          "accuracy": 86,
+          "integrity": 1
+        },
+        "by_priority_band": {
+          "high": 1,
+          "low": 86,
+          "medium": 1
+        },
+        "top_issues": [
+          {
+            "problem_name": "coordinate_precision_not_fit_for_use",
+            "count": 86,
+            "percent": 97.73
+          },
+          {
+            "problem_name": "missing_or_stale_spatial_index",
+            "count": 1,
+            "percent": 1.14
+          },
+          {
+            "problem_name": "validation_runtime_error",
+            "count": 1,
+            "percent": 1.14
+          }
+        ],
+        "top_actionable": [
+          {
+            "problem_name": "validation_runtime_error",
+            "feature_id": 87,
+            "severity": "high",
+            "confidence": "medium",
+            "priority_score": 60
+          },
+          {
+            "problem_name": "missing_or_stale_spatial_index",
+            "feature_id": 86,
+            "severity": "medium",
+            "confidence": "medium",
+            "priority_score": 40
+          }
+        ]
+      }
+    },
+    {
+      "id": "zoning-polygons",
+      "name": "Parcels or zoning polygons",
+      "short_name": "Zoning",
+      "description": "A municipal polygon sample for checking topology, precision, and QA blockers before parcel or zoning analysis.",
+      "feature_count": 420,
+      "geometry_type": "Polygon",
+      "profile": "land_use_quick",
+      "issue_count": 36,
+      "geojson": "geojson/zoning-polygons.geojson",
+      "cleaned_geojson": "geojson/zoning-polygons-cleaned.geojson",
+      "report": "reports/zoning-polygons.json",
+      "command": "geoqa validate public-samples/zoning-polygons.geojson --profile land_use_quick --output-format json --report-path reports/zoning-polygons",
+      "github_url": "https://github.com/NiloferTaher/GeoQA",
+      "source_label": "City of Philadelphia zoning sample",
+      "source_url": "https://www.opendataphilly.org/",
+      "bounds": [
+        -75.273365,
+        39.906929,
+        -74.963301,
+        40.128949
+      ],
+      "summary": {
+        "validation_rule_version": "2026.03",
+        "issue_count": 36,
+        "total_issues": 36,
+        "actionable": 2,
+        "informational": 34,
+        "actionable_ratio": 0.0556,
+        "by_problem": {
+          "coordinate_precision_not_fit_for_use": 34,
+          "missing_or_stale_spatial_index": 1,
+          "validation_runtime_error": 1
+        },
+        "problem_breakdown": [
+          {
+            "name": "coordinate_precision_not_fit_for_use",
+            "count": 34,
+            "percent": 94.44
+          },
+          {
+            "name": "missing_or_stale_spatial_index",
+            "count": 1,
+            "percent": 2.78
+          },
+          {
+            "name": "validation_runtime_error",
+            "count": 1,
+            "percent": 2.78
+          }
+        ],
+        "by_severity": {
+          "high": 1,
+          "medium": 35
+        },
+        "severity_distribution": [
+          {
+            "name": "medium",
+            "count": 35,
+            "percent": 97.22
+          },
+          {
+            "name": "high",
+            "count": 1,
+            "percent": 2.78
+          }
+        ],
+        "by_issue_class": {
+          "data_issue": 36
+        },
+        "by_validator": {
+          "coordinate_precision_not_fit_for_use": 34,
+          "missing_or_stale_spatial_index": 1,
+          "validation_runtime_error": 1
+        },
+        "by_iso_category": {
+          "Logical Consistency": 1,
+          "Positional Accuracy": 34
+        },
+        "by_root_cause": {
+          "accuracy": 34,
+          "integrity": 1
+        },
+        "by_priority_band": {
+          "high": 1,
+          "low": 34,
+          "medium": 1
+        },
+        "top_issues": [
+          {
+            "problem_name": "coordinate_precision_not_fit_for_use",
+            "count": 34,
+            "percent": 94.44
+          },
+          {
+            "problem_name": "missing_or_stale_spatial_index",
+            "count": 1,
+            "percent": 2.78
+          },
+          {
+            "problem_name": "validation_runtime_error",
+            "count": 1,
+            "percent": 2.78
+          }
+        ],
+        "top_actionable": [
+          {
+            "problem_name": "validation_runtime_error",
+            "feature_id": 35,
+            "severity": "high",
+            "confidence": "medium",
+            "priority_score": 60
+          },
+          {
+            "problem_name": "missing_or_stale_spatial_index",
+            "feature_id": 34,
+            "severity": "medium",
+            "confidence": "medium",
+            "priority_score": 40
+          }
+        ]
+      }
+    },
+    {
+      "id": "water-network-utility-lines",
+      "name": "Water network / utility lines",
+      "short_name": "Water",
+      "description": "A utility line sample for reviewing disconnected endpoints, self-intersections, and delivery readiness before network tracing.",
+      "feature_count": 8,
+      "geometry_type": "LineString",
+      "profile": "water_network_quick",
+      "issue_count": 4,
+      "geojson": "geojson/water-network-utility-lines.geojson",
+      "report": "reports/water-network-utility-lines.json",
+      "command": "geoqa validate public-samples/water-network-utility-lines.geojson --profile water_network_quick --output-format json --report-path reports/water-network-utility-lines",
+      "github_url": "https://github.com/NiloferTaher/GeoQA",
+      "source_label": "Synthetic GeoQA water network demo",
+      "source_url": "https://github.com/NiloferTaher/GeoQA",
+      "bounds": [
+        -75.1731,
+        39.9485,
+        -75.1569,
+        39.9561
+      ],
+      "summary": {
+        "validation_rule_version": "2026.03",
+        "issue_count": 4,
+        "total_issues": 4,
+        "actionable": 4,
+        "informational": 0,
+        "actionable_ratio": 1,
+        "by_problem": {
+          "self_intersection": 1,
+          "suspicious_near_miss_endpoints": 1,
+          "unsnapped_endpoints_within_tolerance": 1,
+          "missing_or_stale_spatial_index": 1
+        },
+        "by_severity": {
+          "high": 1,
+          "medium": 3
+        },
+        "severity_distribution": [
+          {
+            "name": "medium",
+            "count": 3,
+            "percent": 75
+          },
+          {
+            "name": "high",
+            "count": 1,
+            "percent": 25
+          }
+        ],
+        "top_issues": [
+          {
+            "problem_name": "self_intersection",
+            "count": 1,
+            "percent": 25
+          },
+          {
+            "problem_name": "suspicious_near_miss_endpoints",
+            "count": 1,
+            "percent": 25
+          },
+          {
+            "problem_name": "unsnapped_endpoints_within_tolerance",
+            "count": 1,
+            "percent": 25
+          },
+          {
+            "problem_name": "missing_or_stale_spatial_index",
+            "count": 1,
+            "percent": 25
+          }
+        ],
+        "by_issue_class": {
+          "data_issue": 4
+        },
+        "by_validator": {
+          "self_intersection": 1,
+          "suspicious_near_miss_endpoints": 1,
+          "unsnapped_endpoints_within_tolerance": 1,
+          "missing_or_stale_spatial_index": 1
+        },
+        "by_root_cause": {
+          "topology": 3,
+          "integrity": 1
+        },
+        "by_priority_band": {
+          "high": 1,
+          "medium": 3
+        }
+      }
+    },
+    {
+      "id": "places-facilities",
+      "name": "Places or facilities points",
+      "short_name": "Places",
+      "description": "A point dataset sample for checking precision and metadata risk before enrichment or facility screening.",
+      "feature_count": 243,
+      "geometry_type": "Point",
+      "profile": "generic_quick",
+      "issue_count": 13,
+      "geojson": "geojson/places-facilities.geojson",
+      "report": "reports/places-facilities.json",
+      "command": "geoqa validate public-samples/places-facilities.geojson --profile generic_quick --output-format json --report-path reports/places-facilities",
+      "github_url": "https://github.com/NiloferTaher/GeoQA",
+      "source_label": "Natural Earth populated places sample",
+      "source_url": "https://www.naturalearthdata.com/",
+      "bounds": [
+        -175.220564,
+        -41.292068,
+        179.216647,
+        64.143459
+      ],
+      "summary": {
+        "validation_rule_version": "2026.03",
+        "issue_count": 13,
+        "total_issues": 13,
+        "actionable": 1,
+        "informational": 12,
+        "actionable_ratio": 0.0769,
+        "by_problem": {
+          "coordinate_precision_not_fit_for_use": 12,
+          "missing_or_stale_spatial_index": 1
+        },
+        "problem_breakdown": [
+          {
+            "name": "coordinate_precision_not_fit_for_use",
+            "count": 12,
+            "percent": 92.31
+          },
+          {
+            "name": "missing_or_stale_spatial_index",
+            "count": 1,
+            "percent": 7.69
+          }
+        ],
+        "by_severity": {
+          "low": 12,
+          "medium": 1
+        },
+        "severity_distribution": [
+          {
+            "name": "low",
+            "count": 12,
+            "percent": 92.31
+          },
+          {
+            "name": "medium",
+            "count": 1,
+            "percent": 7.69
+          }
+        ],
+        "by_issue_class": {
+          "data_issue": 13
+        },
+        "by_validator": {
+          "coordinate_precision_not_fit_for_use": 12,
+          "missing_or_stale_spatial_index": 1
+        },
+        "by_iso_category": {
+          "Logical Consistency": 1,
+          "Positional Accuracy": 12
+        },
+        "by_root_cause": {
+          "accuracy": 12,
+          "integrity": 1
+        },
+        "by_priority_band": {
+          "low": 12,
+          "medium": 1
+        },
+        "top_issues": [
+          {
+            "problem_name": "coordinate_precision_not_fit_for_use",
+            "count": 12,
+            "percent": 92.31
+          },
+          {
+            "problem_name": "missing_or_stale_spatial_index",
+            "count": 1,
+            "percent": 7.69
+          }
+        ],
+        "top_actionable": [
+          {
+            "problem_name": "missing_or_stale_spatial_index",
+            "feature_id": 12,
+            "severity": "medium",
+            "confidence": "medium",
+            "priority_score": 40
+          }
+        ]
+      }
+    }
+  ],
+  "stats": {
+    "datasets": 4,
+    "checks": 6,
+    "issues": 141
+  }
+}
