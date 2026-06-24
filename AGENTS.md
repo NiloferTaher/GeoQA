@@ -79,6 +79,18 @@ MyScript(emit_thermal_diagnostic=False).run()
 
 <!-- New rules introduced by tasks can be appended here -->
 
+## 2026-06-24 GeoQA Atlas Rules
+
+- GeoQA Atlas lives under `apps/atlas` as the visual demo and product layer.
+- GeoQA remains the deterministic Python validation engine and source of truth.
+- Do not duplicate validation logic in the Atlas frontend.
+- Atlas may use static demo data and precomputed GeoQA reports for public demos.
+- User-upload validation should call the GeoQA Python backend when implemented, not reimplement validators in TypeScript or JavaScript.
+- Atlas changes that affect user-visible behavior should update `journal.md` and `docs/CHANGELOG.md`.
+- Atlas demo, report, and product-positioning docs such as `Marketing.md` and `docs/geoqa_atlas_product_brief.md` should stay aligned with `README.md`.
+- Generated frontend folders such as `node_modules`, build outputs, caches, and temporary bundles must not be committed.
+- Keep Atlas map-first, issue-drawer-first, and clearly branded as powered by GeoQA.
+
 ## 2026-03-18 Validation Engine Rules
 
 - Reuse `geoqa.validations.base.ValidationIssue` as the standard issue object for validation results.
