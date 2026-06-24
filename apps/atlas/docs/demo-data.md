@@ -1,6 +1,6 @@
 # Demo Data
 
-GeoQA Atlas v1 uses curated public preview data and one synthetic water-network sample.
+GeoQA Atlas v1 uses curated public preview data and synthetic GeoQA samples for domain-specific demos.
 All reports are precomputed JSON files for a read-only public demo.
 
 ## Sources
@@ -16,6 +16,14 @@ All reports are precomputed JSON files for a read-only public demo.
 - Water network / utility lines
   - Synthetic utility-line sample made for GeoQA Atlas.
   - It demonstrates self-intersections, near-miss endpoints, unsnapped endpoints, and spatial-index review.
+
+- Administrative boundaries / area polygons
+  - Synthetic GeoQA administrative boundary sample.
+  - It demonstrates boundary gaps, CRS metadata review, spatial-index review, and precision readiness.
+
+- Flood zones / risk polygons
+  - Synthetic GeoQA flood risk sample.
+  - It demonstrates overlapping risk polygons, CRS metadata review, spatial-index review, and planning-data readiness.
 
 - Places or facilities points
   - Natural Earth populated places.

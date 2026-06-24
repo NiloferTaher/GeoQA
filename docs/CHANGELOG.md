@@ -8,6 +8,7 @@ For the full internal build history, design rationale, and implementation notes,
 ## Unreleased
 
 ### Added
+- Two GeoQA Atlas demo datasets for administrative boundaries and flood risk polygons.
 - GeoQA Atlas visual demo and product layer under `apps/atlas`.
 - Map-first demo dataset pages for roads, zoning polygons, water utility lines, and places.
 - Run QA upload workflow preview with GeoJSON map preview and profile selection.
@@ -36,6 +37,10 @@ For the full internal build history, design rationale, and implementation notes,
 - `examples/before_after_cleaning.py` showing the validate -> inspect -> clean -> export story.
 
 ### Changed
+- GeoQA Atlas now presents a balanced six-card dataset gallery on desktop.
+- GeoQA Atlas docs now clarify that the water-network demo is synthetic and designed to demonstrate water-network QA behavior.
+- `docs/geoqa_atlas_product_brief.md` now describes the six demo datasets and the current preview-only Run QA status.
+- Latest Atlas verification passed with `npm run build` and `python -m unittest tests.test_public_api`.
 - Root README now introduces GeoQA Atlas without replacing the CLI and Python engine story.
 - README, Start Here, and supporting docs now position GeoQA more explicitly as the data-quality layer before downstream GeoAI/ML work.
 - future-only architecture and staged execution notes now live under `docs/future/` so shipped guidance stays separate from speculative planning

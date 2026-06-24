@@ -12,6 +12,21 @@ export const issueCopy: Record<string, { description: string; recommendation: st
     recommendation: "Rebuild or recreate the spatial index after bulk edits or loads.",
     why: "Spatial queries, overlays, and validation runs can become slower or less reliable.",
   },
+  polygon_gap_same_layer: {
+    description: "Adjacent polygon features leave a gap where the layer should form a continuous coverage.",
+    recommendation: "Review the shared edge, confirm the authoritative boundary, and close the gap before publication.",
+    why: "Gaps can cause missed area totals, failed overlays, and confusing public boundary outputs.",
+  },
+  polygon_overlap_same_layer: {
+    description: "Polygon features overlap where the layer should have one clear area assignment.",
+    recommendation: "Confirm precedence rules, then split, dissolve, or reshape the overlap conservatively.",
+    why: "Overlaps can double count area and create conflicting risk or administrative assignments.",
+  },
+  crs_metadata_missing_or_ambiguous: {
+    description: "The layer lacks clear coordinate reference system metadata or carries ambiguous CRS information.",
+    recommendation: "Confirm the authoritative CRS and write explicit CRS metadata before delivery or analysis.",
+    why: "Ambiguous CRS metadata can shift layers, break overlays, and make reports harder to defend.",
+  },
   self_intersection: {
     description: "A line crosses itself, which can make network tracing and length calculations unreliable.",
     recommendation: "Split or reshape the affected segment so each pipe or road section follows one valid path.",

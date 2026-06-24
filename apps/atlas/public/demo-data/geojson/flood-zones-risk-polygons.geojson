@@ -1,0 +1,145 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FZ-001",
+        "name": "River corridor high risk",
+        "risk": "high"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.205,
+              39.949
+            ],
+            [
+              -75.191,
+              39.951
+            ],
+            [
+              -75.188,
+              39.961
+            ],
+            [
+              -75.201,
+              39.964
+            ],
+            [
+              -75.205,
+              39.949
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FZ-002",
+        "name": "River corridor moderate risk",
+        "risk": "moderate"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.198,
+              39.945
+            ],
+            [
+              -75.183,
+              39.947
+            ],
+            [
+              -75.181,
+              39.957
+            ],
+            [
+              -75.194,
+              39.96
+            ],
+            [
+              -75.198,
+              39.945
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FZ-003",
+        "name": "Industrial low risk fringe",
+        "risk": "low"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.18,
+              39.941
+            ],
+            [
+              -75.166,
+              39.942
+            ],
+            [
+              -75.164,
+              39.951
+            ],
+            [
+              -75.178,
+              39.953
+            ],
+            [
+              -75.18,
+              39.941
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "FZ-004",
+        "name": "Planning review zone",
+        "risk": "review"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.212,
+              39.937
+            ],
+            [
+              -75.196,
+              39.937
+            ],
+            [
+              -75.194,
+              39.946
+            ],
+            [
+              -75.21,
+              39.947
+            ],
+            [
+              -75.212,
+              39.937
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

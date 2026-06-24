@@ -29,8 +29,9 @@ npm run preview
 ## Static Demo Data
 
 The v1 app uses static demo data in `public/demo-data`.
-It includes roads, zoning polygons, water utility lines, and places samples.
+It includes roads, zoning polygons, administrative boundaries, flood risk polygons, water utility lines, and places samples.
 Reports and issue overlays are precomputed JSON files shaped like GeoQA outputs.
+The water-network, administrative-boundary, and flood-zone demos are synthetic GeoQA samples made to show QA behavior without claiming public source provenance.
 
 ## Backend Note
 

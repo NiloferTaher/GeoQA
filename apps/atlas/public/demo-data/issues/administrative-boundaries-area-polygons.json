@@ -1,0 +1,199 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "issue_id": "boundary-001",
+        "problem_name": "polygon_gap_same_layer",
+        "severity": "high",
+        "feature_id": "ADM-002/ADM-003",
+        "description": "Adjacent administrative boundary polygons leave a narrow gap between districts.",
+        "solution_hint": "Review the shared edge and close the gap before publication or overlay analysis.",
+        "priority_score": 78
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.172,
+              39.98
+            ],
+            [
+              -75.1706,
+              39.98
+            ],
+            [
+              -75.1706,
+              39.989
+            ],
+            [
+              -75.172,
+              39.989
+            ],
+            [
+              -75.172,
+              39.98
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "issue_id": "boundary-002",
+        "problem_name": "coordinate_precision_not_fit_for_use",
+        "severity": "medium",
+        "feature_id": "ADM-001",
+        "description": "Boundary coordinates should be normalized before delivery.",
+        "solution_hint": "Align export precision with the intended publication tolerance.",
+        "priority_score": 52
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.182,
+              39.991
+            ],
+            [
+              -75.171,
+              39.991
+            ],
+            [
+              -75.171,
+              40.001
+            ],
+            [
+              -75.182,
+              40.001
+            ],
+            [
+              -75.182,
+              39.991
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "issue_id": "boundary-003",
+        "problem_name": "crs_metadata_missing_or_ambiguous",
+        "severity": "medium",
+        "feature_id": "layer",
+        "description": "The boundary layer should declare CRS metadata before downstream use.",
+        "solution_hint": "Confirm the source CRS and write explicit metadata with the export.",
+        "priority_score": 48
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.183,
+              39.967
+            ],
+            [
+              -75.159,
+              39.967
+            ],
+            [
+              -75.159,
+              40.002
+            ],
+            [
+              -75.183,
+              40.002
+            ],
+            [
+              -75.183,
+              39.967
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "issue_id": "boundary-004",
+        "problem_name": "missing_or_stale_spatial_index",
+        "severity": "medium",
+        "feature_id": "layer",
+        "description": "The boundary layer should rebuild its spatial index after editing.",
+        "solution_hint": "Rebuild the spatial index before delivery or heavier spatial joins.",
+        "priority_score": 42
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.181,
+              39.968
+            ],
+            [
+              -75.16,
+              39.968
+            ],
+            [
+              -75.16,
+              39.978
+            ],
+            [
+              -75.181,
+              39.978
+            ],
+            [
+              -75.181,
+              39.968
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "boundary-001",
+      "problem_name": "polygon_gap_same_layer",
+      "severity": "high",
+      "feature_id": "ADM-002/ADM-003",
+      "description": "Adjacent administrative boundary polygons leave a narrow gap between districts.",
+      "solution_hint": "Review the shared edge and close the gap before publication or overlay analysis.",
+      "priority_score": 78
+    },
+    {
+      "issue_id": "boundary-002",
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "feature_id": "ADM-001",
+      "description": "Boundary coordinates should be normalized before delivery.",
+      "solution_hint": "Align export precision with the intended publication tolerance.",
+      "priority_score": 52
+    },
+    {
+      "issue_id": "boundary-003",
+      "problem_name": "crs_metadata_missing_or_ambiguous",
+      "severity": "medium",
+      "feature_id": "layer",
+      "description": "The boundary layer should declare CRS metadata before downstream use.",
+      "solution_hint": "Confirm the source CRS and write explicit metadata with the export.",
+      "priority_score": 48
+    },
+    {
+      "issue_id": "boundary-004",
+      "problem_name": "missing_or_stale_spatial_index",
+      "severity": "medium",
+      "feature_id": "layer",
+      "description": "The boundary layer should rebuild its spatial index after editing.",
+      "solution_hint": "Rebuild the spatial index before delivery or heavier spatial joins.",
+      "priority_score": 42
+    }
+  ]
+}

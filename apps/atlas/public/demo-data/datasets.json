@@ -247,10 +247,196 @@
       }
     },
     {
+      "id": "administrative-boundaries-area-polygons",
+      "name": "Administrative boundaries / area polygons",
+      "short_name": "Boundaries",
+      "description": "A boundary sample for checking polygon precision, topology, CRS readiness, and delivery risk before analysis or publication.",
+      "feature_count": 4,
+      "geometry_type": "Polygon",
+      "profile": "boundaries_quick",
+      "issue_count": 4,
+      "geojson": "geojson/administrative-boundaries-area-polygons.geojson",
+      "report": "reports/administrative-boundaries-area-polygons.json",
+      "command": "geoqa validate public-samples/administrative-boundaries-area-polygons.geojson --profile boundaries_quick --output-format json --report-path reports/administrative-boundaries-area-polygons",
+      "github_url": "https://github.com/NiloferTaher/GeoQA",
+      "source_label": "Synthetic GeoQA administrative boundary demo",
+      "source_url": "https://github.com/NiloferTaher/GeoQA",
+      "bounds": [
+        -75.183,
+        39.967,
+        -75.159,
+        40.002
+      ],
+      "summary": {
+        "validation_rule_version": "2026.03",
+        "issue_count": 4,
+        "total_issues": 4,
+        "actionable": 4,
+        "informational": 0,
+        "actionable_ratio": 1,
+        "by_problem": {
+          "polygon_gap_same_layer": 1,
+          "coordinate_precision_not_fit_for_use": 1,
+          "crs_metadata_missing_or_ambiguous": 1,
+          "missing_or_stale_spatial_index": 1
+        },
+        "by_severity": {
+          "high": 1,
+          "medium": 3
+        },
+        "severity_distribution": [
+          {
+            "name": "high",
+            "count": 1,
+            "percent": 25
+          },
+          {
+            "name": "medium",
+            "count": 3,
+            "percent": 75
+          }
+        ],
+        "top_issues": [
+          {
+            "problem_name": "polygon_gap_same_layer",
+            "count": 1,
+            "percent": 25
+          },
+          {
+            "problem_name": "coordinate_precision_not_fit_for_use",
+            "count": 1,
+            "percent": 25
+          },
+          {
+            "problem_name": "crs_metadata_missing_or_ambiguous",
+            "count": 1,
+            "percent": 25
+          },
+          {
+            "problem_name": "missing_or_stale_spatial_index",
+            "count": 1,
+            "percent": 25
+          }
+        ],
+        "by_issue_class": {
+          "data_issue": 4
+        },
+        "by_validator": {
+          "polygon_gap_same_layer": 1,
+          "coordinate_precision_not_fit_for_use": 1,
+          "crs_metadata_missing_or_ambiguous": 1,
+          "missing_or_stale_spatial_index": 1
+        },
+        "by_root_cause": {
+          "topology": 1,
+          "accuracy": 1,
+          "crs": 1,
+          "integrity": 1
+        },
+        "by_priority_band": {
+          "high": 1,
+          "medium": 3
+        }
+      }
+    },
+    {
+      "id": "flood-zones-risk-polygons",
+      "name": "Flood zones / risk polygons",
+      "short_name": "Flood risk",
+      "description": "A risk-zone polygon sample for reviewing QA blockers before planning, modeling, or public-decision workflows.",
+      "feature_count": 4,
+      "geometry_type": "Polygon",
+      "profile": "boundaries_quick",
+      "issue_count": 4,
+      "geojson": "geojson/flood-zones-risk-polygons.geojson",
+      "report": "reports/flood-zones-risk-polygons.json",
+      "command": "geoqa validate public-samples/flood-zones-risk-polygons.geojson --profile boundaries_quick --output-format json --report-path reports/flood-zones-risk-polygons",
+      "github_url": "https://github.com/NiloferTaher/GeoQA",
+      "source_label": "Synthetic GeoQA flood risk demo",
+      "source_url": "https://github.com/NiloferTaher/GeoQA",
+      "bounds": [
+        -75.213,
+        39.936,
+        -75.163,
+        39.965
+      ],
+      "summary": {
+        "validation_rule_version": "2026.03",
+        "issue_count": 4,
+        "total_issues": 4,
+        "actionable": 4,
+        "informational": 0,
+        "actionable_ratio": 1,
+        "by_problem": {
+          "polygon_overlap_same_layer": 1,
+          "coordinate_precision_not_fit_for_use": 1,
+          "crs_metadata_missing_or_ambiguous": 1,
+          "missing_or_stale_spatial_index": 1
+        },
+        "by_severity": {
+          "high": 1,
+          "medium": 3
+        },
+        "severity_distribution": [
+          {
+            "name": "high",
+            "count": 1,
+            "percent": 25
+          },
+          {
+            "name": "medium",
+            "count": 3,
+            "percent": 75
+          }
+        ],
+        "top_issues": [
+          {
+            "problem_name": "polygon_overlap_same_layer",
+            "count": 1,
+            "percent": 25
+          },
+          {
+            "problem_name": "coordinate_precision_not_fit_for_use",
+            "count": 1,
+            "percent": 25
+          },
+          {
+            "problem_name": "crs_metadata_missing_or_ambiguous",
+            "count": 1,
+            "percent": 25
+          },
+          {
+            "problem_name": "missing_or_stale_spatial_index",
+            "count": 1,
+            "percent": 25
+          }
+        ],
+        "by_issue_class": {
+          "data_issue": 4
+        },
+        "by_validator": {
+          "polygon_overlap_same_layer": 1,
+          "coordinate_precision_not_fit_for_use": 1,
+          "crs_metadata_missing_or_ambiguous": 1,
+          "missing_or_stale_spatial_index": 1
+        },
+        "by_root_cause": {
+          "topology": 1,
+          "accuracy": 1,
+          "crs": 1,
+          "integrity": 1
+        },
+        "by_priority_band": {
+          "high": 1,
+          "medium": 3
+        }
+      }
+    },
+    {
       "id": "water-network-utility-lines",
       "name": "Water network / utility lines",
       "short_name": "Water",
-      "description": "A utility line sample for reviewing disconnected endpoints, self-intersections, and delivery readiness before network tracing.",
+      "description": "A synthetic utility line sample for reviewing disconnected endpoints, self-intersections, and delivery readiness before network tracing.",
       "feature_count": 8,
       "geometry_type": "LineString",
       "profile": "water_network_quick",
@@ -441,8 +627,8 @@
     }
   ],
   "stats": {
-    "datasets": 4,
-    "checks": 6,
-    "issues": 141
+    "datasets": 6,
+    "checks": 9,
+    "issues": 149
   }
 }

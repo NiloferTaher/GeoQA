@@ -1,0 +1,145 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ADM-001",
+        "name": "North district",
+        "district": "north"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.182,
+              39.991
+            ],
+            [
+              -75.171,
+              39.991
+            ],
+            [
+              -75.171,
+              40.001
+            ],
+            [
+              -75.182,
+              40.001
+            ],
+            [
+              -75.182,
+              39.991
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ADM-002",
+        "name": "Central district",
+        "district": "central"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.182,
+              39.98
+            ],
+            [
+              -75.172,
+              39.98
+            ],
+            [
+              -75.172,
+              39.989
+            ],
+            [
+              -75.182,
+              39.989
+            ],
+            [
+              -75.182,
+              39.98
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ADM-003",
+        "name": "East district",
+        "district": "east"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.1706,
+              39.98
+            ],
+            [
+              -75.16,
+              39.98
+            ],
+            [
+              -75.16,
+              39.989
+            ],
+            [
+              -75.1706,
+              39.989
+            ],
+            [
+              -75.1706,
+              39.98
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ADM-004",
+        "name": "South district",
+        "district": "south"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.181,
+              39.968
+            ],
+            [
+              -75.16,
+              39.968
+            ],
+            [
+              -75.16,
+              39.978
+            ],
+            [
+              -75.181,
+              39.978
+            ],
+            [
+              -75.181,
+              39.968
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

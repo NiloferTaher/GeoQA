@@ -3271,3 +3271,26 @@
 
 - The parcel workspace still felt too broad after clicking Show on map for a selected polygon issue.
 - The Medium badge was not readable enough in the issue drawer screenshot because surrounding muted text styles could visually dominate the label.
+
+## 2026-06-24 14 27 +04 GeoQA Atlas six-card demo gallery
+
+### What changed
+
+- Verified the water-network demo provenance from the Atlas metadata and docs.
+- Confirmed it is synthetic GeoQA demo data and kept the source label as `Synthetic GeoQA water network demo`.
+- Added two small synthetic Atlas demo datasets.
+- Added `Administrative boundaries / area polygons` with the `boundaries_quick` profile.
+- Added `Flood zones / risk polygons` with the `boundaries_quick` profile.
+- Added precomputed report JSON, issue overlay GeoJSON, raw layer GeoJSON, source labels, and reproducible commands for both new demos.
+- Improved the dataset gallery layout so desktop shows three columns by two rows, tablet shows two columns, and mobile shows one column.
+- Kept the Run QA page preview-only and clarified the backend-connected validation path.
+- Updated the Atlas product brief, app demo data docs, README Atlas note, and changelog.
+- Confirmed `AGENTS.md` already contains the GeoQA Atlas rules.
+- Verified the Atlas app with `npm run build`.
+- Verified the lightweight Python public API suite with `python -m unittest tests.test_public_api`.
+
+### Why this change was made
+
+- The gallery needed to feel complete and more marketable.
+- Demo provenance needed to stay honest, especially for the synthetic water-network sample.
+- Atlas should stay visually compelling without moving validation logic out of GeoQA.

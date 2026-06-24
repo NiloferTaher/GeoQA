@@ -86,7 +86,9 @@ export default function RunQaPage() {
 
       <section className="run-notice">
         <ShieldCheck size={20} />
-        <p>Full validation requires the GeoQA Python backend. This page is the Atlas upload workflow preview.</p>
+        <p>
+          Today upload preview and workflow demo. Next backend-connected validation using the GeoQA Python engine.
+        </p>
       </section>
 
       <section className="workflow-strip" aria-label="GeoQA workflow steps">

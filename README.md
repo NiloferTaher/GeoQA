@@ -29,6 +29,8 @@ npm run dev
 
 The v1 app serves precomputed reports and static GeoJSON previews for public demo use.
 The Run QA page previews the upload workflow and clearly marks full validation as a backend-connected step.
+Current demo cards cover roads, zoning polygons, administrative boundaries, flood risk zones, synthetic water utility lines, and places.
+Screenshots can be added under `docs/assets/` after the Atlas preview is captured.
 
 ## Front-and-Center Proof
 

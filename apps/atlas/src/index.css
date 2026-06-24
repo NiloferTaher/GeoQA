@@ -1287,10 +1287,13 @@ h2 {
   .hero,
   .workspace-grid,
   .workspace-lower,
-  .dataset-grid,
   .platform-grid,
   .engine-section {
     grid-template-columns: 1fr;
+  }
+
+  .dataset-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .hero {
@@ -1331,7 +1334,8 @@ h2 {
   }
 
   .stat-grid,
-  .summary-grid {
+  .summary-grid,
+  .dataset-grid {
     grid-template-columns: 1fr;
   }
 

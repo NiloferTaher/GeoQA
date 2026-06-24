@@ -1,0 +1,199 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "issue_id": "flood-001",
+        "problem_name": "polygon_overlap_same_layer",
+        "severity": "high",
+        "feature_id": "FZ-001/FZ-002",
+        "description": "Two flood risk polygons overlap where risk classes should be mutually exclusive.",
+        "solution_hint": "Confirm precedence rules and split or dissolve the overlap before analysis.",
+        "priority_score": 74
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.198,
+              39.949
+            ],
+            [
+              -75.19,
+              39.951
+            ],
+            [
+              -75.188,
+              39.957
+            ],
+            [
+              -75.195,
+              39.959
+            ],
+            [
+              -75.198,
+              39.949
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "issue_id": "flood-002",
+        "problem_name": "coordinate_precision_not_fit_for_use",
+        "severity": "medium",
+        "feature_id": "FZ-002",
+        "description": "Risk-zone coordinates should be normalized for public review and modeling.",
+        "solution_hint": "Use a precision grid that matches the source scale and planning tolerance.",
+        "priority_score": 50
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.198,
+              39.945
+            ],
+            [
+              -75.183,
+              39.947
+            ],
+            [
+              -75.181,
+              39.957
+            ],
+            [
+              -75.194,
+              39.96
+            ],
+            [
+              -75.198,
+              39.945
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "issue_id": "flood-003",
+        "problem_name": "crs_metadata_missing_or_ambiguous",
+        "severity": "medium",
+        "feature_id": "layer",
+        "description": "Risk-zone polygons should carry explicit CRS metadata.",
+        "solution_hint": "Confirm the authoritative CRS before publishing the layer.",
+        "priority_score": 47
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.213,
+              39.936
+            ],
+            [
+              -75.163,
+              39.936
+            ],
+            [
+              -75.163,
+              39.965
+            ],
+            [
+              -75.213,
+              39.965
+            ],
+            [
+              -75.213,
+              39.936
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "issue_id": "flood-004",
+        "problem_name": "missing_or_stale_spatial_index",
+        "severity": "medium",
+        "feature_id": "layer",
+        "description": "The flood-zone layer should rebuild its spatial index after edits.",
+        "solution_hint": "Rebuild the index before spatial joins, overlays, or public review exports.",
+        "priority_score": 41
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -75.18,
+              39.941
+            ],
+            [
+              -75.166,
+              39.942
+            ],
+            [
+              -75.164,
+              39.951
+            ],
+            [
+              -75.178,
+              39.953
+            ],
+            [
+              -75.18,
+              39.941
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "issues": [
+    {
+      "issue_id": "flood-001",
+      "problem_name": "polygon_overlap_same_layer",
+      "severity": "high",
+      "feature_id": "FZ-001/FZ-002",
+      "description": "Two flood risk polygons overlap where risk classes should be mutually exclusive.",
+      "solution_hint": "Confirm precedence rules and split or dissolve the overlap before analysis.",
+      "priority_score": 74
+    },
+    {
+      "issue_id": "flood-002",
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "medium",
+      "feature_id": "FZ-002",
+      "description": "Risk-zone coordinates should be normalized for public review and modeling.",
+      "solution_hint": "Use a precision grid that matches the source scale and planning tolerance.",
+      "priority_score": 50
+    },
+    {
+      "issue_id": "flood-003",
+      "problem_name": "crs_metadata_missing_or_ambiguous",
+      "severity": "medium",
+      "feature_id": "layer",
+      "description": "Risk-zone polygons should carry explicit CRS metadata.",
+      "solution_hint": "Confirm the authoritative CRS before publishing the layer.",
+      "priority_score": 47
+    },
+    {
+      "issue_id": "flood-004",
+      "problem_name": "missing_or_stale_spatial_index",
+      "severity": "medium",
+      "feature_id": "layer",
+      "description": "The flood-zone layer should rebuild its spatial index after edits.",
+      "solution_hint": "Rebuild the index before spatial joins, overlays, or public review exports.",
+      "priority_score": 41
+    }
+  ]
+}
