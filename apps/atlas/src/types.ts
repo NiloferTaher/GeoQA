@@ -65,3 +65,9 @@ export type Issue = {
 export type IssuesResponse = FeatureCollection & {
   issues: Issue[]
 }
+
+export type PreviewUploadResponse = {
+  collection: FeatureCollection
+  label: string
+  note: string
+}

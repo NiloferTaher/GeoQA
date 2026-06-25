@@ -3343,3 +3343,22 @@
 - Atlas needed the gallery to feel complete while using honest public provenance where public fixtures were available.
 - Cleaned-layer behavior needed to communicate whether an actual cleaned output exists.
 - Runtime errors and coordinate precision findings needed clearer product semantics for non-expert GIS users.
+
+## 2026-06-25 15 58 +04 GeoQA Atlas Run QA upload preview
+
+### What changed
+
+- Tested the user supplied `C:\Users\admin\Downloads\Batinah_South.zip` archive and confirmed it contains many shapefile layers.
+- Added `shpjs` to the Atlas frontend so normal zipped Shapefile uploads can be parsed in the browser.
+- Added a large-zip fallback path in the Run QA page so big zipped Shapefile archives can use the local Atlas backend preview endpoint when available.
+- Updated the Run QA upload field to accept `.zip`, `.geojson`, and `.json` files.
+- Added upload status text that reports how many features were loaded and which shapefile layer is being previewed.
+- Downloaded the public Oman administrative boundary GeoJSON package from HDX and used `omn_admin1.geojson` as a real GeoJSON upload test layer.
+- Verified the Batinah zip preview behavior against the rebuilt desktop exe.
+- Verified the Oman GeoJSON preview behavior against the rebuilt desktop exe.
+- Captured verification screenshots under `C:\Users\admin\Downloads\geoqa_atlas_upload_tests`.
+
+### Why this change was made
+
+- The Run QA page was still attempting to parse zipped Shapefiles as JSON, which caused the visible `Unexpected token 'P'` error for zip files.
+- Atlas preview copy promised zipped Shapefile support, so the upload path needed to match that product promise for real files.

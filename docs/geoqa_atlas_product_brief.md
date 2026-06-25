@@ -24,7 +24,7 @@ The first audience is GIS analysts, geospatial data engineers, utility teams, mu
 - Leaflet map viewer with static demo GeoJSON.
 - Precomputed GeoQA style report JSON.
 - Six demo datasets covering roads, zoning polygons, public administrative boundaries, public flood risk polygons, synthetic water utility lines, and places.
-- Run QA workflow preview with local GeoJSON map preview.
+- Run QA workflow preview with local GeoJSON and zipped Shapefile map preview.
 - No public arbitrary validation backend in v1.
 - No Streamlit.
 - No ElasticSearch.
@@ -49,6 +49,7 @@ The water-network sample remains a synthetic GeoQA demo and is labeled that way.
 - Selected-feature issue review works through map overlays and the problem drawer.
 - Runtime errors are labeled operational and are not drawn as normal defect geometries.
 - Cleaned layer controls are enabled only where static cleaned output exists.
+- Large zipped Shapefile previews can use the local Atlas backend when packaged in the desktop app.
 - Run QA is preview-only and does not validate uploaded files yet.
 - GeoQA Python remains the validation source of truth.
 

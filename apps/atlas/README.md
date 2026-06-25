@@ -42,6 +42,7 @@ Runtime errors are operational findings in Atlas, not normal defect overlays.
 The Run QA page previews the upload workflow and can display a local GeoJSON layer in the browser.
 Full validation requires a backend service that calls the GeoQA Python package.
 Atlas preview supports GeoJSON and zipped Shapefile where browser parsing is available.
+Large zipped Shapefile archives can use the local Atlas backend preview endpoint when the desktop app or FastAPI API is running.
 Full GeoQA validation through the Python backend can support additional GeoPandas-readable formats such as Shapefile, GeoPackage, CSV, GeoJSON, and GeoParquet.
 
 ## Root Project

@@ -15,7 +15,8 @@
     "react": "latest",
     "react-dom": "latest",
     "react-leaflet": "latest",
-    "react-router-dom": "latest"
+    "react-router-dom": "latest",
+    "shpjs": "^6.2.0"
   },
   "devDependencies": {
     "@types/geojson": "latest",

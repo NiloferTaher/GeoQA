@@ -1,4 +1,4 @@
-import type { Dataset, DatasetListResponse, IssuesResponse, Report } from "./types"
+import type { Dataset, DatasetListResponse, IssuesResponse, PreviewUploadResponse, Report } from "./types"
 import type { FeatureCollection } from "geojson"
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? ""
@@ -106,4 +106,18 @@ export function getIssues(id: string): Promise<IssuesResponse> {
 
 export function reportDownloadUrl(id: string): string {
   return `${STATIC_BASE}/reports/${id}.json`
+}
+
+export async function previewUploadedLayer(file: File): Promise<PreviewUploadResponse> {
+  const response = await fetch(`${API_BASE}/api/preview-layer?filename=${encodeURIComponent(file.name)}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/octet-stream",
+    },
+    body: file,
+  })
+  if (!response.ok) {
+    throw new Error("GeoQA Atlas backend preview is not available for this file.")
+  }
+  return response.json() as Promise<PreviewUploadResponse>
 }

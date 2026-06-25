@@ -1,8 +1,10 @@
 import { useMemo, useState } from "react"
 import { CheckCircle2, FileJson, Layers3, MapPinned, ShieldCheck, UploadCloud } from "lucide-react"
 import type { FeatureCollection } from "geojson"
+import shp from "shpjs"
 import MapPanel from "../components/MapPanel"
 import ErrorState from "../components/ErrorState"
+import { previewUploadedLayer } from "../api"
 
 const profiles = ["generic_quick", "geometry", "water_network_quick", "land_use_quick", "boundaries_quick"]
 
@@ -17,6 +19,12 @@ const workflow = [
 
 const command =
   "geoqa validate your-data.geojson --profile generic_quick --output-format json --report-path reports/your-data"
+const maxPreviewFeatures = 5000
+const backendZipPreviewThreshold = 80 * 1024 * 1024
+
+type ParsedShapefileLayer = FeatureCollection & {
+  fileName?: string
+}
 
 function inferBounds(collection: FeatureCollection): [number, number, number, number] | undefined {
   const positions: Array<[number, number]> = []
@@ -49,28 +57,31 @@ export default function RunQaPage() {
   const [profile, setProfile] = useState(profiles[0])
   const [preview, setPreview] = useState<FeatureCollection | null>(null)
   const [fileName, setFileName] = useState("")
+  const [previewLabel, setPreviewLabel] = useState("")
+  const [uploadNote, setUploadNote] = useState("")
+  const [processing, setProcessing] = useState(false)
   const [error, setError] = useState("")
 
   const bounds = useMemo(() => (preview ? inferBounds(preview) : undefined), [preview])
 
-  function handleUpload(file?: File) {
+  async function handleUpload(file?: File) {
     setError("")
     setPreview(null)
+    setPreviewLabel("")
+    setUploadNote("")
     if (!file) return
     setFileName(file.name)
-    const reader = new FileReader()
-    reader.onload = () => {
-      try {
-        const parsed = JSON.parse(String(reader.result))
-        if (parsed?.type !== "FeatureCollection" || !Array.isArray(parsed.features)) {
-          throw new Error("Upload a GeoJSON FeatureCollection for this workflow preview.")
-        }
-        setPreview(parsed as FeatureCollection)
-      } catch (caught) {
-        setError(caught instanceof Error ? caught.message : "GeoQA Atlas could not read this GeoJSON file.")
-      }
+    setProcessing(true)
+    try {
+      const parsed = await parsePreviewFile(file)
+      setPreview(parsed.collection)
+      setPreviewLabel(parsed.label)
+      setUploadNote(parsed.note)
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : "GeoQA Atlas could not read this layer preview.")
+    } finally {
+      setProcessing(false)
     }
-    reader.readAsText(file)
   }
 
   return (
@@ -111,12 +122,15 @@ export default function RunQaPage() {
           <label className="upload-drop">
             <input
               type="file"
-              accept=".geojson,.json,application/geo+json,application/json"
+              accept=".geojson,.json,.zip,application/geo+json,application/json,application/zip"
               onChange={(event) => handleUpload(event.target.files?.[0])}
             />
             <FileJson size={28} />
-            <span>{fileName || "Choose a GeoJSON FeatureCollection"}</span>
+            <span>{fileName || "Choose a GeoJSON FeatureCollection or zipped Shapefile"}</span>
           </label>
+          {processing ? <p className="upload-note">Reading layer preview...</p> : null}
+          {previewLabel ? <p className="upload-note">{previewLabel}</p> : null}
+          {uploadNote ? <p className="upload-note muted">{uploadNote}</p> : null}
           {error ? <ErrorState message={error} /> : null}
           <label className="field-label" htmlFor="profile-select">
             GeoQA profile
@@ -167,4 +181,74 @@ export default function RunQaPage() {
       </section>
     </div>
   )
+}
+
+async function parsePreviewFile(file: File) {
+  const lowerName = file.name.toLowerCase()
+  if (lowerName.endsWith(".zip")) {
+    if (file.size >= backendZipPreviewThreshold) {
+      try {
+        return await previewUploadedLayer(file)
+      } catch {
+        throw new Error(
+          "This large zipped Shapefile needs the local GeoQA Atlas backend preview. Smaller zipped Shapefiles can still be parsed in the browser.",
+        )
+      }
+    }
+    const buffer = await file.arrayBuffer()
+    const parsed = await shp(buffer)
+    const layers = (Array.isArray(parsed) ? parsed : [parsed]) as ParsedShapefileLayer[]
+    const usable = layers.find((layer) => layer?.type === "FeatureCollection" && Array.isArray(layer.features))
+    if (!usable) {
+      throw new Error("This zip did not include a readable Shapefile layer for browser preview.")
+    }
+    const layerName = usable.fileName ? usable.fileName.split(/[\\/]/).pop() : file.name
+    const collection = capPreviewFeatures(usable)
+    const trimmed = usable.features.length - collection.features.length
+    const layerNote =
+      layers.length > 1
+        ? `This zip contains ${layers.length} shapefile layers. Atlas is previewing ${layerName}.`
+        : `Atlas is previewing ${layerName}.`
+    const trimNote = trimmed > 0 ? ` Preview limited to ${collection.features.length.toLocaleString()} features for map speed.` : ""
+    return {
+      collection,
+      label: `${collection.features.length.toLocaleString()} features loaded from zipped Shapefile.`,
+      note: `${layerNote}${trimNote}`,
+    }
+  }
+
+  const text = await file.text()
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(text)
+  } catch {
+    throw new Error("Upload a GeoJSON FeatureCollection or a zipped Shapefile.")
+  }
+  if (!isFeatureCollection(parsed)) {
+    throw new Error("Upload a GeoJSON FeatureCollection or a zipped Shapefile.")
+  }
+  const collection = capPreviewFeatures(parsed)
+  const trimmed = parsed.features.length - collection.features.length
+  return {
+    collection,
+    label: `${collection.features.length.toLocaleString()} features loaded from GeoJSON.`,
+    note: trimmed > 0 ? `Preview limited to ${collection.features.length.toLocaleString()} features for map speed.` : "",
+  }
+}
+
+function isFeatureCollection(value: unknown): value is FeatureCollection {
+  return Boolean(
+    value &&
+      typeof value === "object" &&
+      (value as FeatureCollection).type === "FeatureCollection" &&
+      Array.isArray((value as FeatureCollection).features),
+  )
+}
+
+function capPreviewFeatures(collection: FeatureCollection): FeatureCollection {
+  if (collection.features.length <= maxPreviewFeatures) return collection
+  return {
+    ...collection,
+    features: collection.features.slice(0, maxPreviewFeatures),
+  }
 }

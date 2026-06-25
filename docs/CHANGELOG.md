@@ -37,6 +37,8 @@ For the full internal build history, design rationale, and implementation notes,
 - `examples/before_after_cleaning.py` showing the validate -> inspect -> clean -> export story.
 
 ### Changed
+- GeoQA Atlas Run QA now previews GeoJSON files and zipped Shapefiles instead of treating every upload as JSON.
+- GeoQA Atlas Run QA now routes large zipped Shapefile previews to a local backend endpoint when available.
 - GeoQA Atlas now presents a balanced six-card dataset gallery on desktop.
 - GeoQA Atlas now uses public preview sources for the administrative-boundary and flood-zone demo cards.
 - GeoQA Atlas Run QA copy now separates browser preview format support from broader GeoQA Python backend format support.
@@ -91,6 +93,7 @@ For the full internal build history, design rationale, and implementation notes,
   - result: `OK` (`144` tests)
 
 ### Fixed
+- GeoQA Atlas Run QA no longer shows a JSON parse error for zipped Shapefile uploads.
 - GeoQA Atlas cleaned-layer metadata is now explicit per dataset and controls the cleaned layer toggle state.
 - GeoQA Atlas runtime-error explanations now frame those findings as operational partial-run issues rather than geometry defects.
 - GeoQA Atlas no longer renders `validation_runtime_error` findings as normal defect geometry overlays.
