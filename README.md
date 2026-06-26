@@ -2,6 +2,12 @@
 
 GeoQA finds, explains, and fixes geospatial data-quality issues before they break GIS, GeoAI, ML, analysis, publishing, or delivery workflows.
 
+![GeoQA Atlas landing page](docs/assets/geoqa-atlas-landing.png)
+
+### Visual overview
+
+See [docs/assets/GeoQA_Atlas_preview.pdf](docs/assets/GeoQA_Atlas_preview.pdf) for a visual walkthrough of Atlas: landing page, dataset gallery, map-first issue review, Run QA, and intended audiences.
+
 GeoQA is the Python validation engine for deterministic geospatial QA.
 
 GeoQA can also load additive domain plugins for real-world operational rules. In the current repo, DMA-specific polygon QA logic from legacy operational scripts is available through the normal `geoqa.validate(...)` path without changing the core engine.
@@ -57,6 +63,12 @@ Recommended Vercel settings:
 
 The public web demo uses sampled Run QA limits.
 Full GeoQA validation should be run locally through the Python CLI/API or through a separately hosted backend.
+
+### Atlas screenshots
+
+| Landing | Dataset review | Run QA |
+| --- | --- | --- |
+| ![Landing](docs/assets/geoqa-atlas-landing.png) | ![Dataset review](docs/assets/geoqa-atlas-dataset-review.png) | ![Run QA](docs/assets/geoqa-atlas-run-qa.png) |
 
 ## Front-and-Center Proof
 
