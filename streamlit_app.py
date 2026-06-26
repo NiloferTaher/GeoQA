@@ -950,7 +950,7 @@ elif source_mode == "Use local file path":
     local_source_text = st.text_input(
         "Local dataset path",
         value=st.session_state.get("geoqa_local_source_input", ""),
-        placeholder=r"G:\My Drive\Python-G-drive\GIS-Department\GIS-Prototype\Sandbox-TIG\data\real\census_places_national_2025_real_20260227_024144.csv",
+        placeholder="path/to/your/dataset.geojson",
         help="Point GeoQA at a dataset already on disk. This avoids browser upload failures for larger local files.",
     )
     st.session_state["geoqa_local_source_input"] = local_source_text

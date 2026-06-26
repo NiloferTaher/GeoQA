@@ -1,0 +1,6 @@
+*.dbf binary
+*.gpkg binary
+*.pdf binary
+*.shp binary
+*.shx binary
+*.xlsx binary

@@ -4,6 +4,163 @@
 - Started: 2026-03-18 14:26:51 +04:00
 - Project note: Substantive project changes should be logged here with both the change itself and the reasoning behind it.
 
+## Privacy note
+
+This journal records development history and verification outcomes. Private and local datasets are described by role, geometry type, scale, and observed behavior rather than by source filenames, client names, or local filesystem paths.
+
+## 2026-06-26 GeoQA public privacy scrub
+
+- Added the journal privacy note.
+- Generalized private delivery archive names, selected layer names, local paths, and local output folder references in the journal.
+- Replaced public doc wording that used private-facing terminology with neutral stakeholder or operational wording.
+- Confirmed remaining private-test references describe role, geometry type, scale, and outcome rather than hard filenames or local paths.
+
+### Why this change was made
+
+- The repo is being prepared for public GitHub release.
+- The development history should preserve useful technical evidence without publishing private local filenames or machine-specific paths.
+
+## 2026-06-26 GeoQA Atlas footer and bloat audit
+
+- Added a reusable Atlas footer with Nilofer Taher, copyright, GitHub, and LinkedIn links.
+- Added maintainer links to the root README.
+- Added `docs/github_about.txt` for repository profile copy and topics.
+- Added `apps/atlas/scripts/audit-bloat.mjs`.
+- Added `npm run audit:bloat`.
+- Added explicit Run QA public sampling regression checks for 736 points, 123 polygons, and 5000 lines.
+
+### Why this change was made
+
+- Public Atlas pages need clear maintainer identity without adding contact forms or contact links.
+- Bloat and sampling behavior should be auditable with repeatable evidence instead of only manual review.
+
+## 2026-06-26 GeoQA Atlas fixed dark map mode
+
+- Removed the Run QA basemap switcher from the public UI.
+- Kept Atlas on the default dark readable basemap.
+- Removed dead CSS for the light and satellite control row.
+
+### Why this change was made
+
+- The extra dark, light, and satellite controls added choice without improving the Run QA workflow.
+- A single stable map mode keeps the interface calmer and avoids confusing users when satellite is not configured.
+
+## 2026-06-26 GeoQA Atlas idle safe performance hardening
+
+- Profiled Atlas page load paths for landing, gallery, dataset workspace, and Run QA.
+- Found that the app shell eagerly imported route modules, Leaflet CSS, dataset workspace map code, Run QA map code, and the Shapefile parser before users opened those workflows.
+- Changed the app shell to lazy load routes.
+- Moved Leaflet CSS into the lazy map component.
+- Lazy loaded `MapPanel` from dataset workspace and Run QA.
+- Changed Run QA to import `shpjs` only after a user uploads a ZIP and the backend preview fallback needs browser parsing.
+- Changed dataset workspace cleaned GeoJSON loading so it waits for the cleaned layer toggle instead of loading during initial dataset open.
+- Added `apps/atlas/PERFORMANCE.md`.
+- Added `apps/atlas/AGENTS.md`.
+- Added an Atlas idle safety regression script and wired it into `npm test`.
+- Updated Atlas README, product brief, changelog, and root agent rules.
+
+### Why this change was made
+
+- Opening Atlas should not warm the workstation by loading map and geospatial parsing code before the user asks for it.
+- Landing and gallery pages only need metadata.
+- Run QA must stay idle until the user selects a file or starts validation.
+- Future map, upload, and report changes need permanent rules so CPU-heavy startup behavior does not return.
+
+## 2026-06-26 GeoQA Atlas dataset Show on map fallback
+
+- Added a raw feature fallback for dataset Show on map when a report issue has no usable GeoJSON overlay feature.
+- Added a selected focus layer above normal issue overlays so feature-level issue cards visibly focus on the map.
+- Added specific drawer copy for isolated network segment and line dangle findings.
+- Updated Run QA map fitting so selected uploaded layers can zoom closer and recalculate after layout changes.
+- Fixed Atlas backend preview serialization for Shapefile date attributes found in private multi-layer utility archive layers.
+- Audited all 39 layers from the private multi-layer utility archive through the backend preview serializer.
+- Rebuilt the standalone Atlas frontend and refreshed the one-folder exe release assets.
+
+### Why this change was made
+
+- Some public water findings had WKT or text geometry in the report row instead of a ready GeoJSON issue overlay.
+- The drawer could select an issue card, but the map had no geometry to focus.
+- Falling back to the matching raw source feature keeps Show on map useful without pretending the raw feature is a cleaned geometry.
+- Small selected layers could still look zoomed out because the preview map capped fit bounds too conservatively.
+- Several private archive layers included Shapefile date fields that Python returned as date objects.
+- Those values must become JSON safe strings or nulls before Atlas sends preview features to the browser.
+
+## 2026-06-26 GeoQA Atlas water endpoint gap focus
+
+- Audited the OSM water and drainage line demo report.
+- Confirmed near-miss endpoint issues only had full line geometry and no endpoint pair metadata.
+- Added endpoint pair metadata to GeoQA endpoint validators.
+- Added related feature id, endpoint A, endpoint B, distance, tolerance, and distance units to report rows.
+- Switched geographic CRS endpoint distance checks to meters.
+- Updated water-network default endpoint tolerances to meter-based values.
+- Regenerated the water demo report and issue overlay.
+- Reduced the water demo issue count from 273 to 162 after endpoint pair dedupe and meter-based tolerance handling.
+- Added Atlas endpoint issue overlays with two endpoint markers and a short gap connector.
+- Updated Show on map so near-miss endpoint issues focus the gap instead of the whole line.
+- Added drawer metadata for involved features, gap distance, tolerance, and missing endpoint fallback copy.
+
+### Why this change was made
+
+- The old Atlas map highlighted full waterways because the report geometry was the full source feature.
+- Users needed to see the actual endpoint gap, not a long line segment that only implied a problem somewhere along it.
+- Meter-based distance handling keeps geographic water data from treating degrees as meters.
+
+## 2026-06-26 GeoQA Atlas Run QA explainability and basemaps
+
+- Added a dark and light basemap switcher to Atlas Run QA.
+- Kept satellite basemap hidden unless a deployment configures satellite tiles.
+- Increased the Run QA inspection map height and made uploaded raw layers more visible on dark and light maps.
+- Added duplicate geometry comparison tables with feature IDs, coordinate summaries, and row attribute differences.
+- Added issue interpretation copy for duplicate, spatial index, precision, gap, overlap, and utility network findings.
+- Added Run notes suggestions for selected Shapefile layers, sampled public demo runs, utility layer context, duplicate rows, spatial indexes, and polygon coverage review.
+- Synced and rebuilt the standalone Atlas frontend production bundle.
+- Refreshed the one-folder exe release frontend assets.
+
+### Why this change was made
+
+- Users needed readable city and state labels without losing the dark Atlas feel.
+- Duplicate geometry findings needed to show what rows were actually being compared, not only raw JSON.
+- Multi-layer utility ZIPs need clear selected-layer context so a service or point asset layer is not mistaken for a whole network validation.
+
+## 2026-06-25 GeoQA Atlas Run QA thermal visibility
+
+- Added live CPU temperature status to the Atlas Run QA workflow.
+- Added an Atlas backend thermal endpoint powered by the GeoQA thermal reader.
+- Added a hot CPU preflight guard so uploaded Run QA does not start when the workstation is already over the Atlas hard threshold.
+- Returned final thermal summary data from uploaded Run QA responses.
+- Increased the Atlas uploaded Run QA backend runtime ceiling from 35 seconds to 75 seconds.
+- Synced the frontend thermal card into `apps/atlas`.
+
+### Why this change was made
+
+- A small selected point layer caused the workstation to reach 97 C during Run QA.
+- The product workflow needed visible thermal feedback and a clear stop condition before starting more validation work.
+
+## 2026-06-25 GeoQA Atlas map label readability
+
+- Split Atlas Leaflet maps into separate dark no-label and label tile layers.
+- Removed CSS tile filters so label text stays crisp.
+- Rendered GeoQA issue overlays above labels so issue points and selected features stay visible.
+
+### Why this change was made
+
+- Users could not read country and location labels on the very dark basemap, especially around bright point overlays.
+
+## 2026-06-25 GeoQA Atlas point preview CPU reduction
+
+- Investigated Atlas Run QA preview for small point Shapefile layers selected from multi-layer ZIP archives.
+- Confirmed the local backend preview path returned only the selected Flow Meter layer with 80 features from 41 detected layers.
+- Added low-cost Leaflet canvas point rendering for uploaded preview layers.
+- Memoized the Atlas map panel so thermal polling and unrelated Run QA state changes do not re-render Leaflet.
+- Added a per-upload and per-layer preview cache in the Run QA page.
+- Slowed thermal polling outside active validation and skipped unchanged thermal state updates.
+- Verified full Python tests, problem catalog validation, Atlas frontend build, and optional npm scripts.
+
+### Why this change was made
+
+- Small uploaded point previews were raising workstation temperature before validation ran.
+- The fix keeps GeoQA Python as the validation engine and reduces browser preview cost in the Atlas product layer.
+
 ## 2026-03-21 12:10:00 +04:00
 
 ### Planning update: best-effort plugin execution on partial runs
@@ -2629,7 +2786,7 @@
 
 ### Why this change was made
 
-- The failing `census_places_national_2025_real_20260227_024144.csv` file was confirmed to be only about 4 MB and structurally valid, so the observed `AxiosError: Network Error` was not a GeoQA parser problem.
+- The failing private CSV point file was confirmed to be only about 4 MB and structurally valid, so the observed `AxiosError: Network Error` was not a GeoQA parser problem.
 - That failure happens in the browser-to-Streamlit upload path before GeoQA gets the file, so adding a direct local-path mode is the correct way to support larger or otherwise troublesome local datasets without depending on frontend upload behavior.
 
 ## 2026-03-19 05:10:00 +04:00
@@ -2652,8 +2809,8 @@
 ### Public CSV Integrity Check and Loader Hardening
 
 - Checked the public CSV datasets under:
-  - `GIS-Department/GIS-Prototype/Sandbox-TIG/data/real/`
-- Verified that the `census_places_national_2025_real_20260227_024144.csv` file is structurally sound and now loads through `geoqa.conversion.load_vector_dataset(...)`.
+  - a private local data folder
+- Verified that the private CSV point file is structurally sound and now loads through `geoqa.conversion.load_vector_dataset(...)`.
 - Confirmed that this Census file contains:
   - `718` rows
   - `1` row with missing coordinate values, now represented as null geometry instead of causing a loader failure
@@ -2673,11 +2830,11 @@
 
 - Most of the public CSV files in the sandbox folder are structurally readable.
 - One of the large GeoBoundaries CSV variants appears genuinely malformed or truncated:
-  - `geoboundaries_global_adm1_geoms_20260225_025619.csv`
+  - a private boundary CSV export
   - observed failure:
     - `EOF inside string`
 - The alternate GeoBoundaries export with the nearby timestamp should be treated as the healthier candidate unless re-downloaded verification suggests otherwise:
-  - `geoboundaries_global_adm1_geoms_20260225_025253.csv`
+  - an alternate private boundary CSV export
 
 ### Why this change was made
 
@@ -3238,3 +3395,468 @@
   - dissolve-by-name behavior
 - Added `geoqa.plugins` as an additive layer rather than altering validator internals.
 - Hooked plugins into `validate_dataset_with_profile(...)` only after core validation completes, so the engine remains the center and plugin rules stay optional/additive.
+
+## 2026-06-24 12 50 +04 GeoQA Atlas product layer
+
+### What changed
+
+- Added GeoQA Atlas under `apps/atlas` as the public WebGIS demo layer for the existing GeoQA engine.
+- Added a Vite React and Leaflet interface with landing, dataset gallery, dataset workspace, issue drawer, layer toggles, report downloads, GitHub links, and static demo fallback data.
+- Added a Run QA workflow preview page with GeoJSON upload preview, profile selection, and the command users would run through the GeoQA CLI.
+- Added a water-network utility-line demo using `water_network_quick` with self-intersection, near-miss endpoint, unsnapped endpoint, and spatial-index issue examples.
+- Added reusable frontend geometry bounds handling for selected issue focus so polygon and parcel issue zoom uses the actual feature coordinates.
+- Improved Medium severity badge readability with bright yellow background, near-black text, and heavier type.
+- Added root and app documentation for Atlas, including `docs/geoqa_atlas_product_brief.md` and `apps/atlas/docs/demo-data.md`.
+- Kept GeoQA validation logic inside the Python engine and treated Atlas as a report and workflow presentation layer.
+
+### Why this change was made
+
+- The project needed a public-facing product demo that explains GeoQA quickly without replacing internals or making Streamlit the lead experience.
+- Atlas gives reviewers a map-first way to understand GeoQA reports, while the CLI and Python package remain the authoritative validation surface.
+
+## 2026-06-24 13 45 +04 GeoQA Atlas parcel focus and badge readability
+
+### What changed
+
+- Tightened parcel issue focus behavior so very small polygon findings zoom to the selected feature center at a higher level.
+- Switched selected issue focus updates to clone the GeoJSON feature so clicking Show on map again can retrigger the map movement.
+- Increased map and tile maximum zoom settings for detailed parcel review.
+- Narrowed the issue detail span selector so severity badge text is not affected by muted feature-label styling.
+- Forced Medium severity badge text to near-black with a bright yellow badge background.
+
+### Why this change was made
+
+- The parcel workspace still felt too broad after clicking Show on map for a selected polygon issue.
+- The Medium badge was not readable enough in the issue drawer screenshot because surrounding muted text styles could visually dominate the label.
+
+## 2026-06-24 14 27 +04 GeoQA Atlas six-card demo gallery
+
+### What changed
+
+- Verified the water-network demo provenance from the Atlas metadata and docs.
+- Confirmed it is synthetic GeoQA demo data and kept the source label as `Synthetic GeoQA water network demo`.
+- Added two small synthetic Atlas demo datasets.
+- Added `Administrative boundaries / area polygons` with the `boundaries_quick` profile.
+- Added `Flood zones / risk polygons` with the `boundaries_quick` profile.
+- Added precomputed report JSON, issue overlay GeoJSON, raw layer GeoJSON, source labels, and reproducible commands for both new demos.
+- Improved the dataset gallery layout so desktop shows three columns by two rows, tablet shows two columns, and mobile shows one column.
+- Kept the Run QA page preview-only and clarified the backend-connected validation path.
+- Updated the Atlas product brief, app demo data docs, README Atlas note, and changelog.
+- Confirmed `AGENTS.md` already contains the GeoQA Atlas rules.
+- Verified the Atlas app with `npm run build`.
+- Verified the lightweight Python public API suite with `python -m unittest tests.test_public_api`.
+
+### Why this change was made
+
+- The gallery needed to feel complete and more marketable.
+- Demo provenance needed to stay honest, especially for the synthetic water-network sample.
+- Atlas should stay visually compelling without moving validation logic out of GeoQA.
+
+## 2026-06-24 14 52 +04 GeoQA Atlas runtime issue overlay semantics
+
+### What changed
+
+- Audited the Atlas dataset workspace map, issue drawer, layer toggles, and issue overlay data flow.
+- Added a frontend issue classification helper for operational issue types.
+- Treated `validation_runtime_error` as an operational issue rather than a normal defect geometry overlay.
+- Excluded runtime errors from the default yellow issue overlay layer.
+- Kept runtime errors visible in the issue drawer with explicit operational copy.
+- Disabled the Show on map action for runtime errors because their geometry is optional context, not a cleaned or invalid geometry.
+- Prevented stale cleaned layer state when changing datasets.
+- Kept the cleaned layer disabled when no real cleaned layer is available and added the message `No cleaned layer is available for this demo.`
+- Verified `npm run build` passed from a clean Atlas source copy.
+- Ran a dataset smoke check across all six demos confirming runtime issue features are separable from normal overlays and cleaned-layer files only exist where configured.
+
+### Why this change was made
+
+- Runtime errors describe validation completeness, not feature geometry validity.
+- Showing runtime geometry as a normal defect overlay made Atlas imply a false geometry problem.
+- The map needed to preserve feature-level issue review while keeping operational report issues honest.
+
+## 2026-06-24 15 34 +04 GeoQA Atlas gallery and layer semantics polish
+
+### What changed
+
+- Re-read the Atlas correction instructions from `the local Atlas correction instructions`.
+- Kept the Atlas app on the existing `atlas-product-layer` branch.
+- Rebuilt the administrative-boundary preview from the Natural Earth Admin 1 states and provinces public sample already staged in `data/public_samples`.
+- Rebuilt the flood-zone preview from the Philadelphia FEMA flood plain 2023 public sample already staged in `data/public_samples`.
+- Kept the water-network demo labeled as a synthetic GeoQA utility sample.
+- Added explicit cleaned-layer metadata to each Atlas demo dataset.
+- Kept the six-card dataset gallery balanced at three columns on desktop, two columns on tablet, and one column on mobile.
+- Updated the cleaned-layer toolbar so unavailable cleaned output is disabled and explained with `No cleaned layer is available for this demo.`
+- Added cleaned-layer copy for supported geometry fixes only when a cleaned preview exists.
+- Updated runtime error copy so `validation_runtime_error` is an operational issue and not a normal geometry defect.
+- Updated coordinate precision copy so flagged features are explained as QA findings rather than automatic fixes.
+- Clarified Run QA format support so Atlas browser preview support is separate from broader GeoQA Python backend support.
+- Updated the Atlas README, demo-data notes, product brief, root README, and changelog.
+- Verified the Atlas package with `npm run lint --if-present`, `npm run typecheck --if-present`, and `npm test --if-present`.
+- Verified `npm run build` from a clean Atlas source copy because the cloud-synced worktree could not complete a local dependency install or filesystem junction.
+- Confirmed the app metadata has six datasets, two cleaned previews, and four disabled cleaned-layer demos.
+- Verified the lightweight Python public API suite with `python -m unittest tests.test_public_api`.
+
+### Why this change was made
+
+- Atlas needed the gallery to feel complete while using honest public provenance where public fixtures were available.
+- Cleaned-layer behavior needed to communicate whether an actual cleaned output exists.
+- Runtime errors and coordinate precision findings needed clearer product semantics for non-expert GIS users.
+
+## 2026-06-25 15 58 +04 GeoQA Atlas Run QA upload preview
+
+### What changed
+
+- Tested the user supplied `a private multi-layer utility delivery ZIP` archive and confirmed it contains many shapefile layers.
+- Added `shpjs` to the Atlas frontend so normal zipped Shapefile uploads can be parsed in the browser.
+- Added a large-zip fallback path in the Run QA page so big zipped Shapefile archives can use the local Atlas backend preview endpoint when available.
+- Updated the Run QA upload field to accept `.zip`, `.geojson`, and `.json` files.
+- Added upload status text that reports how many features were loaded and which shapefile layer is being previewed.
+- Downloaded the public Oman administrative boundary GeoJSON package from HDX and used `omn_admin1.geojson` as a real GeoJSON upload test layer.
+- Verified the private ZIP preview behavior against the rebuilt desktop exe.
+- Verified the Oman GeoJSON preview behavior against the rebuilt desktop exe.
+- Captured verification screenshots under `a local verification screenshot folder`.
+
+### Why this change was made
+
+- The Run QA page was still attempting to parse zipped Shapefiles as JSON, which caused the visible `Unexpected token 'P'` error for zip files.
+- Atlas preview copy promised zipped Shapefile support, so the upload path needed to match that product promise for real files.
+
+## 2026-06-25 17 21 +04 GeoQA Atlas Run QA execution
+
+### What changed
+
+- Confirmed the Run QA page only previewed uploads and updated command text when the profile changed.
+- Added a local uploaded-layer Run QA API client to the Atlas frontend.
+- Added a visible Run QA button, validation status card, summary metrics, top issue groups, issue details, map issue overlay toggle, and JSON report download.
+- Synced the frontend changes into `apps/atlas`.
+- Updated `docs/CHANGELOG.md` with the new Run QA execution behavior.
+- Tested the new desktop backend endpoint with `a private multi-layer utility delivery ZIP`.
+- Confirmed the private archive run checked one hundred ninety-five features and returned one GeoQA issue.
+- Tested the same endpoint with `omn_admin1.geojson`.
+- Confirmed the Oman generic profile run checked eleven features and returned one GeoQA issue.
+- Confirmed the Oman geometry profile run returns zero issues cleanly.
+
+### Why this change was made
+
+- The profile dropdown looked broken because there was no validation action behind it.
+- Atlas needed the Run QA page to call the GeoQA Python backend and show report results directly in the product UI.
+
+## 2026-06-25 17 55 +04 GeoQA Atlas zipped Shapefile layer selector
+
+### What changed
+
+- Updated Atlas Run QA so ZIP uploads expose detected Shapefile layers before validation.
+- Added frontend types for Shapefile layer metadata.
+- Added selected-layer preview support in the Atlas upload API client.
+- Added a Shapefile layer selector showing layer name, feature count, and geometry type where available.
+- Added a disabled `Run QA on all layers` placeholder for a future batch workflow.
+- Updated the Run QA request so validation sends the selected layer name.
+- Updated `docs/CHANGELOG.md` with the multi-layer ZIP behavior.
+- Verified `a private multi-layer utility delivery ZIP` reports forty-one actual `.shp` layers.
+- Verified selected-layer validation on a selected private line layer.
+
+### Why this change was made
+
+- Real delivery ZIPs often contain many Shapefiles.
+- Atlas needed to avoid implying that the whole archive passed validation when only one selected Shapefile layer was checked.
+
+## 2026-06-25 18 22 +04 GeoQA Atlas multi-layer ZIP map loading fix
+
+### What changed
+
+- Updated Atlas Run QA so a ZIP with multiple Shapefile layers does not load a default layer on the map.
+- Kept automatic map loading only for GeoJSON uploads and single-Shapefile ZIP uploads.
+- Cleared stale map previews when users change the selected Shapefile layer.
+- Disabled Run QA until a multi-layer ZIP has a selected preview layer.
+- Synced the frontend changes into `apps/atlas`.
+- Updated `docs/CHANGELOG.md` with the corrected map loading behavior.
+- Verified `a private multi-layer utility delivery ZIP` initial preview reports forty-one layers, zero map features, and no selected layer.
+- Verified selecting a private line layer loads only that layer with one hundred ninety-five features.
+
+### Why this change was made
+
+- A multi-layer delivery ZIP should not imply that Atlas loaded or validated the entire archive.
+- The map should show only the explicitly selected Shapefile layer.
+
+## 2026-06-25 18 48 +04 GeoQA Atlas selected Shapefile CRS preview fix
+
+### What changed
+
+- Fixed the desktop Atlas backend so selected Shapefile previews use the layer projection file to transform coordinates for the web map.
+- Confirmed the selected private point asset layer now previews around Oman instead of near the world map edge.
+- Kept the GeoQA geometry result separate from the map display transformation.
+- Reduced selected-layer preview work by stopping reads at the map preview limit.
+- Rebuilt the Windows exe through the Atlas packaging script.
+- Verified the rebuilt exe previews the selected Flow Meter layer with eighty features and Oman-area map bounds.
+- Verified the rebuilt exe geometry profile run checks eighty Flow Meter features and returns zero structural geometry issues.
+
+### Why this change was made
+
+- A projected Shapefile can be valid geometry and still render in the wrong place if the web map receives raw projected coordinates.
+- Atlas needed to show selected ZIP layers in their real location without treating projection display as a geometry defect.
+
+## 2026-06-25 19 25 +04 GeoQA archive audit and Excel reporting
+
+### What changed
+
+- Added geometry-aware validator coverage to the runtime result model.
+- Added geometry type guards so line-only validators skip point and polygon layers.
+- Changed CRS validation so valid projected CRS layers are not invalid by default unless an expected CRS is configured.
+- Added `geoqa audit-archive` for local audit-only reporting over folders, ZIPs, Shapefiles, GeoJSON, and GeoPackages.
+- Added automatic layer inventory and profile recommendation for detected layers.
+- Added professional Excel audit output with executive summary, layer inventory, issue summary, row-level issues, validator coverage, CRS review, fix plan, and metadata sheets.
+- Added a compact PDF summary output.
+- Added deterministic plain-English issue explanation templates.
+- Added `docs/audit_archive.md`.
+- Added a synthetic public demo under `examples/public_demo/` with JSON reports and `GeoQA_Public_Demo_Report.xlsx`.
+- Added unittest coverage for geometry guards, CRS policy, selected-layer ZIP inventory, all-layer audit mode, Excel output, and PDF summary output.
+
+### Why this change was made
+
+- GeoQA needed to avoid false line-network issues on point layers.
+- Valid projected engineering datasets needed to stay valid unless an authoritative expected CRS is configured.
+- Client-facing review workflows needed audit-only JSON and Excel outputs that explain what was checked, what was skipped, and what needs human review.
+
+## 2026-06-25 GeoQA Atlas ZIP preview anomaly check
+
+### What changed
+
+- Checked the several private multi-layer utility delivery ZIPs with temperature checks before and after preview runs.
+- Fixed the Atlas selected-layer preview path so a single empty or unreadable Shapefile record does not fail the whole map preview.
+- Confirmed a private water line layer now previews five thousand line features in Oman and skips one unreadable preview record.
+- Confirmed sampled point and line layers from the delivery ZIPs all produce Oman-area map bounds.
+- Added stable GeoJSON map render keys so switching selected ZIP layers does not leave stale Leaflet geometry on the map.
+- Synced `apps/atlas` Run QA with the standalone Atlas app profile recommendations and selected-layer behavior.
+
+### Why this change was made
+
+- Real delivery ZIPs can contain malformed records inside otherwise useful layers.
+- Atlas should only map the selected layer and should not keep stale geometry from a previous selection.
+
+## 2026-06-25 GeoQA Atlas point layer Run QA profile guard
+
+### What changed
+
+- Filtered the Atlas Run QA profile selector by selected geometry type.
+- Limited point layers to generic, geometry, and point asset profiles.
+- Reset stale profile selections when users switch to a layer with a different geometry type.
+- Added a one minute client timeout for uploaded Run QA requests.
+- Raised the Atlas top bar above Leaflet panes and constrained the Run QA map preview height.
+- Verified a private point asset layer runs with `point_asset_quick` in under one second.
+
+### Why this change was made
+
+- Point layers should not expose boundary or line network profiles.
+- The map preview should stay inside the Run QA panel and never cover the navigation.
+
+## 2026-06-25 GeoQA Atlas Run QA result layout polish
+
+### What changed
+
+- Moved Run notes beside Issue details in the uploaded-layer results grid.
+- Kept Issue details in the first column and Run notes in the second column on desktop.
+- Added a mobile fallback so both panels stack cleanly on narrow screens.
+- Increased the Run QA map preview height for more vertical inspection space.
+- Matched the Top issue types card height to the Validation summary card.
+- Changed the Run QA map preview to fill the full right-side panel height on desktop.
+- Changed typed layer profile defaults so point layers start with `point_asset_quick`.
+- Extended the uploaded Run QA client timeout to five minutes for large ZIP uploads with small selected layers.
+
+### Why this change was made
+
+- The result view reads better when issue content and execution notes are side by side.
+- The map and top result cards needed better visual balance on desktop.
+- Selected point layers should use the point-specific profile by default.
+
+## 2026-06-25 GeoQA Atlas public demo analyzed subset
+
+### What changed
+
+- Added public demo analysis limits for uploaded layers.
+- Point and MultiPoint uploads now analyze up to twenty features.
+- LineString, MultiLineString, Polygon, MultiPolygon, mixed, and unknown uploads now analyze up to five features.
+- Added a GeoQA-analyzed feature collection separate from the raw uploaded preview.
+- Styled raw uploaded features as muted map context and GeoQA-analyzed features as the bright checked subset.
+- Added a map legend for raw uploaded layer, GeoQA-analyzed features, and issue overlay.
+- Updated Run QA copy so sampled results say how many loaded features were analyzed.
+- Hid the CPU temperature card by default and kept it behind `VITE_ATLAS_SHOW_THERMAL=true`.
+- Updated Atlas maps to a brighter CARTO basemap with more readable place labels.
+- Added utility tests for public demo limits, sampled feature metadata, result copy, and the thermal flag.
+
+### Why this change was made
+
+- Public demo users should not think a full upload was validated when Atlas only checks a bounded subset.
+- The map needed to make the checked features visible without hiding the rest of the loaded layer.
+- CPU temperature details are useful for local developer runs but distracting in a public demo.
+
+## 2026-06-25 GeoQA Atlas basemap and legend toggle polish
+
+### What changed
+
+- Added centralized Atlas basemap configuration with no-key CARTO fallback tiles.
+- Added optional tile URL and attribution overrides for deployments that need a different English-label tile source.
+- Returned the Run QA map to a darker Atlas-style basemap while keeping labels readable.
+- Changed the Run QA legend rows into accessible clickable layer toggles.
+- Added raw uploaded, GeoQA-analyzed, and issue overlay visibility state that does not reparse uploads or rerun QA.
+- Refined overlay colors back toward the stronger cyan and gold Atlas language.
+- Kept point rendering on low-cost Leaflet canvas paths with no glow, blur, pulsing, or animated effects.
+- Confirmed the CPU temperature card remains hidden unless `VITE_ATLAS_SHOW_THERMAL=true` is set.
+- Extended utility tests for basemap fallback config, env overrides, layer toggle defaults, and toggle behavior.
+
+### Why this change was made
+
+- The previous map pass became too gray for the Atlas brand.
+- Users needed a simple way to isolate the checked subset and issue overlay without confusing the sampling metadata.
+- The public demo needs readable labels while still allowing deployers to supply a better English-label tile source when available.
+
+## 2026-06-25 GeoQA Atlas OSM water demo replacement
+
+### What changed
+
+- Replaced the synthetic Atlas water demo layer with a compact OSM-derived Muscat water and drainage line sample from the HOTOSM HDX Oman waterways export.
+- Regenerated the water-network GeoQA report with the `water_network_quick` profile and converted generated issue geometries into the static Atlas issue overlay.
+- Updated Atlas dataset metadata, report counts, source labels, demo docs, product brief, changelog, and README copy so the demo no longer claims synthetic data.
+- Recorded provenance, license, date accessed, transformation steps, and the limitation that this is public OSM waterways data, not official utility mains.
+- Synced the same OSM water dataset into the standalone desktop backend `data` folder and the release `_internal/data` folder after finding the gallery still read the older backend config through `/api/datasets`.
+
+### Why this change was made
+
+- The public Atlas demo should use a real legally usable public line dataset where possible.
+- Utility mains are often not publicly released, so OSM-derived waterways are the honest GCC public fallback.
+- Atlas gallery cards are loaded from the backend API first, so frontend-only demo data updates are not enough for the desktop app.
+
+## 2026-06-25 GeoQA Atlas sampled issue focus polish
+
+### What changed
+
+- Added clickable issue cards, top issue type rows, and issue overlay features for uploaded Run QA results.
+- Added map focus fallback so issues without their own geometry use the analyzed feature geometry when a feature reference is available.
+- Restored exact result copy for zero, one, and multiple issues in the GeoQA-analyzed subset.
+- Changed sampled execution status to show `demo sample` when public demo mode checks only a subset.
+- Guarded sampled uploaded features with malformed or empty coordinates before sending them to GeoQA.
+- Replaced the raw `float(None)` backend error with a clearer Atlas validation message.
+- Added helper tests for issue counts, sampled status, malformed lines, null geometry, multipart malformed lines, issue focus fallback, and top issue focus selection.
+
+### Why this change was made
+
+- Uploaded sample results needed to make issue location and sampled scope obvious.
+- Malformed line coordinates should not leak a Python type error into the product UI.
+
+## 2026-06-25 GeoQA Atlas dataset scope restoration
+
+### What changed
+
+- Audited the Atlas diff after the sampled Run QA pass.
+- Found the scope leak in the shared `MapPanel` component.
+- Restored dataset workspace defaults to full curated demo layer styling.
+- Kept Run QA upload styling behind an explicit `mapMode="runQa"` setting.
+- Kept dataset pages on the original raw layer, issue overlay, and cleaned layer controls.
+- Reduced dataset issue focus zoom so point and tiny geometry issues keep map context.
+- Added a frontend regression guard that checks dataset workspaces do not import Run QA sampling.
+- Kept Run QA sampled analysis limits and issue focus behavior isolated to the upload page.
+
+### Why this change was made
+
+- Curated dataset pages should always show their full precomputed demo layers and issue overlays.
+- Public demo sampling is an upload page behavior only.
+
+## 2026-06-25 GeoQA Atlas map label clarity
+
+### What changed
+
+- Kept the brighter CARTO label tile source and removed CSS filters from basemap and label tiles.
+- Synced the label clarity fix into the standalone desktop app.
+
+### Why this change was made
+
+- City and state names were visually blurred on dataset maps.
+- Labels should remain readable while the map keeps the dark Atlas style.
+
+## 2026-06-25 GeoQA Atlas dataset mode restoration
+
+### What changed
+
+- Kept Run QA public demo sampling isolated to the upload page.
+- Added guards so dataset workspaces do not import the sampling helper.
+- Filtered operational runtime notices out of curated dataset feature drawers and map issue overlays.
+- Grouped repeated issue examples by affected feature while keeping total issue counts unchanged.
+- Reordered Leaflet panes so GeoQA issue overlays render above label tiles.
+- Kept map label tiles crisp with no CSS blur.
+
+### Why this change was made
+
+- Curated demo pages must show full precomputed demo data.
+- Runtime and sampling behavior belongs to the upload workflow, not the polished dataset demo.
+
+## 2026-06-25 GeoQA Atlas cleaned preview and Run QA focus polish
+
+### What changed
+
+- Added explicit cleaned preview metadata for Atlas demo datasets.
+- Disabled cleaned toggles when no meaningful visible cleaned geometry output exists.
+- Updated cleaned copy for coordinate precision, spatial index, CRS, metadata, and operational findings.
+- Added a selected issue panel beside the Run QA map.
+- Changed layer-level Run QA findings to focus the analyzed layer context.
+- Documented the water network public source search and kept the synthetic demo labeled honestly.
+
+### Why this change was made
+
+- A cleaned file alone does not mean the user can see a useful before and after geometry comparison.
+- Run QA issue review should keep the map and selected issue together.
+- Atlas should not replace the synthetic water demo with uncertain or unverified public utility data.
+
+## 2026-06-26 GeoQA Atlas Run QA suggestion cleanup
+
+### What changed
+
+- Removed the Run QA suggestion that named a specific companion Shapefile layer.
+
+### Why this change was made
+
+- Atlas should not imply that one detected layer is the required comparison source for utility connectivity review.
+
+## 2026-06-26 GeoQA Atlas dataset map fitting
+
+### What changed
+
+- Added metadata driven map view hints for curated Atlas dataset pages.
+- Added robust GeoJSON collection bounds so invalid coordinates and extreme outliers do not stretch initial map extents.
+- Set the OSM water and drainage dataset to open on issue overlay bounds with tighter padding and overview zoom limits.
+- Kept Run QA map bounds separate from curated dataset map bounds.
+
+### Why this change was made
+
+- The water demo opened with too much empty gray basemap area.
+- Dataset pages should frame the data review area first while preserving separate Show on map issue focus behavior.
+
+## 2026-06-26 GeoQA Atlas navigation footer and spacing polish
+
+### What changed
+
+- Added LinkedIn to the top navigation after GitHub.
+- Kept GitHub and LinkedIn as external links that open in a new tab.
+- Simplified the footer to `Built by Nilofer Taher · © 2026 GeoQA`.
+- Tightened desktop page gutters with shared page width variables while keeping mobile padding comfortable.
+- Updated Atlas README and GitHub about text to match the new navigation and footer.
+
+### Why this change was made
+
+- Social links belong in the primary navigation rather than the footer.
+- The footer should be copyright focused.
+- Atlas pages needed to use more desktop width without losing the premium spacious layout.
+
+## 2026-06-26 GeoQA public release and license prep
+
+### What changed
+
+- Added Apache License 2.0 licensing at the repo root.
+- Added concise project attribution in `NOTICE`.
+- Added Apache-2.0 package metadata for Python and Atlas.
+- Added Vercel deployment notes for the `apps/atlas` frontend.
+- Added a public release checklist.
+- Expanded demo-data provenance notes so third-party public datasets keep their original source licenses.
+- Updated ignore rules for generated files, build output, local integration output, and large public sample downloads.
+
+### Why this change was made
+
+- GeoQA needs a clean, reproducible public GitHub and Vercel release path.
+- The project license should cover project code and docs without relabeling third-party public datasets.

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 from typing import Any
 
 from .base import ValidationIssue, build_issue
@@ -530,6 +531,97 @@ def _endpoint_distance(left: tuple[float, float], right: tuple[float, float]) ->
     return ((left[0] - right[0]) ** 2 + (left[1] - right[1]) ** 2) ** 0.5
 
 
+def _endpoint_distance_meters(left: tuple[float, float], right: tuple[float, float]) -> float:
+    lon1, lat1 = math.radians(left[0]), math.radians(left[1])
+    lon2, lat2 = math.radians(right[0]), math.radians(right[1])
+    delta_lon = lon2 - lon1
+    delta_lat = lat2 - lat1
+    haversine = (
+        math.sin(delta_lat / 2) ** 2
+        + math.cos(lat1) * math.cos(lat2) * math.sin(delta_lon / 2) ** 2
+    )
+    return 6371008.8 * 2 * math.asin(min(1.0, math.sqrt(haversine)))
+
+
+def _uses_geographic_distance(layer: Any) -> bool:
+    crs = getattr(layer, "crs", None)
+    if crs is None:
+        return False
+    is_geographic = getattr(crs, "is_geographic", None)
+    if isinstance(is_geographic, bool):
+        return is_geographic
+    try:
+        epsg = crs.to_epsg()
+    except Exception:
+        epsg = None
+    return epsg in {4326, 4269}
+
+
+def _row_feature_id(row: Any, index: Any) -> Any:
+    for field_name in ("ID", "id", "fid", "FID", "objectid", "OBJECTID"):
+        try:
+            if hasattr(row, "index") and field_name in row.index:
+                return row[field_name]
+        except Exception:
+            pass
+        if isinstance(row, dict) and field_name in row:
+            return row[field_name]
+        if hasattr(row, field_name):
+            return getattr(row, field_name)
+    return index
+
+
+def _nearest_endpoint_pair(
+    left_points: tuple[tuple[float, float], tuple[float, float]],
+    right_points: tuple[tuple[float, float], tuple[float, float]],
+    tolerance: float,
+    distance_fn: Any = _endpoint_distance,
+) -> tuple[tuple[float, float], tuple[float, float], float] | None:
+    best: tuple[tuple[float, float], tuple[float, float], float] | None = None
+    for left_point in left_points:
+        for right_point in right_points:
+            distance = distance_fn(left_point, right_point)
+            if distance <= 0.0 or distance > tolerance:
+                continue
+            if best is None or distance < best[2]:
+                best = (left_point, right_point, distance)
+    return best
+
+
+def _endpoint_pair_key(
+    left_index: Any,
+    right_index: Any,
+    endpoint_a: tuple[float, float],
+    endpoint_b: tuple[float, float],
+) -> tuple[str, str, tuple[float, float], tuple[float, float]]:
+    left_label = str(left_index)
+    right_label = str(right_index)
+    first_endpoint = (round(endpoint_a[0], 12), round(endpoint_a[1], 12))
+    second_endpoint = (round(endpoint_b[0], 12), round(endpoint_b[1], 12))
+    if (right_label, second_endpoint) < (left_label, first_endpoint):
+        return right_label, left_label, second_endpoint, first_endpoint
+    return left_label, right_label, first_endpoint, second_endpoint
+
+
+def _endpoint_issue_extra(
+    *,
+    related_feature_id: Any,
+    endpoint_a: tuple[float, float],
+    endpoint_b: tuple[float, float],
+    distance: float,
+    tolerance: float,
+    distance_units: str,
+) -> dict[str, Any]:
+    return {
+        "related_feature_id": related_feature_id,
+        "endpoint_a": [float(endpoint_a[0]), float(endpoint_a[1])],
+        "endpoint_b": [float(endpoint_b[0]), float(endpoint_b[1])],
+        "distance": float(distance),
+        "tolerance": float(tolerance),
+        "distance_units": distance_units,
+    }
+
+
 def suspicious_near_miss_endpoints(
     layer: Any,
     *,
@@ -540,35 +632,60 @@ def suspicious_near_miss_endpoints(
     """Detect endpoints that are close enough to suggest an unintended near miss."""
     endpoint_rows, _ = _line_endpoints(layer)
     allowed = {value.strip().lower() for value in (allowed_terminal_values or set())}
-    flagged: set[Any] = set()
+    distance_fn = _endpoint_distance_meters if _uses_geographic_distance(layer) else _endpoint_distance
+    distance_units = "meters" if distance_fn is _endpoint_distance_meters else "source_units"
+    seen_pairs: set[Any] = set()
+    flagged_features: set[Any] = set()
     issues: list[ValidationIssue] = []
     items = list(endpoint_rows.items())
     for position, (left_index, (left_row, left_start, left_end)) in enumerate(items):
         left_role = _row_role_value(left_row, role_field)
         if left_role is not None and left_role in allowed:
             continue
+        if left_index in flagged_features:
+            continue
         for right_index, (right_row, right_start, right_end) in items[position + 1 :]:
+            if right_index in flagged_features:
+                continue
             right_role = _row_role_value(right_row, role_field)
             if right_role is not None and right_role in allowed:
                 continue
-            close = any(
-                0.0 < _endpoint_distance(left_point, right_point) <= float(snap_tolerance)
-                for left_point in (left_start, left_end)
-                for right_point in (right_start, right_end)
+            pair = _nearest_endpoint_pair(
+                (left_start, left_end),
+                (right_start, right_end),
+                float(snap_tolerance),
+                distance_fn,
             )
-            if close:
-                for feature_index, feature_row in ((left_index, left_row), (right_index, right_row)):
-                    if feature_index not in flagged:
-                        issues.append(
-                            build_issue(
-                                "suspicious_near_miss_endpoints",
-                                row=feature_row,
-                                index=feature_index,
-                                description="This line has an endpoint very close to another endpoint without actually snapping to it.",
-                                solution_hint="Inspect nearby endpoints and snap them if the separation is unintended or below network tolerance.",
-                            )
-                        )
-                        flagged.add(feature_index)
+            if pair is None:
+                continue
+            endpoint_a, endpoint_b, distance = pair
+            pair_key = _endpoint_pair_key(left_index, right_index, endpoint_a, endpoint_b)
+            if pair_key in seen_pairs:
+                continue
+            seen_pairs.add(pair_key)
+            flagged_features.update({left_index, right_index})
+            right_feature_id = _row_feature_id(right_row, right_index)
+            issues.append(
+                build_issue(
+                    "suspicious_near_miss_endpoints",
+                    row=left_row,
+                    index=left_index,
+                    geometry={"type": "LineString", "coordinates": [[endpoint_a[0], endpoint_a[1]], [endpoint_b[0], endpoint_b[1]]]},
+                    description=(
+                        "These endpoints are close enough to look connected, but their coordinates do not touch. "
+                        f"Gap distance: {distance:.6g} {distance_units}. Tolerance: {float(snap_tolerance):.6g} {distance_units}."
+                    ),
+                    solution_hint="Inspect the endpoint pair and snap or connect only if they represent the same network connection.",
+                    extra=_endpoint_issue_extra(
+                        related_feature_id=right_feature_id,
+                        endpoint_a=endpoint_a,
+                        endpoint_b=endpoint_b,
+                        distance=distance,
+                        tolerance=float(snap_tolerance),
+                        distance_units=distance_units,
+                    ),
+                )
+            )
     return issues
 
 
@@ -582,43 +699,66 @@ def unsnapped_endpoints_within_tolerance(
     """Detect endpoints within snapping tolerance that remain disconnected."""
     endpoint_rows, endpoint_counts = _line_endpoints(layer)
     allowed = {value.strip().lower() for value in (allowed_terminal_values or set())}
-    flagged: set[Any] = set()
+    distance_fn = _endpoint_distance_meters if _uses_geographic_distance(layer) else _endpoint_distance
+    distance_units = "meters" if distance_fn is _endpoint_distance_meters else "source_units"
+    seen_pairs: set[Any] = set()
+    flagged_features: set[Any] = set()
     issues: list[ValidationIssue] = []
     items = list(endpoint_rows.items())
     for position, (left_index, (left_row, left_start, left_end)) in enumerate(items):
         left_role = _row_role_value(left_row, role_field)
         if left_role is not None and left_role in allowed:
             continue
+        if left_index in flagged_features:
+            continue
         for right_index, (right_row, right_start, right_end) in items[position + 1 :]:
+            if right_index in flagged_features:
+                continue
             right_role = _row_role_value(right_row, role_field)
             if right_role is not None and right_role in allowed:
                 continue
-            matched = False
+            pair: tuple[tuple[float, float], tuple[float, float], float] | None = None
             for left_point in (left_start, left_end):
                 if endpoint_counts.get(left_point, 0) > 1:
                     continue
                 for right_point in (right_start, right_end):
                     if endpoint_counts.get(right_point, 0) > 1:
                         continue
-                    distance = _endpoint_distance(left_point, right_point)
+                    distance = distance_fn(left_point, right_point)
                     if 0.0 < distance <= float(snap_tolerance):
-                        matched = True
+                        if pair is None or distance < pair[2]:
+                            pair = (left_point, right_point, distance)
                         break
-                if matched:
-                    break
-            if matched:
-                for feature_index, feature_row in ((left_index, left_row), (right_index, right_row)):
-                    if feature_index not in flagged:
-                        issues.append(
-                            build_issue(
-                                "unsnapped_endpoints_within_tolerance",
-                                row=feature_row,
-                                index=feature_index,
-                                description="This line endpoint is disconnected even though a nearby endpoint falls within the configured snap tolerance.",
-                                solution_hint="Snap the endpoint to the nearby feature or document why the disconnected near match is valid.",
-                            )
-                        )
-                        flagged.add(feature_index)
+            if pair is None:
+                continue
+            endpoint_a, endpoint_b, distance = pair
+            pair_key = _endpoint_pair_key(left_index, right_index, endpoint_a, endpoint_b)
+            if pair_key in seen_pairs:
+                continue
+            seen_pairs.add(pair_key)
+            flagged_features.update({left_index, right_index})
+            right_feature_id = _row_feature_id(right_row, right_index)
+            issues.append(
+                build_issue(
+                    "unsnapped_endpoints_within_tolerance",
+                    row=left_row,
+                    index=left_index,
+                    geometry={"type": "LineString", "coordinates": [[endpoint_a[0], endpoint_a[1]], [endpoint_b[0], endpoint_b[1]]]},
+                    description=(
+                        "This endpoint pair falls within the configured snapping tolerance but remains disconnected. "
+                        f"Gap distance: {distance:.6g} {distance_units}. Tolerance: {float(snap_tolerance):.6g} {distance_units}."
+                    ),
+                    solution_hint="Snap the endpoint pair to the nearby feature or document why the disconnected near match is valid.",
+                    extra=_endpoint_issue_extra(
+                        related_feature_id=right_feature_id,
+                        endpoint_a=endpoint_a,
+                        endpoint_b=endpoint_b,
+                        distance=distance,
+                        tolerance=float(snap_tolerance),
+                        distance_units=distance_units,
+                    ),
+                )
+            )
     return issues
 
 

@@ -71,6 +71,52 @@ _BUILTIN_PROFILES: dict[str, GeoQAProfile] = {
         ),
         maturity="stable",
     ),
+    "point_asset_quick": GeoQAProfile(
+        name="point_asset_quick",
+        description="Fast point asset QA for duplicate locations, geometry basics, CRS review, and index health.",
+        families=(
+            ValidationFamilyProfile(
+                dataset_type="geometry",
+                enabled_validators=("null_geometry", "duplicate_vertex", "self_intersection"),
+            ),
+            ValidationFamilyProfile(
+                dataset_type="topology",
+                enabled_validators=("duplicate_geometry_same_layer",),
+            ),
+            ValidationFamilyProfile(
+                dataset_type="crs",
+                enabled_validators=("missing_crs", "invalid_crs"),
+            ),
+            ValidationFamilyProfile(
+                dataset_type="integrity",
+                enabled_validators=("missing_spatial_index", "outdated_index"),
+            ),
+        ),
+        maturity="stable",
+    ),
+    "line_network_quick": GeoQAProfile(
+        name="line_network_quick",
+        description="Fast line network QA for line geometry, connectivity, CRS review, and index health.",
+        families=(
+            ValidationFamilyProfile(
+                dataset_type="geometry",
+                enabled_validators=("null_geometry", "duplicate_vertex", "below_minimum_feature_length", "self_intersection"),
+            ),
+            ValidationFamilyProfile(
+                dataset_type="topology",
+                enabled_validators=("line_intersection_same_layer", "feature_not_split_at_intersection", "line_dangle"),
+            ),
+            ValidationFamilyProfile(
+                dataset_type="crs",
+                enabled_validators=("missing_crs", "invalid_crs"),
+            ),
+            ValidationFamilyProfile(
+                dataset_type="integrity",
+                enabled_validators=("missing_spatial_index", "outdated_index"),
+            ),
+        ),
+        maturity="stable",
+    ),
     "generic_quick": GeoQAProfile(
         name="generic_quick",
         description="Fast generic QA pass for common geometry, CRS, and integrity checks.",

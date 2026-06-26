@@ -13,6 +13,7 @@ def configure_parser(subparsers: argparse._SubParsersAction[argparse.ArgumentPar
     parser = subparsers.add_parser("validate", help="Validate a dataset with a named profile.")
     parser.add_argument("path", help="Dataset path.")
     parser.add_argument("--profile", default="generic_quick", help="GeoQA validation profile name.")
+    parser.add_argument("--expected-crs", default=None, help="Configured authoritative CRS such as EPSG:32640.")
     parser.add_argument("--output-format", choices=("json", "csv"), default="json")
     parser.add_argument("--report-path", help="Output path without extension.")
     parser.add_argument("--max-workers", type=int, default=None)
@@ -38,6 +39,7 @@ def run(args: argparse.Namespace) -> int:
     result = validate_dataset_with_profile(
         args.path,
         profile=args.profile,
+        expected_crs=args.expected_crs,
         output_format=args.output_format if args.report_path else None,
         report_path=args.report_path,
         max_workers=args.max_workers,

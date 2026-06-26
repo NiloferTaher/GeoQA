@@ -104,7 +104,7 @@ class TestWaterNetworkPack(unittest.TestCase):
                 {
                     "type": "Feature",
                     "properties": {"asset_id": "A2", "pipe_diameter": 100, "status": "active", "asset_class": "main"},
-                    "geometry": {"type": "LineString", "coordinates": [[1.04, 0], [2, 0]]},
+                    "geometry": {"type": "LineString", "coordinates": [[1.0004, 0], [2, 0]]},
                 },
             ],
         }
@@ -115,8 +115,10 @@ class TestWaterNetworkPack(unittest.TestCase):
 
         near_miss = [issue for issue in result.issues if issue.problem_name == "suspicious_near_miss_endpoints"]
         unsnapped = [issue for issue in result.issues if issue.problem_name == "unsnapped_endpoints_within_tolerance"]
-        self.assertGreaterEqual(len(near_miss), 2)
-        self.assertGreaterEqual(len(unsnapped), 2)
+        self.assertGreaterEqual(len(near_miss), 1)
+        self.assertGreaterEqual(len(unsnapped), 1)
+        self.assertTrue(all(issue.to_dict().get("endpoint_a") for issue in near_miss))
+        self.assertTrue(all(issue.to_dict().get("endpoint_b") for issue in near_miss))
 
     def test_water_network_strict_uses_schema_aware_attribute_rules(self) -> None:
         feature_collection = {
