@@ -177,4 +177,4 @@ python -m geoqa benchmark data/public_samples/edge_cases/duplicate_vertex_line.g
 
 For the detailed ledger behind these summaries, see:
 
-- [tests.md](/g:/My%20Drive/Python-G-drive/GeoQA/docs/tests.md)
+- [tests.md](tests.md)

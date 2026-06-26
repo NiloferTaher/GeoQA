@@ -2,7 +2,8 @@ import { ChevronDown, ChevronRight, Copy, FileJson, LocateFixed, PanelRightClose
 import { useMemo, useState } from "react"
 import type { Issue } from "../types"
 import { displayIssueName, getIssueCopy } from "./issueCopy"
-import { isOperationalIssue } from "../lib/issues"
+import { endpointIssueDetails } from "../lib/endpointIssues"
+import { groupIssueExamples, isOperationalIssue, type IssueExample } from "../lib/issues"
 
 type IssueDrawerProps = {
   issues: Issue[]
@@ -74,7 +75,7 @@ export default function IssueDrawer({ issues, command, isOpen, selectedIssueId, 
               <div className="issue-group-meta">
                 <span className={`severity-pill ${group.severity.toLowerCase()}`}>{group.severity}</span>
                 {isOperationalIssue({ problem_name: group.name }) ? <span className="operational-pill">Operational issue</span> : null}
-                <span>Affected features {group.issues.length}</span>
+                <span>Affected examples {groupIssueExamples(group.issues).length}</span>
                 <span>{issueClassLabel(group.name)}</span>
               </div>
               {expanded ? (
@@ -85,11 +86,11 @@ export default function IssueDrawer({ issues, command, isOpen, selectedIssueId, 
                   {copy.note ? <InfoBlock title="QA note" value={copy.note} /> : null}
                   <h3 className="examples-heading">Example affected features</h3>
                   <div className="issue-preview-list">
-                    {group.issues.slice(0, 4).map((issue) => (
+                    {groupIssueExamples(group.issues).slice(0, 4).map((example) => (
                       <IssueDetail
-                        issue={issue}
-                        selected={issue.issue_id === selectedIssueId}
-                        key={issue.issue_id ?? `${issue.problem_name}-${issue.feature_id}`}
+                        example={example}
+                        selected={example.representative.issue_id === selectedIssueId}
+                        key={example.representative.issue_id ?? `${example.representative.problem_name}-${example.representative.feature_id}`}
                         onShowIssue={onShowIssue}
                       />
                     ))}
@@ -114,27 +115,39 @@ function InfoBlock({ title, value }: { title: string; value: string }) {
 }
 
 function IssueDetail({
-  issue,
+  example,
   selected,
   onShowIssue,
 }: {
-  issue: Issue
+  example: IssueExample
   selected: boolean
   onShowIssue: (issue: Issue) => void
 }) {
   const [showJson, setShowJson] = useState(false)
+  const issue = example.representative
   const copy = getIssueCopy(issue.problem_name)
   const operational = isOperationalIssue(issue)
+  const featureLabel = issue.feature_id ?? "Layer"
+  const groupedCopy = groupedIssueCopy(example, featureLabel)
+  const endpointDetails = endpointIssueDetails(issue)
   return (
     <article className={`issue-detail-card ${selected ? "selected" : ""}`}>
       <div className="issue-detail-top">
         <div>
           <h4>{displayIssueName(issue.problem_name)}</h4>
-          <span>Feature {issue.feature_id ?? "Layer"}</span>
+          <span>Feature {featureLabel}</span>
         </div>
         <span className={`severity-pill ${issue.severity.toLowerCase()}`}>{issue.severity}</span>
       </div>
       {operational ? <span className="operational-pill inline">Operational issue</span> : null}
+      {groupedCopy ? <p className="grouped-copy">{groupedCopy}</p> : null}
+      {endpointDetails.length ? (
+        <ul className="endpoint-detail-list">
+          {endpointDetails.map((detail) => (
+            <li key={detail}>{detail}</li>
+          ))}
+        </ul>
+      ) : null}
       <p>{copy.description}</p>
       <p className="why-copy">{copy.why}</p>
       <p className="recommendation">{copy.recommendation}</p>
@@ -152,6 +165,14 @@ function IssueDetail({
       {showJson ? <pre className="raw-json">{JSON.stringify(issue, null, 2)}</pre> : null}
     </article>
   )
+}
+
+function groupedIssueCopy(example: IssueExample, featureLabel: string | number) {
+  if (example.issueCount <= 1) return ""
+  if (example.counterpartFeatures.length) {
+    return `Feature ${featureLabel} has ${example.issueCount} related findings with features ${example.counterpartFeatures.join(", ")}.`
+  }
+  return `Feature ${featureLabel} has ${example.issueCount} related findings. Multiple duplicate relationships were reported for this feature.`
 }
 
 function groupIssues(issues: Issue[]): IssueGroup[] {

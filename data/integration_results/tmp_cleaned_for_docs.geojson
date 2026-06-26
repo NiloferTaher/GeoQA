@@ -1,1 +1,0 @@
-{"type": "FeatureCollection", "features": [{"id": "0", "type": "Feature", "properties": {"ID": 1, "name": "duplicate_vertex_line"}, "geometry": {"type": "LineString", "coordinates": [[0.0, 0.0], [1.0, 1.0], [2.0, 2.0]]}}]}

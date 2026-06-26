@@ -10,8 +10,8 @@ def _positive_number(value: Any) -> bool:
 
 @dataclass(slots=True, frozen=True)
 class WaterNetworkThresholds:
-    snap_tolerance: float = 0.05
-    near_miss_tolerance: float = 0.1
+    snap_tolerance: float = 50.0
+    near_miss_tolerance: float = 100.0
     min_length: float = 0.1
     min_angle_degrees: float = 12.5
     allowed_terminal_values: frozenset[str] = field(

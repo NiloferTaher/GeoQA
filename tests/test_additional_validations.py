@@ -4,7 +4,7 @@ import json
 import unittest
 
 import pandas as pd
-from shapely.geometry import MultiLineString, Polygon
+from shapely.geometry import LineString, MultiLineString, Polygon
 
 from geoqa.interactive_validation import validate_layer as interactive_validate_layer
 from geoqa.validations.accuracy import coordinate_precision, positional_accuracy, xy_tolerance
@@ -20,6 +20,8 @@ from geoqa.validations.topology import (
     line_intersection_same_layer,
     polygon_gap_same_layer,
     polygon_overlap_same_layer,
+    suspicious_near_miss_endpoints,
+    unsnapped_endpoints_within_tolerance,
 )
 
 
@@ -312,6 +314,64 @@ class TestTopologyValidation(unittest.TestCase):
         issues = line_dangle(layer, role_field="asset_class", allowed_endpoint_values={"service"})
         self.assertEqual(len(issues), 1)
         self.assertEqual(issues[0].feature_id, 1)
+
+    def test_near_miss_endpoint_metadata_and_pair_dedupe(self) -> None:
+        layer = SimpleLayer(
+            [
+                {"ID": "A", "asset_class": "main", "geometry": LineString([(0, 0), (1, 0)])},
+                {"ID": "B", "asset_class": "main", "geometry": LineString([(1.04, 0), (2, 0)])},
+            ]
+        )
+        issues = suspicious_near_miss_endpoints(layer, snap_tolerance=0.1, role_field="asset_class")
+        self.assertEqual(len(issues), 1)
+        issue = issues[0].to_dict()
+        self.assertEqual(issue["feature_id"], "A")
+        self.assertEqual(issue["related_feature_id"], "B")
+        self.assertEqual(issue["endpoint_a"], [1.0, 0.0])
+        self.assertEqual(issue["endpoint_b"], [1.04, 0.0])
+        self.assertAlmostEqual(issue["distance"], 0.04)
+        self.assertEqual(issue["tolerance"], 0.1)
+        self.assertEqual(issue["geometry"]["type"], "LineString")
+        self.assertEqual(issue["geometry"]["coordinates"], [[1.0, 0.0], [1.04, 0.0]])
+
+    def test_identical_endpoints_are_not_near_miss(self) -> None:
+        layer = SimpleLayer(
+            [
+                {"ID": "A", "asset_class": "main", "geometry": LineString([(0, 0), (1, 0)])},
+                {"ID": "B", "asset_class": "main", "geometry": LineString([(1, 0), (2, 0)])},
+            ]
+        )
+        issues = suspicious_near_miss_endpoints(layer, snap_tolerance=0.1, role_field="asset_class")
+        self.assertEqual(len(issues), 0)
+
+    def test_unsnapped_endpoint_metadata(self) -> None:
+        layer = SimpleLayer(
+            [
+                {"ID": "A", "asset_class": "main", "geometry": LineString([(0, 0), (1, 0)])},
+                {"ID": "B", "asset_class": "main", "geometry": LineString([(1.04, 0), (2, 0)])},
+            ]
+        )
+        issues = unsnapped_endpoints_within_tolerance(layer, snap_tolerance=0.1, role_field="asset_class")
+        self.assertEqual(len(issues), 1)
+        issue = issues[0].to_dict()
+        self.assertEqual(issue["related_feature_id"], "B")
+        self.assertEqual(issue["endpoint_a"], [1.0, 0.0])
+        self.assertEqual(issue["endpoint_b"], [1.04, 0.0])
+
+    def test_near_miss_geographic_crs_reports_meters(self) -> None:
+        layer = SimpleLayer(
+            [
+                {"ID": "A", "asset_class": "main", "geometry": LineString([(0, 0), (1, 0)])},
+                {"ID": "B", "asset_class": "main", "geometry": LineString([(1.0001, 0), (2, 0)])},
+            ],
+            crs=FakeCRS("EPSG:4326", 4326),
+        )
+        issues = suspicious_near_miss_endpoints(layer, snap_tolerance=20, role_field="asset_class")
+        self.assertEqual(len(issues), 1)
+        issue = issues[0].to_dict()
+        self.assertEqual(issue["distance_units"], "meters")
+        self.assertGreater(issue["distance"], 10)
+        self.assertLess(issue["distance"], 12)
 
     def test_polygon_gap_same_layer(self) -> None:
         layer = SimpleLayer(

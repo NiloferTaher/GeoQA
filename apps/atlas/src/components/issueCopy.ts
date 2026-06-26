@@ -34,14 +34,25 @@ export const issueCopy: Record<string, { description: string; recommendation: st
     why: "Self-crossing linework can create false junctions and confusing route behavior in downstream GIS tools.",
   },
   suspicious_near_miss_endpoints: {
-    description: "Two endpoint coordinates stop very close to each other but do not touch.",
-    recommendation: "Review the nearby endpoints and snap them together when they represent the same connection.",
+    description: "These endpoints are close enough to look connected, but their coordinates do not touch.",
+    recommendation: "Inspect the endpoint pair and snap or connect only if they represent the same network connection.",
     why: "Near misses often look connected on the map while network analysis treats them as disconnected.",
   },
   unsnapped_endpoints_within_tolerance: {
     description: "Endpoint pairs fall within the configured snapping tolerance but remain separate.",
-    recommendation: "Apply conservative snapping after confirming the endpoints describe the same junction.",
+    recommendation: "Inspect the endpoint pair and apply conservative snapping only after confirming both endpoints describe the same junction.",
     why: "Unsnapped endpoints can fragment a utility or road network and hide service gaps.",
+  },
+  isolated_network_segment: {
+    description: "This line segment is isolated from the rest of the network at both endpoints.",
+    recommendation: "Inspect the segment and confirm whether it should connect to nearby infrastructure or remain standalone.",
+    why: "Isolated segments can break tracing, routing, and service-area analysis.",
+    note: "Atlas focuses the affected source feature when endpoint pair coordinates are not available for this finding.",
+  },
+  line_dangle: {
+    description: "A line endpoint appears disconnected from the rest of the network.",
+    recommendation: "Inspect the endpoint and connect, classify, or document it when the dangling endpoint is intentional.",
+    why: "Dangling linework can create false dead ends in network analysis.",
   },
   validation_runtime_error: {
     description:

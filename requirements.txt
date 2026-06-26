@@ -3,6 +3,7 @@ geopandas
 shapely
 pyproj
 psutil
+openpyxl
 
 # Local UI and preview support
 streamlit

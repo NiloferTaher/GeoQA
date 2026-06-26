@@ -80,7 +80,7 @@ class TestValidationRuntime(unittest.TestCase):
         layer = SimpleLayer([{"ID": 1, "geometry": FakeGeometry(0, 0)}])
 
         def custom_validator(current_layer, **context):
-            self.assertEqual(context["expected_crs"], "EPSG:4326")
+            self.assertIsNone(context["expected_crs"])
             return [
                 ValidationIssue(
                     "custom_runtime_issue",
@@ -114,10 +114,11 @@ class TestValidationRuntime(unittest.TestCase):
 
         validate_layer(layer, "geometry", progress_callback=events.append, profile=ValidationProfile(name="all"))
 
-        self.assertEqual(len(events), 10)
+        self.assertEqual(len(events), 7)
         self.assertEqual(events[0].status, "started")
         self.assertEqual(events[1].status, "completed")
         self.assertEqual(events[0].validator_name, "null_geometry")
+        self.assertEqual(events[-1].status, "skipped")
         self.assertEqual(events[-1].validator_name, "self_intersection")
 
     def test_cache_reuses_validator_result(self) -> None:

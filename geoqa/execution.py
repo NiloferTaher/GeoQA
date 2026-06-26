@@ -47,6 +47,7 @@ class ValidationExecutionResult:
     validators_attempted: list[str] | None = None
     validators_completed: list[str] | None = None
     validators_deferred: list[str] | None = None
+    validator_coverage: list[dict[str, Any]] | None = None
     partial_result: bool = False
     operator_next_steps: list[str] | None = None
 
@@ -69,6 +70,7 @@ class ValidationExecutionResult:
             "validators_attempted": self.validators_attempted or [],
             "validators_completed": self.validators_completed or [],
             "validators_deferred": self.validators_deferred or [],
+            "validator_coverage": self.validator_coverage or [],
             "partial_result": self.partial_result,
             "operator_next_steps": self.operator_next_steps or [],
         }
@@ -90,6 +92,8 @@ def _resolve_thermal_guard(profile_name: str) -> ThermalGuard:
 def _load_layer(path: str | Path, *, ogr_layer: str | None = None) -> Any:
     layer = load_vector_dataset(path, ogr_layer=ogr_layer)
     layer.attrs["source_path"] = str(Path(path).resolve())
+    if ogr_layer is not None:
+        layer.attrs["layer_name"] = ogr_layer
     return layer
 
 
@@ -291,8 +295,9 @@ def validate_dataset_with_profile(
     *,
     profile: str | GeoQAProfile,
     metadata: dict[str, Any] | None = None,
-    expected_crs: Any = "EPSG:4326",
+    expected_crs: Any = None,
     reference_path: str | Path | None = None,
+    ogr_layer: str | None = None,
     output_format: str | None = None,
     report_path: str | Path | None = None,
     max_workers: int | None = None,
@@ -315,7 +320,7 @@ def validate_dataset_with_profile(
         raise ValueError(f"Unknown GeoQA profile: {profile!r}")
 
     dataset_path = Path(dataset_path)
-    layer = _load_layer(dataset_path)
+    layer = _load_layer(dataset_path, ogr_layer=ogr_layer)
     reference_layer = _load_layer(reference_path) if reference_path is not None else None
     guard = _resolve_thermal_guard(thermal_profile)
     messages: list[str] = []
@@ -324,6 +329,7 @@ def validate_dataset_with_profile(
     validators_attempted: list[str] = []
     validators_completed: list[str] = []
     validators_deferred: list[str] = []
+    validator_coverage: list[dict[str, Any]] = []
     started = time.perf_counter()
     completed = True
     execution_reason: str | None = None
@@ -402,6 +408,16 @@ def validate_dataset_with_profile(
         validators_attempted.extend(list(family_result.validators_attempted))
         validators_completed.extend(list(family_result.validators_completed))
         validators_deferred.extend(list(family_result.validators_deferred))
+        for row in family_result.validator_coverage:
+            validator_coverage.append(
+                {
+                    **row,
+                    "family": family.dataset_type,
+                    "layer_name": dataset_path.stem,
+                    "layer_path": str(dataset_path),
+                    "geometry_type": row.get("layer_geometry_type"),
+                }
+            )
         kept, suppressed = _apply_profile_policies(family_issues, resolved_profile, family_name=family.dataset_type)
         all_issues.extend(kept)
         suppressed_issues.extend(suppressed)
@@ -448,6 +464,7 @@ def validate_dataset_with_profile(
     summary["validators_attempted"] = validators_attempted
     summary["validators_completed"] = validators_completed
     summary["validators_deferred"] = validators_deferred
+    summary["validator_coverage"] = validator_coverage
     summary["plugin_validators_attempted"] = plugin_attempted
     summary["plugin_validators_completed"] = plugin_completed
     summary["partial_result"] = execution_status != "full"
@@ -481,6 +498,7 @@ def validate_dataset_with_profile(
         validators_attempted=validators_attempted,
         validators_completed=validators_completed,
         validators_deferred=validators_deferred,
+        validator_coverage=validator_coverage,
         partial_result=execution_status != "full",
         operator_next_steps=summary["operator_next_steps"],
     )

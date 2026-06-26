@@ -48,6 +48,7 @@ class ValidationIssue:
     confidence: str = "medium"
     actionable: bool = True
     priority_score: int | None = None
+    extra: dict[str, Any] | None = None
 
     def __post_init__(self) -> None:
         if self.issue_id is None:
@@ -67,7 +68,7 @@ class ValidationIssue:
 
     def to_dict(self) -> dict[str, Any]:
         """Convert the issue to a report-friendly dictionary."""
-        return {
+        payload = {
             "problem_name": _json_safe_value(self.problem_name),
             "severity": _json_safe_value(self.severity),
             "description": _json_safe_value(self.description),
@@ -86,6 +87,9 @@ class ValidationIssue:
             "actionable": _json_safe_value(self.actionable),
             "priority_score": _json_safe_value(self.priority_score),
         }
+        if self.extra:
+            payload.update({str(key): _json_safe_value(value) for key, value in self.extra.items()})
+        return payload
 
 
 def _compute_priority_score(
@@ -187,6 +191,7 @@ def build_issue(
     description: str | None = None,
     solution_hint: str | None = None,
     severity: str | None = None,
+    extra: dict[str, Any] | None = None,
 ) -> ValidationIssue:
     """Create a validation issue, preferring catalog-backed metadata when available."""
     catalog_entry = get_problem_definition(problem_name)
@@ -213,6 +218,7 @@ def build_issue(
         iso_category=iso_category,
         confidence=catalog_entry.default_confidence if catalog_entry is not None else "medium",
         actionable=catalog_entry.default_actionable if catalog_entry is not None else True,
+        extra=extra,
     )
 
 

@@ -2,11 +2,14 @@
   "name": "geoqa-atlas-frontend",
   "private": true,
   "version": "0.1.0",
+  "license": "Apache-2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "node scripts/test-public-demo-limits.mjs && node scripts/check-idle-safety.mjs",
+    "audit:bloat": "node scripts/audit-bloat.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",

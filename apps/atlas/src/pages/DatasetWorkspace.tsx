@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { lazy, Suspense, useEffect, useMemo, useState } from "react"
 import { Download, ExternalLink } from "lucide-react"
 import { Link, useParams } from "react-router-dom"
 import type { Feature, FeatureCollection, Geometry } from "geojson"
@@ -9,9 +9,12 @@ import ErrorState from "../components/ErrorState"
 import IssueDrawer from "../components/IssueDrawer"
 import LayerToggleBar from "../components/LayerToggleBar"
 import LoadingState from "../components/LoadingState"
-import MapPanel from "../components/MapPanel"
 import SummaryCards from "../components/SummaryCards"
-import { isOperationalIssue, isOperationalIssueFeature } from "../lib/issues"
+import { buildEndpointIssueOverlay, endpointIssueFocusFeature } from "../lib/endpointIssues"
+import { featureIssueFeaturesOnly, featureIssuesOnly, isNonVisualCleanedIssue, isOperationalIssue, isOperationalIssueFeature } from "../lib/issues"
+import { resolveDatasetMapView } from "../lib/mapBounds"
+
+const MapPanel = lazy(() => import("../components/MapPanel"))
 
 export default function DatasetWorkspace() {
   const { datasetId } = useParams()
@@ -36,35 +39,67 @@ export default function DatasetWorkspace() {
     setSelectedIssueId(null)
     setFocusFeature(null)
     setShowCleaned(false)
+    setCleaned(null)
     Promise.all([getDataset(datasetId), getDatasetGeojson(datasetId), getIssues(datasetId), getReport(datasetId)])
-      .then(async ([datasetPayload, rawPayload, issuePayload, reportPayload]) => {
+      .then(([datasetPayload, rawPayload, issuePayload, reportPayload]) => {
         setDataset(datasetPayload)
         setRaw(rawPayload)
         setIssues(issuePayload)
         setReport(reportPayload)
-        if (datasetPayload.has_cleaned_layer) {
-          const cleanedPayload = await getCleanedGeojson(datasetId)
-          setCleaned(cleanedPayload)
-        } else {
-          setCleaned(null)
-        }
       })
       .catch((caught: Error) => setError(caught.message))
       .finally(() => setLoading(false))
   }, [datasetId])
 
+  useEffect(() => {
+    if (!datasetId || !showCleaned || cleaned) return
+    if (!dataset?.cleaned_preview?.available || !dataset.cleaned_preview.meaningful) return
+    let active = true
+    getCleanedGeojson(datasetId)
+      .then((cleanedPayload) => {
+        if (active) setCleaned(cleanedPayload)
+      })
+      .catch((caught: Error) => {
+        if (active) setError(caught.message)
+      })
+    return () => {
+      active = false
+    }
+  }, [cleaned, dataset, datasetId, showCleaned])
+
+  const issueRows = useMemo(() => featureIssuesOnly(report?.issues ?? issues?.issues ?? []), [report?.issues, issues?.issues])
   const issueFeatures = useMemo(() => {
     if (!issues) return undefined
+    const baseOverlay = {
+      type: "FeatureCollection",
+      features: featureIssueFeaturesOnly(issues.features as Feature<Geometry>[]),
+    } as FeatureCollection
+    const endpointOverlay = buildEndpointIssueOverlay(baseOverlay, issueRows)
+    if (endpointOverlay) return endpointOverlay
     return {
       type: "FeatureCollection",
-      features: issues.features.filter((feature) => !isOperationalIssueFeature(feature as Feature<Geometry>)),
+      features: featureIssueFeaturesOnly(issues.features as Feature<Geometry>[]),
     } as FeatureCollection
-  }, [issues])
+  }, [issueRows, issues])
 
-  const issueRows = report?.issues ?? issues?.issues ?? []
   const selectedIssue = issueRows.find((issue) => issue.issue_id === selectedIssueId)
   const selectedIssueIsOperational = isOperationalIssue(selectedIssue)
-  const cleanedAvailable = Boolean(cleaned)
+  const cleanedAvailable = Boolean(dataset?.cleaned_preview?.available && dataset.cleaned_preview.meaningful)
+  const selectedIssueHasNoCleanedPreview = isNonVisualCleanedIssue(selectedIssue)
+  const cleanedSupportedIssueTypes = dataset?.cleaned_preview?.supportedIssueTypes ?? []
+  const cleanedVisible = Boolean(cleaned) && cleanedAvailable && showCleaned && !selectedIssueIsOperational
+  const datasetMapView = useMemo(() => {
+    if (!dataset) return {}
+    return resolveDatasetMapView({
+      dataset,
+      raw,
+      issues: issueFeatures,
+      cleaned,
+      showRaw,
+      showIssues,
+      showCleaned: cleanedVisible,
+    })
+  }, [cleaned, cleanedVisible, dataset, issueFeatures, raw, showCleaned, showIssues, showRaw])
 
   function showIssueOnMap(issue: Issue) {
     const issueId = issue.issue_id ?? null
@@ -73,9 +108,28 @@ export default function DatasetWorkspace() {
       setFocusFeature(null)
       return
     }
+    const endpointFeature = endpointIssueFocusFeature(issue)
+    if (endpointFeature) {
+      setFocusFeature(endpointFeature)
+      return
+    }
     const feature = issues?.features.find((item) => item.properties?.issue_id === issueId) as Feature<Geometry> | undefined
     if (feature) {
       setFocusFeature({ ...feature })
+      return
+    }
+    const rawFeature = findRawFeatureForIssue(raw, issue)
+    if (rawFeature) {
+      setFocusFeature({
+        ...rawFeature,
+        properties: {
+          ...(rawFeature.properties ?? {}),
+          issue_id: issueId,
+          problem_name: issue.problem_name,
+          severity: issue.severity,
+          _focus_only: true,
+        },
+      })
     }
   }
 
@@ -139,25 +193,38 @@ export default function DatasetWorkspace() {
           <LayerToggleBar
             showRaw={showRaw}
             showIssues={showIssues}
-            showCleaned={cleanedAvailable && showCleaned && !selectedIssueIsOperational}
+            showCleaned={cleanedVisible}
             cleanedAvailable={cleanedAvailable}
             cleanedLayerNote={dataset.cleaned_layer_note}
+            selectedIssueProblem={selectedIssue?.problem_name}
+            cleanedSupportedIssueTypes={cleanedSupportedIssueTypes}
             onRawChange={setShowRaw}
             onIssuesChange={setShowIssues}
             onCleanedChange={setShowCleaned}
           />
-          <MapPanel
-            raw={raw}
-            issues={issueFeatures}
-            cleaned={cleaned}
-            bounds={dataset.bounds}
-            showRaw={showRaw}
-            showIssues={showIssues}
-            showCleaned={cleanedAvailable && showCleaned && !selectedIssueIsOperational}
-            selectedIssueId={selectedIssueId}
-            focusFeature={focusFeature}
-            onIssueSelect={selectIssueFeature}
-          />
+          {raw ? (
+            <Suspense fallback={<LoadingState label="Loading map" />}>
+              <MapPanel
+                raw={raw}
+                issues={issueFeatures}
+                cleaned={cleaned}
+                bounds={datasetMapView.bounds}
+                mapPadding={datasetMapView.padding}
+                mapMaxZoom={datasetMapView.maxZoom}
+                mapMinZoom={datasetMapView.minZoom}
+                mapCenter={datasetMapView.center}
+                mapZoom={datasetMapView.zoom}
+                showRaw={showRaw}
+                showIssues={showIssues}
+                showCleaned={cleanedVisible && !selectedIssueHasNoCleanedPreview}
+                selectedIssueId={selectedIssueId}
+                focusFeature={focusFeature}
+                onIssueSelect={selectIssueFeature}
+              />
+            </Suspense>
+          ) : (
+            <LoadingState label="Loading selected dataset layer" />
+          )}
         </div>
 
         <IssueDrawer
@@ -197,4 +264,25 @@ export default function DatasetWorkspace() {
       </section>
     </div>
   )
+}
+
+function findRawFeatureForIssue(collection: FeatureCollection | undefined, issue: Issue): Feature<Geometry> | null {
+  if (!collection || issue.feature_id === undefined || issue.feature_id === null) return null
+  const wanted = String(issue.feature_id)
+  const match = collection.features.find((feature, index) => {
+    const props = feature.properties ?? {}
+    return [
+      props.id,
+      props.ID,
+      props["@id"],
+      props.osm_id,
+      props.fid,
+      props.FID,
+      props.objectid,
+      props.OBJECTID,
+      index,
+      index + 1,
+    ].some((candidate) => candidate !== undefined && candidate !== null && String(candidate) === wanted)
+  })
+  return match?.geometry ? (match as Feature<Geometry>) : null
 }

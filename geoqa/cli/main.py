@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import argparse
 
-from geoqa.cli.commands import benchmark, convert, profiles, report, validate
+from geoqa.cli.commands import audit_archive, benchmark, convert, profiles, report, validate
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -10,6 +10,7 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     validate.configure_parser(subparsers)
+    audit_archive.configure_parser(subparsers)
     profiles.configure_parser(subparsers)
     convert.configure_parser(subparsers)
     report.configure_parser(subparsers)

@@ -2,7 +2,7 @@
 
 GeoQA prepares geospatial datasets for AI by detecting, explaining, and fixing data quality issues.
 
-GeoQA can also load additive domain plugins for real-world client rules. In the current repo, DMA-specific polygon QA logic from legacy operational scripts is available through the normal `geoqa.validate(...)` path without changing the core engine.
+GeoQA can also load additive domain plugins for real-world operational rules. In the current repo, DMA-specific polygon QA logic from legacy operational scripts is available through the normal `geoqa.validate(...)` path without changing the core engine.
 
 Future-only architecture notes and staged build plans live under `docs/future/` so they stay separate from shipped operator guidance.
 
@@ -31,9 +31,30 @@ The v1 app serves precomputed reports and static GeoJSON previews for public dem
 The Run QA page previews the upload workflow and clearly marks full validation as a backend-connected step.
 Atlas preview supports GeoJSON and zipped Shapefile where browser parsing is available.
 Full GeoQA validation through the Python backend can support additional GeoPandas-readable formats such as Shapefile, GeoPackage, CSV, GeoJSON, and GeoParquet.
-Current demo cards cover roads, zoning polygons, public administrative boundaries, public flood risk zones, synthetic water utility lines, and places.
+Atlas public demo mode highlights the exact uploaded features sent to GeoQA.
+It checks up to twenty point features and up to five line, polygon, mixed, or unknown features, while the rest of the loaded preview stays muted on the map.
+When a run is sampled, Atlas says how many features were analyzed and tells users to run GeoQA locally for full-layer validation.
+Run QA map legends are clickable layer toggles for raw preview, GeoQA-analyzed features, and issue overlays, which makes it easier to isolate what was checked.
+Atlas uses a centralized dark basemap config with no-key CARTO fallback tiles and optional `VITE_ATLAS_TILE_URL`, `VITE_ATLAS_LABEL_TILE_URL`, and `VITE_ATLAS_TILE_ATTRIBUTION` overrides for deployments that need a different English-label source.
+The CPU temperature card is hidden in public mode and appears only when `VITE_ATLAS_SHOW_THERMAL=true` is set for local developer review.
+Current demo cards cover roads, zoning polygons, public administrative boundaries, public flood risk zones, OSM water and drainage lines, and places.
 Runtime errors are labeled operational in Atlas and cleaned layers appear only when real cleaned output exists.
 Screenshots can be added under `docs/assets/` after the Atlas preview is captured.
+
+### Deploy Atlas on Vercel
+
+GeoQA Atlas is a Vite frontend under `apps/atlas`.
+
+Recommended Vercel settings:
+
+- Repository `NiloferTaher/GeoQA`
+- Root Directory `apps/atlas`
+- Build Command `npm run build`
+- Output Directory `dist`
+- Install Command `npm install`
+
+The public web demo uses sampled Run QA limits.
+Full GeoQA validation should be run locally through the Python CLI/API or through a separately hosted backend.
 
 ## Front-and-Center Proof
 
@@ -99,6 +120,14 @@ Run the CLI:
 ```powershell
 python -m geoqa validate data/public_samples/edge_cases/duplicate_vertex_line.geojson --profile geometry
 ```
+
+Run a local archive audit with JSON and Excel reports:
+
+```powershell
+python -m geoqa audit-archive path/to/archive_or_folder --out reports --profiles auto --all-layers --excel --json
+```
+
+Archive audit mode detects multi-layer Shapefile ZIPs, recommends geometry-aware profiles, records validator coverage, and keeps source data unchanged. See `docs/audit_archive.md` and `examples/public_demo/`.
 
 Low-resource first run on a weak or heat-limited machine:
 
@@ -385,3 +414,20 @@ But the recommended order is:
 1. CLI
 2. library/runtime APIs
 3. app
+
+## Maintainer
+
+Built by **Nilofer Taher**.
+
+- GitHub: [GeoQA repository](https://github.com/NiloferTaher/GeoQA)
+- LinkedIn: [Nilofer Taher](https://ae.linkedin.com/in/nilofertaher)
+
+## License
+
+GeoQA is licensed under the Apache License, Version 2.0.
+See [LICENSE](LICENSE).
+
+Copyright 2026 Nilofer Taher.
+
+Third-party demo datasets retain their original source licenses and attribution requirements.
+See the Atlas demo data documentation for source-specific provenance.

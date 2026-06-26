@@ -1,4 +1,4 @@
-import type { Dataset, DatasetListResponse, IssuesResponse, PreviewUploadResponse, Report } from "./types"
+import type { CleanedPreview, Dataset, DatasetListResponse, IssuesResponse, PreviewUploadResponse, Report, ThermalStatus, UploadQaResponse } from "./types"
 import type { FeatureCollection } from "geojson"
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? ""
@@ -6,21 +6,47 @@ const STATIC_BASE = "/demo-data"
 
 function normalizeDataset(dataset: Dataset): Dataset {
   const cleanedGeojson = dataset.cleaned_geojson ?? dataset.cleanedGeoJsonPath
-  const hasCleanedLayer = dataset.has_cleaned_layer ?? dataset.hasCleanedLayer ?? Boolean(cleanedGeojson)
+  const preview = normalizeCleanedPreview(dataset, cleanedGeojson)
+  const hasCleanedLayer = preview.available && preview.meaningful
   const cleanedLayerNote =
+    preview.note ??
     dataset.cleaned_layer_note ??
     dataset.cleanedLayerNote ??
-    (hasCleanedLayer
-      ? "Cleaned preview available for supported geometry fixes only."
-      : "No cleaned layer is available for this demo.")
+    "No cleaned preview is available for this demo."
   return {
     ...dataset,
-    cleaned_geojson: cleanedGeojson,
-    cleanedGeoJsonPath: cleanedGeojson,
+    cleaned_geojson: preview.path ?? cleanedGeojson,
+    cleanedGeoJsonPath: preview.path ?? cleanedGeojson,
     has_cleaned_layer: hasCleanedLayer,
     hasCleanedLayer,
     cleaned_layer_note: cleanedLayerNote,
     cleanedLayerNote,
+    cleaned_preview: preview,
+    cleanedPreview: preview,
+  }
+}
+
+function normalizeCleanedPreview(dataset: Dataset, cleanedGeojson?: string): CleanedPreview {
+  const preview = dataset.cleaned_preview ?? dataset.cleanedPreview
+  const supportedIssueTypes = preview?.supportedIssueTypes ?? preview?.supported_issue_types ?? []
+  if (preview) {
+    return {
+      available: Boolean(preview.available),
+      meaningful: Boolean(preview.meaningful),
+      path: preview.path ?? cleanedGeojson,
+      supportedIssueTypes,
+      supported_issue_types: supportedIssueTypes,
+      note: preview.note || "No cleaned preview is available for this demo.",
+    }
+  }
+  const legacyAvailable = dataset.has_cleaned_layer ?? dataset.hasCleanedLayer ?? Boolean(cleanedGeojson)
+  return {
+    available: Boolean(legacyAvailable),
+    meaningful: Boolean(legacyAvailable),
+    path: cleanedGeojson,
+    supportedIssueTypes: [],
+    supported_issue_types: [],
+    note: legacyAvailable ? "Cleaned preview is available for supported geometry fixes." : "No cleaned preview is available for this demo.",
   }
 }
 
@@ -108,8 +134,14 @@ export function reportDownloadUrl(id: string): string {
   return `${STATIC_BASE}/reports/${id}.json`
 }
 
-export async function previewUploadedLayer(file: File): Promise<PreviewUploadResponse> {
-  const response = await fetch(`${API_BASE}/api/preview-layer?filename=${encodeURIComponent(file.name)}`, {
+export async function getThermalStatus(): Promise<ThermalStatus> {
+  return request<ThermalStatus>("/api/thermal")
+}
+
+export async function previewUploadedLayer(file: File, layer?: string): Promise<PreviewUploadResponse> {
+  const params = new URLSearchParams({ filename: file.name })
+  if (layer) params.set("layer", layer)
+  const response = await fetch(`${API_BASE}/api/preview-layer?${params.toString()}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/octet-stream",
@@ -120,4 +152,40 @@ export async function previewUploadedLayer(file: File): Promise<PreviewUploadRes
     throw new Error("GeoQA Atlas backend preview is not available for this file.")
   }
   return response.json() as Promise<PreviewUploadResponse>
+}
+
+export async function runUploadedQa(file: File, profile: string, layer?: string): Promise<UploadQaResponse> {
+  const params = new URLSearchParams({ filename: file.name, profile })
+  if (layer) params.set("layer", layer)
+  const controller = new AbortController()
+  const timeout = window.setTimeout(() => controller.abort(), 300000)
+  let response: Response
+  try {
+    response = await fetch(`${API_BASE}/api/run-qa?${params.toString()}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/octet-stream",
+      },
+      body: file,
+      signal: controller.signal,
+    })
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw new Error("GeoQA Atlas did not finish this QA run within five minutes. Try a smaller layer or a more specific profile.")
+    }
+    throw error
+  } finally {
+    window.clearTimeout(timeout)
+  }
+  if (!response.ok) {
+    let message = "GeoQA Atlas could not run QA on this layer."
+    try {
+      const payload = await response.json()
+      if (typeof payload?.detail === "string") message = payload.detail
+    } catch {
+      // Keep the generic message when the backend does not return JSON.
+    }
+    throw new Error(message)
+  }
+  return response.json() as Promise<UploadQaResponse>
 }

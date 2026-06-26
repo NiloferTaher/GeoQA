@@ -77,4 +77,4 @@ It is a QA-and-cleaning loop, not automatic semantic reconstruction.
 - full automatic correction of complex data defects
 
 For the heavier constrained-machine benchmark story, see:
-- [benchmark_story.md](/g:/My%20Drive/Python-G-drive/GeoQA/docs/benchmark_story.md)
+- [benchmark_story.md](benchmark_story.md)

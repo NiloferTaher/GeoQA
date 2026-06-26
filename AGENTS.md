@@ -39,8 +39,8 @@ When asked to add or modify GeoQA code:
 
 - Generate or modify the requested GeoQA library code as specified.
 - Keep compatibility with existing `ThermalGuard`, `ThermalRunner`, and `GeoQAScriptBase` workflows unless a change is explicitly requested.
-- Use [codex_prompt.md](/g:/My%20Drive/Python-G-drive/GeoQA/codex_prompt.md) as the canonical prompt reference for GeoQA task framing and coding expectations.
-- Record meaningful project changes in [journal.md](/g:/My%20Drive/Python-G-drive/GeoQA/journal.md), including why the change was made.
+- Use [codex_prompt.md](codex_prompt.md) as the canonical prompt reference for GeoQA task framing and coding expectations.
+- Record meaningful project changes in [journal.md](journal.md), including why the change was made.
 - At the end of the task, offer to update this `AGENTS.md` file if new rules or patterns were introduced.
 - Ask exactly: `Do you want to update AGENTS.md with these changes? (yes/no)`
 - If the answer is yes, append the new rules under a clearly marked section.
@@ -90,6 +90,7 @@ MyScript(emit_thermal_diagnostic=False).run()
 - Atlas demo, report, and product-positioning docs such as `Marketing.md` and `docs/geoqa_atlas_product_brief.md` should stay aligned with `README.md`.
 - Generated frontend folders such as `node_modules`, build outputs, caches, and temporary bundles must not be committed.
 - Keep Atlas map-first, issue-drawer-first, and clearly branded as powered by GeoQA.
+- Atlas must remain idle-safe. Opening the app, landing page, gallery, or Run QA page must not perform heavy geospatial parsing, validation, polling, or map rendering. Heavy work must be user-triggered and bounded.
 
 ## 2026-03-18 Validation Engine Rules
 

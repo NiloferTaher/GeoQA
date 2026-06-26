@@ -1,104 +1,41 @@
 {
   "type": "FeatureCollection",
-  "issues": [
-    {
-      "issue_id": "water-001",
-      "problem_name": "self_intersection",
-      "severity": "high",
-      "feature_id": "W-005",
-      "description": "Loop segment crosses itself near the center of the service area.",
-      "solution_hint": "Reshape or split the line before tracing network connectivity.",
-      "priority_score": 82,
-      "issue_class": "data_geometry_issue"
-    },
-    {
-      "issue_id": "water-002",
-      "problem_name": "suspicious_near_miss_endpoints",
-      "severity": "medium",
-      "feature_id": "W-003/W-004",
-      "description": "Two service endpoints stop close to each other but do not share a vertex.",
-      "solution_hint": "Confirm whether the endpoints are the same junction and snap if appropriate.",
-      "priority_score": 58,
-      "issue_class": "data_geometry_issue"
-    },
-    {
-      "issue_id": "water-003",
-      "problem_name": "unsnapped_endpoints_within_tolerance",
-      "severity": "medium",
-      "feature_id": "W-006/W-007",
-      "description": "Lateral endpoints fall within snapping tolerance but remain separate.",
-      "solution_hint": "Snap the endpoints after confirming they are the same service connection.",
-      "priority_score": 55,
-      "issue_class": "data_geometry_issue"
-    },
-    {
-      "issue_id": "water-004",
-      "problem_name": "missing_or_stale_spatial_index",
-      "severity": "medium",
-      "feature_id": "layer",
-      "description": "The water network layer should rebuild its spatial index after editing.",
-      "solution_hint": "Rebuild the spatial index before publishing or running heavier QA.",
-      "priority_score": 40,
-      "issue_class": "data_issue"
-    }
-  ],
   "features": [
     {
       "type": "Feature",
       "properties": {
-        "issue_id": "water-001",
-        "problem_name": "self_intersection",
-        "severity": "high",
-        "feature_id": "W-005",
-        "description": "Loop segment crosses itself near the center of the service area.",
-        "solution_hint": "Reshape or split the line before tracing network connectivity.",
-        "priority_score": 82,
-        "issue_class": "data_geometry_issue"
-      },
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [
-          [
-            -75.1706,
-            39.9492
-          ],
-          [
-            -75.1669,
-            39.9519
-          ],
-          [
-            -75.1702,
-            39.9521
-          ],
-          [
-            -75.1667,
-            39.9493
-          ]
-        ]
-      }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "issue_id": "water-002",
+        "issue_id": "6a870c3d764971c8",
         "problem_name": "suspicious_near_miss_endpoints",
         "severity": "medium",
-        "feature_id": "W-003/W-004",
-        "description": "Two service endpoints stop close to each other but do not share a vertex.",
-        "solution_hint": "Confirm whether the endpoints are the same junction and snap if appropriate.",
-        "priority_score": 58,
-        "issue_class": "data_geometry_issue"
+        "description": "These endpoints are close enough to look connected, but their coordinates do not touch. Gap distance: 23.5681 meters. Tolerance: 100 meters.",
+        "solution_hint": "Inspect the endpoint pair and snap or connect only if they represent the same network connection.",
+        "feature_id": "way/203921240",
+        "related_feature_id": "way/1240093851",
+        "distance": 23.56811083373563,
+        "tolerance": 100.0,
+        "distance_units": "meters",
+        "endpoint_a": [
+          58.1144712,
+          23.4168941
+        ],
+        "endpoint_b": [
+          58.1145156,
+          23.4171021
+        ],
+        "endpoint_pair": true,
+        "endpoint_role": "gap",
+        "label": "Near-miss endpoint gap"
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
           [
-            -75.1587,
-            39.9497
+            58.1144712,
+            23.4168941
           ],
           [
-            -75.15862,
-            39.94974
+            58.1145156,
+            23.4171021
           ]
         ]
       }
@@ -106,25 +43,419 @@
     {
       "type": "Feature",
       "properties": {
-        "issue_id": "water-003",
+        "issue_id": "6a870c3d764971c8",
+        "problem_name": "suspicious_near_miss_endpoints",
+        "severity": "medium",
+        "description": "These endpoints are close enough to look connected, but their coordinates do not touch. Gap distance: 23.5681 meters. Tolerance: 100 meters.",
+        "solution_hint": "Inspect the endpoint pair and snap or connect only if they represent the same network connection.",
+        "feature_id": "way/203921240",
+        "related_feature_id": "way/1240093851",
+        "distance": 23.56811083373563,
+        "tolerance": 100.0,
+        "distance_units": "meters",
+        "endpoint_a": [
+          58.1144712,
+          23.4168941
+        ],
+        "endpoint_b": [
+          58.1145156,
+          23.4171021
+        ],
+        "endpoint_pair": true,
+        "endpoint_role": "a",
+        "label": "Near-miss endpoint gap"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          58.1144712,
+          23.4168941
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "issue_id": "6a870c3d764971c8",
+        "problem_name": "suspicious_near_miss_endpoints",
+        "severity": "medium",
+        "description": "These endpoints are close enough to look connected, but their coordinates do not touch. Gap distance: 23.5681 meters. Tolerance: 100 meters.",
+        "solution_hint": "Inspect the endpoint pair and snap or connect only if they represent the same network connection.",
+        "feature_id": "way/203921240",
+        "related_feature_id": "way/1240093851",
+        "distance": 23.56811083373563,
+        "tolerance": 100.0,
+        "distance_units": "meters",
+        "endpoint_a": [
+          58.1144712,
+          23.4168941
+        ],
+        "endpoint_b": [
+          58.1145156,
+          23.4171021
+        ],
+        "endpoint_pair": true,
+        "endpoint_role": "b",
+        "label": "Near-miss endpoint gap"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          58.1145156,
+          23.4171021
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "issue_id": "e17234c62d792fe7",
+        "problem_name": "suspicious_near_miss_endpoints",
+        "severity": "medium",
+        "description": "These endpoints are close enough to look connected, but their coordinates do not touch. Gap distance: 78.5314 meters. Tolerance: 100 meters.",
+        "solution_hint": "Inspect the endpoint pair and snap or connect only if they represent the same network connection.",
+        "feature_id": "way/285918680",
+        "related_feature_id": "way/688092071",
+        "distance": 78.53144362568696,
+        "tolerance": 100.0,
+        "distance_units": "meters",
+        "endpoint_a": [
+          58.3268671,
+          23.4986542
+        ],
+        "endpoint_b": [
+          58.3273227,
+          23.4980848
+        ],
+        "endpoint_pair": true,
+        "endpoint_role": "gap",
+        "label": "Near-miss endpoint gap"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            58.3268671,
+            23.4986542
+          ],
+          [
+            58.3273227,
+            23.4980848
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "issue_id": "e17234c62d792fe7",
+        "problem_name": "suspicious_near_miss_endpoints",
+        "severity": "medium",
+        "description": "These endpoints are close enough to look connected, but their coordinates do not touch. Gap distance: 78.5314 meters. Tolerance: 100 meters.",
+        "solution_hint": "Inspect the endpoint pair and snap or connect only if they represent the same network connection.",
+        "feature_id": "way/285918680",
+        "related_feature_id": "way/688092071",
+        "distance": 78.53144362568696,
+        "tolerance": 100.0,
+        "distance_units": "meters",
+        "endpoint_a": [
+          58.3268671,
+          23.4986542
+        ],
+        "endpoint_b": [
+          58.3273227,
+          23.4980848
+        ],
+        "endpoint_pair": true,
+        "endpoint_role": "a",
+        "label": "Near-miss endpoint gap"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          58.3268671,
+          23.4986542
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "issue_id": "e17234c62d792fe7",
+        "problem_name": "suspicious_near_miss_endpoints",
+        "severity": "medium",
+        "description": "These endpoints are close enough to look connected, but their coordinates do not touch. Gap distance: 78.5314 meters. Tolerance: 100 meters.",
+        "solution_hint": "Inspect the endpoint pair and snap or connect only if they represent the same network connection.",
+        "feature_id": "way/285918680",
+        "related_feature_id": "way/688092071",
+        "distance": 78.53144362568696,
+        "tolerance": 100.0,
+        "distance_units": "meters",
+        "endpoint_a": [
+          58.3268671,
+          23.4986542
+        ],
+        "endpoint_b": [
+          58.3273227,
+          23.4980848
+        ],
+        "endpoint_pair": true,
+        "endpoint_role": "b",
+        "label": "Near-miss endpoint gap"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          58.3273227,
+          23.4980848
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "issue_id": "2a0f6fb82a2673f6",
+        "problem_name": "suspicious_near_miss_endpoints",
+        "severity": "medium",
+        "description": "These endpoints are close enough to look connected, but their coordinates do not touch. Gap distance: 65.9607 meters. Tolerance: 100 meters.",
+        "solution_hint": "Inspect the endpoint pair and snap or connect only if they represent the same network connection.",
+        "feature_id": "way/1240093847",
+        "related_feature_id": "way/203829759",
+        "distance": 65.96067492759435,
+        "tolerance": 100.0,
+        "distance_units": "meters",
+        "endpoint_a": [
+          58.1059757,
+          23.4828965
+        ],
+        "endpoint_b": [
+          58.1059924,
+          23.4823035
+        ],
+        "endpoint_pair": true,
+        "endpoint_role": "gap",
+        "label": "Near-miss endpoint gap"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            58.1059757,
+            23.4828965
+          ],
+          [
+            58.1059924,
+            23.4823035
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "issue_id": "2a0f6fb82a2673f6",
+        "problem_name": "suspicious_near_miss_endpoints",
+        "severity": "medium",
+        "description": "These endpoints are close enough to look connected, but their coordinates do not touch. Gap distance: 65.9607 meters. Tolerance: 100 meters.",
+        "solution_hint": "Inspect the endpoint pair and snap or connect only if they represent the same network connection.",
+        "feature_id": "way/1240093847",
+        "related_feature_id": "way/203829759",
+        "distance": 65.96067492759435,
+        "tolerance": 100.0,
+        "distance_units": "meters",
+        "endpoint_a": [
+          58.1059757,
+          23.4828965
+        ],
+        "endpoint_b": [
+          58.1059924,
+          23.4823035
+        ],
+        "endpoint_pair": true,
+        "endpoint_role": "a",
+        "label": "Near-miss endpoint gap"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          58.1059757,
+          23.4828965
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "issue_id": "2a0f6fb82a2673f6",
+        "problem_name": "suspicious_near_miss_endpoints",
+        "severity": "medium",
+        "description": "These endpoints are close enough to look connected, but their coordinates do not touch. Gap distance: 65.9607 meters. Tolerance: 100 meters.",
+        "solution_hint": "Inspect the endpoint pair and snap or connect only if they represent the same network connection.",
+        "feature_id": "way/1240093847",
+        "related_feature_id": "way/203829759",
+        "distance": 65.96067492759435,
+        "tolerance": 100.0,
+        "distance_units": "meters",
+        "endpoint_a": [
+          58.1059757,
+          23.4828965
+        ],
+        "endpoint_b": [
+          58.1059924,
+          23.4823035
+        ],
+        "endpoint_pair": true,
+        "endpoint_role": "b",
+        "label": "Near-miss endpoint gap"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          58.1059924,
+          23.4823035
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "issue_id": "6f5d61a1dafa4ab2",
+        "problem_name": "suspicious_near_miss_endpoints",
+        "severity": "medium",
+        "description": "These endpoints are close enough to look connected, but their coordinates do not touch. Gap distance: 12.8566 meters. Tolerance: 100 meters.",
+        "solution_hint": "Inspect the endpoint pair and snap or connect only if they represent the same network connection.",
+        "feature_id": "way/1240093847",
+        "related_feature_id": "way/1376570673",
+        "distance": 12.856646443539145,
+        "tolerance": 100.0,
+        "distance_units": "meters",
+        "endpoint_a": [
+          58.1059757,
+          23.4828965
+        ],
+        "endpoint_b": [
+          58.1059815,
+          23.483012
+        ],
+        "endpoint_pair": true,
+        "endpoint_role": "gap",
+        "label": "Near-miss endpoint gap"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            58.1059757,
+            23.4828965
+          ],
+          [
+            58.1059815,
+            23.483012
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "issue_id": "6f5d61a1dafa4ab2",
+        "problem_name": "suspicious_near_miss_endpoints",
+        "severity": "medium",
+        "description": "These endpoints are close enough to look connected, but their coordinates do not touch. Gap distance: 12.8566 meters. Tolerance: 100 meters.",
+        "solution_hint": "Inspect the endpoint pair and snap or connect only if they represent the same network connection.",
+        "feature_id": "way/1240093847",
+        "related_feature_id": "way/1376570673",
+        "distance": 12.856646443539145,
+        "tolerance": 100.0,
+        "distance_units": "meters",
+        "endpoint_a": [
+          58.1059757,
+          23.4828965
+        ],
+        "endpoint_b": [
+          58.1059815,
+          23.483012
+        ],
+        "endpoint_pair": true,
+        "endpoint_role": "a",
+        "label": "Near-miss endpoint gap"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          58.1059757,
+          23.4828965
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "issue_id": "6f5d61a1dafa4ab2",
+        "problem_name": "suspicious_near_miss_endpoints",
+        "severity": "medium",
+        "description": "These endpoints are close enough to look connected, but their coordinates do not touch. Gap distance: 12.8566 meters. Tolerance: 100 meters.",
+        "solution_hint": "Inspect the endpoint pair and snap or connect only if they represent the same network connection.",
+        "feature_id": "way/1240093847",
+        "related_feature_id": "way/1376570673",
+        "distance": 12.856646443539145,
+        "tolerance": 100.0,
+        "distance_units": "meters",
+        "endpoint_a": [
+          58.1059757,
+          23.4828965
+        ],
+        "endpoint_b": [
+          58.1059815,
+          23.483012
+        ],
+        "endpoint_pair": true,
+        "endpoint_role": "b",
+        "label": "Near-miss endpoint gap"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          58.1059815,
+          23.483012
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "issue_id": "afd1a6a4a7ac705b",
         "problem_name": "unsnapped_endpoints_within_tolerance",
-        "severity": "medium",
-        "feature_id": "W-006/W-007",
-        "description": "Lateral endpoints fall within snapping tolerance but remain separate.",
-        "solution_hint": "Snap the endpoints after confirming they are the same service connection.",
-        "priority_score": 55,
-        "issue_class": "data_geometry_issue"
+        "severity": "high",
+        "description": "This endpoint pair falls within the configured snapping tolerance but remains disconnected. Gap distance: 23.5681 meters. Tolerance: 50 meters.",
+        "solution_hint": "Snap the endpoint pair to the nearby feature or document why the disconnected near match is valid.",
+        "feature_id": "way/203921240",
+        "related_feature_id": "way/1240093851",
+        "distance": 23.56811083373563,
+        "tolerance": 50.0,
+        "distance_units": "meters",
+        "endpoint_a": [
+          58.1144712,
+          23.4168941
+        ],
+        "endpoint_b": [
+          58.1145156,
+          23.4171021
+        ],
+        "endpoint_pair": true,
+        "endpoint_role": "gap",
+        "label": "Near-miss endpoint gap"
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
           [
-            -75.1609,
-            39.9552
+            58.1144712,
+            23.4168941
           ],
           [
-            -75.16083,
-            39.95523
+            58.1145156,
+            23.4171021
           ]
         ]
       }
@@ -132,26 +463,171 @@
     {
       "type": "Feature",
       "properties": {
-        "issue_id": "water-004",
-        "problem_name": "missing_or_stale_spatial_index",
-        "severity": "medium",
-        "feature_id": "layer",
-        "description": "The water network layer should rebuild its spatial index after editing.",
-        "solution_hint": "Rebuild the spatial index before publishing or running heavier QA.",
-        "priority_score": 40,
-        "issue_class": "data_issue"
+        "issue_id": "afd1a6a4a7ac705b",
+        "problem_name": "unsnapped_endpoints_within_tolerance",
+        "severity": "high",
+        "description": "This endpoint pair falls within the configured snapping tolerance but remains disconnected. Gap distance: 23.5681 meters. Tolerance: 50 meters.",
+        "solution_hint": "Snap the endpoint pair to the nearby feature or document why the disconnected near match is valid.",
+        "feature_id": "way/203921240",
+        "related_feature_id": "way/1240093851",
+        "distance": 23.56811083373563,
+        "tolerance": 50.0,
+        "distance_units": "meters",
+        "endpoint_a": [
+          58.1144712,
+          23.4168941
+        ],
+        "endpoint_b": [
+          58.1145156,
+          23.4171021
+        ],
+        "endpoint_pair": true,
+        "endpoint_role": "a",
+        "label": "Near-miss endpoint gap"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          58.1144712,
+          23.4168941
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "issue_id": "afd1a6a4a7ac705b",
+        "problem_name": "unsnapped_endpoints_within_tolerance",
+        "severity": "high",
+        "description": "This endpoint pair falls within the configured snapping tolerance but remains disconnected. Gap distance: 23.5681 meters. Tolerance: 50 meters.",
+        "solution_hint": "Snap the endpoint pair to the nearby feature or document why the disconnected near match is valid.",
+        "feature_id": "way/203921240",
+        "related_feature_id": "way/1240093851",
+        "distance": 23.56811083373563,
+        "tolerance": 50.0,
+        "distance_units": "meters",
+        "endpoint_a": [
+          58.1144712,
+          23.4168941
+        ],
+        "endpoint_b": [
+          58.1145156,
+          23.4171021
+        ],
+        "endpoint_pair": true,
+        "endpoint_role": "b",
+        "label": "Near-miss endpoint gap"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          58.1145156,
+          23.4171021
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "issue_id": "a84ae2d772291d41",
+        "problem_name": "unsnapped_endpoints_within_tolerance",
+        "severity": "high",
+        "description": "This endpoint pair falls within the configured snapping tolerance but remains disconnected. Gap distance: 12.8566 meters. Tolerance: 50 meters.",
+        "solution_hint": "Snap the endpoint pair to the nearby feature or document why the disconnected near match is valid.",
+        "feature_id": "way/1240093847",
+        "related_feature_id": "way/1376570673",
+        "distance": 12.856646443539145,
+        "tolerance": 50.0,
+        "distance_units": "meters",
+        "endpoint_a": [
+          58.1059757,
+          23.4828965
+        ],
+        "endpoint_b": [
+          58.1059815,
+          23.483012
+        ],
+        "endpoint_pair": true,
+        "endpoint_role": "gap",
+        "label": "Near-miss endpoint gap"
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
           [
-            -75.1724,
-            39.9485
+            58.1059757,
+            23.4828965
           ],
           [
-            -75.1712,
-            39.9491
+            58.1059815,
+            23.483012
           ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "issue_id": "a84ae2d772291d41",
+        "problem_name": "unsnapped_endpoints_within_tolerance",
+        "severity": "high",
+        "description": "This endpoint pair falls within the configured snapping tolerance but remains disconnected. Gap distance: 12.8566 meters. Tolerance: 50 meters.",
+        "solution_hint": "Snap the endpoint pair to the nearby feature or document why the disconnected near match is valid.",
+        "feature_id": "way/1240093847",
+        "related_feature_id": "way/1376570673",
+        "distance": 12.856646443539145,
+        "tolerance": 50.0,
+        "distance_units": "meters",
+        "endpoint_a": [
+          58.1059757,
+          23.4828965
+        ],
+        "endpoint_b": [
+          58.1059815,
+          23.483012
+        ],
+        "endpoint_pair": true,
+        "endpoint_role": "a",
+        "label": "Near-miss endpoint gap"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          58.1059757,
+          23.4828965
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "issue_id": "a84ae2d772291d41",
+        "problem_name": "unsnapped_endpoints_within_tolerance",
+        "severity": "high",
+        "description": "This endpoint pair falls within the configured snapping tolerance but remains disconnected. Gap distance: 12.8566 meters. Tolerance: 50 meters.",
+        "solution_hint": "Snap the endpoint pair to the nearby feature or document why the disconnected near match is valid.",
+        "feature_id": "way/1240093847",
+        "related_feature_id": "way/1376570673",
+        "distance": 12.856646443539145,
+        "tolerance": 50.0,
+        "distance_units": "meters",
+        "endpoint_a": [
+          58.1059757,
+          23.4828965
+        ],
+        "endpoint_b": [
+          58.1059815,
+          23.483012
+        ],
+        "endpoint_pair": true,
+        "endpoint_role": "b",
+        "label": "Near-miss endpoint gap"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          58.1059815,
+          23.483012
         ]
       }
     }

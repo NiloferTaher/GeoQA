@@ -1,7 +1,9 @@
 # Demo Data
 
-GeoQA Atlas v1 uses curated public preview data and one synthetic GeoQA sample for domain-specific demos.
+GeoQA Atlas v1 uses curated public preview data for domain-specific demos.
 All reports are precomputed JSON files for a read-only public demo.
+Third-party demo datasets retain their original source licenses and attribution requirements.
+The Apache-2.0 project license applies to GeoQA code and project-authored docs, not to third-party public data sources.
 
 ## Sources
 
@@ -13,9 +15,17 @@ All reports are precomputed JSON files for a read-only public demo.
   - City of Philadelphia zoning data from OpenDataPhilly.
   - The app uses a bounded polygon preview for fast map rendering.
 
-- Water network / utility lines
-  - Synthetic utility-line sample made for GeoQA Atlas.
-  - It demonstrates self-intersections, near-miss endpoints, unsnapped endpoints, and spatial-index review.
+- OSM water / drainage lines
+  - OpenStreetMap-derived Muscat waterway lines from the HOTOSM HDX Oman waterways export.
+  - Source organization is OpenStreetMap contributors via HOTOSM HDX.
+  - License is Open Database License ODbL 1.0.
+  - Atlas uses a compact sixty-feature LineString sample near Muscat.
+  - It demonstrates disconnected endpoints, near-miss endpoints, short segments, and delivery readiness.
+  - Near-miss endpoint findings include endpoint A, endpoint B, related feature id, gap distance, tolerance, and a short gap geometry.
+  - The water report now uses meter-based endpoint distances for geographic CRS data.
+  - Repeated endpoint pair findings are grouped so A-B and B-A are not counted as separate near-miss findings.
+  - This is not official utility mains data and Atlas does not label it that way.
+  - Source research is recorded in `apps/atlas/docs/water-network-source-research.md`.
 
 - Administrative boundaries / area polygons
   - Natural Earth Admin 1 states and provinces sample.
@@ -41,9 +51,10 @@ Example command.
 geoqa validate public-samples/roads-line-network.geojson --profile generic_quick --output-format json --report-path reports/roads-line-network
 ```
 
-Cleaned preview layers are available only when a static cleaned GeoJSON file exists.
-The roads and zoning demos include cleaned previews for supported geometry fixes.
-The other demos show a disabled cleaned layer toggle with the message `No cleaned layer is available for this demo.`
+Cleaned preview layers are shown only when a meaningful visible cleaned geometry output exists.
+Coordinate precision, spatial index, CRS, metadata, and operational findings do not produce visible cleaned geometry previews.
+The current roads and zoning cleaned files differ at a coordinate level but do not demonstrate a visible geometry fix for their displayed issue types, so Atlas disables the cleaned toggle for those demos.
+All demos currently show a disabled cleaned layer toggle unless a future dataset adds a meaningful cleaned output.
 Runtime errors are shown as operational findings in the drawer and are not drawn as normal defect geometries.
 
 ## Public Demo Limits

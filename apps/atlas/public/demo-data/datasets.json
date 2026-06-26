@@ -124,11 +124,25 @@
           }
         ]
       },
-      "hasCleanedLayer": true,
-      "has_cleaned_layer": true,
-      "cleanedLayerNote": "Cleaned preview available for supported geometry fixes only.",
-      "cleaned_layer_note": "Cleaned preview available for supported geometry fixes only.",
-      "cleanedGeoJsonPath": "geojson/roads-line-network-cleaned.geojson"
+      "hasCleanedLayer": false,
+      "has_cleaned_layer": false,
+      "cleanedLayerNote": "This dataset has no visible cleaned geometry preview. Coordinate precision and spatial index findings require review or export settings, not changed shapes.",
+      "cleaned_layer_note": "This dataset has no visible cleaned geometry preview. Coordinate precision and spatial index findings require review or export settings, not changed shapes.",
+      "cleanedGeoJsonPath": "geojson/roads-line-network-cleaned.geojson",
+      "cleanedPreview": {
+        "available": false,
+        "meaningful": false,
+        "supportedIssueTypes": [],
+        "supported_issue_types": [],
+        "note": "This dataset has no visible cleaned geometry preview. Coordinate precision and spatial index findings require review or export settings, not changed shapes."
+      },
+      "cleaned_preview": {
+        "available": false,
+        "meaningful": false,
+        "supportedIssueTypes": [],
+        "supported_issue_types": [],
+        "note": "This dataset has no visible cleaned geometry preview. Coordinate precision and spatial index findings require review or export settings, not changed shapes."
+      }
     },
     {
       "id": "zoning-polygons",
@@ -254,11 +268,25 @@
           }
         ]
       },
-      "hasCleanedLayer": true,
-      "has_cleaned_layer": true,
-      "cleanedLayerNote": "Cleaned preview available for supported geometry fixes only.",
-      "cleaned_layer_note": "Cleaned preview available for supported geometry fixes only.",
-      "cleanedGeoJsonPath": "geojson/zoning-polygons-cleaned.geojson"
+      "hasCleanedLayer": false,
+      "has_cleaned_layer": false,
+      "cleanedLayerNote": "This dataset has no visible cleaned geometry preview. Coordinate precision and spatial index findings require review or export settings, not changed shapes.",
+      "cleaned_layer_note": "This dataset has no visible cleaned geometry preview. Coordinate precision and spatial index findings require review or export settings, not changed shapes.",
+      "cleanedGeoJsonPath": "geojson/zoning-polygons-cleaned.geojson",
+      "cleanedPreview": {
+        "available": false,
+        "meaningful": false,
+        "supportedIssueTypes": [],
+        "supported_issue_types": [],
+        "note": "This dataset has no visible cleaned geometry preview. Coordinate precision and spatial index findings require review or export settings, not changed shapes."
+      },
+      "cleaned_preview": {
+        "available": false,
+        "meaningful": false,
+        "supportedIssueTypes": [],
+        "supported_issue_types": [],
+        "note": "This dataset has no visible cleaned geometry preview. Coordinate precision and spatial index findings require review or export settings, not changed shapes."
+      }
     },
     {
       "id": "administrative-boundaries-area-polygons",
@@ -356,7 +384,21 @@
       "hasCleanedLayer": false,
       "has_cleaned_layer": false,
       "cleanedLayerNote": "No cleaned layer is available for this demo.",
-      "cleaned_layer_note": "No cleaned layer is available for this demo."
+      "cleaned_layer_note": "No cleaned layer is available for this demo.",
+      "cleanedPreview": {
+        "available": false,
+        "meaningful": false,
+        "supportedIssueTypes": [],
+        "supported_issue_types": [],
+        "note": "No cleaned preview is available for this demo."
+      },
+      "cleaned_preview": {
+        "available": false,
+        "meaningful": false,
+        "supportedIssueTypes": [],
+        "supported_issue_types": [],
+        "note": "No cleaned preview is available for this demo."
+      }
     },
     {
       "id": "flood-zones-risk-polygons",
@@ -454,103 +496,623 @@
       "hasCleanedLayer": false,
       "has_cleaned_layer": false,
       "cleanedLayerNote": "No cleaned layer is available for this demo.",
-      "cleaned_layer_note": "No cleaned layer is available for this demo."
+      "cleaned_layer_note": "No cleaned layer is available for this demo.",
+      "cleanedPreview": {
+        "available": false,
+        "meaningful": false,
+        "supportedIssueTypes": [],
+        "supported_issue_types": [],
+        "note": "No cleaned preview is available for this demo."
+      },
+      "cleaned_preview": {
+        "available": false,
+        "meaningful": false,
+        "supportedIssueTypes": [],
+        "supported_issue_types": [],
+        "note": "No cleaned preview is available for this demo."
+      }
     },
     {
       "id": "water-network-utility-lines",
-      "name": "Water network / utility lines",
-      "short_name": "Water",
-      "description": "A synthetic utility line sample for reviewing disconnected endpoints, self-intersections, and delivery readiness before network tracing.",
-      "feature_count": 8,
+      "name": "OSM water / drainage lines",
+      "short_name": "Water lines",
+      "description": "An OpenStreetMap derived public waterways sample around Muscat for reviewing disconnected endpoints, short segments, and delivery readiness.",
+      "feature_count": 60,
       "geometry_type": "LineString",
       "profile": "water_network_quick",
-      "issue_count": 4,
+      "issue_count": 162,
       "geojson": "geojson/water-network-utility-lines.geojson",
       "report": "reports/water-network-utility-lines.json",
-      "command": "geoqa validate public-samples/water-network-utility-lines.geojson --profile water_network_quick --output-format json --report-path reports/water-network-utility-lines",
+      "command": "geoqa validate public-samples/osm-muscat-water-drainage-lines.geojson --profile water_network_quick --output-format json --report-path reports/water-network-utility-lines",
       "github_url": "https://github.com/NiloferTaher/GeoQA",
-      "source_label": "Synthetic GeoQA water network demo",
-      "source_url": "https://github.com/NiloferTaher/GeoQA",
+      "source_label": "OpenStreetMap contributors via HOTOSM HDX Oman waterways export, ODbL",
+      "source_url": "https://data.humdata.org/dataset/hotosm_omn_waterways",
       "bounds": [
-        -75.1731,
-        39.9485,
-        -75.1569,
-        39.9561
+        58.042616,
+        23.330069,
+        58.747883,
+        23.692751
       ],
+      "mapView": {
+        "fitTo": "issues",
+        "padding": [
+          28,
+          28
+        ],
+        "maxZoom": 12,
+        "minZoom": 10
+      },
       "summary": {
         "validation_rule_version": "2026.03",
-        "issue_count": 4,
-        "total_issues": 4,
-        "actionable": 4,
+        "issue_count": 162,
+        "total_issues": 162,
+        "actionable": 162,
         "informational": 0,
-        "actionable_ratio": 1,
+        "actionable_ratio": 1.0,
         "by_problem": {
-          "self_intersection": 1,
-          "suspicious_near_miss_endpoints": 1,
-          "unsnapped_endpoints_within_tolerance": 1,
-          "missing_or_stale_spatial_index": 1
+          "below_minimum_feature_length": 51,
+          "isolated_network_segment": 46,
+          "line_dangle": 59,
+          "suspicious_near_miss_endpoints": 4,
+          "unsnapped_endpoints_within_tolerance": 2
         },
+        "problem_breakdown": [
+          {
+            "name": "line_dangle",
+            "count": 59,
+            "percent": 36.42
+          },
+          {
+            "name": "below_minimum_feature_length",
+            "count": 51,
+            "percent": 31.48
+          },
+          {
+            "name": "isolated_network_segment",
+            "count": 46,
+            "percent": 28.4
+          },
+          {
+            "name": "suspicious_near_miss_endpoints",
+            "count": 4,
+            "percent": 2.47
+          },
+          {
+            "name": "unsnapped_endpoints_within_tolerance",
+            "count": 2,
+            "percent": 1.23
+          }
+        ],
         "by_severity": {
-          "high": 1,
-          "medium": 3
+          "high": 48,
+          "medium": 114
         },
         "severity_distribution": [
           {
             "name": "medium",
-            "count": 3,
-            "percent": 75
+            "count": 114,
+            "percent": 70.37
           },
           {
             "name": "high",
-            "count": 1,
-            "percent": 25
-          }
-        ],
-        "top_issues": [
-          {
-            "problem_name": "self_intersection",
-            "count": 1,
-            "percent": 25
-          },
-          {
-            "problem_name": "suspicious_near_miss_endpoints",
-            "count": 1,
-            "percent": 25
-          },
-          {
-            "problem_name": "unsnapped_endpoints_within_tolerance",
-            "count": 1,
-            "percent": 25
-          },
-          {
-            "problem_name": "missing_or_stale_spatial_index",
-            "count": 1,
-            "percent": 25
+            "count": 48,
+            "percent": 29.63
           }
         ],
         "by_issue_class": {
-          "data_geometry_issue": 3,
-          "data_issue": 1
+          "data_issue": 162
         },
         "by_validator": {
-          "self_intersection": 1,
-          "suspicious_near_miss_endpoints": 1,
-          "unsnapped_endpoints_within_tolerance": 1,
-          "missing_or_stale_spatial_index": 1
+          "below_minimum_feature_length": 51,
+          "isolated_network_segment": 46,
+          "line_dangle": 59,
+          "suspicious_near_miss_endpoints": 4,
+          "unsnapped_endpoints_within_tolerance": 2
+        },
+        "by_iso_category": {
+          "Logical Consistency": 162
         },
         "by_root_cause": {
-          "topology": 3,
-          "integrity": 1
+          "geometry": 51,
+          "topology": 111
         },
         "by_priority_band": {
-          "high": 1,
-          "medium": 3
+          "low": 162
+        },
+        "top_issues": [
+          {
+            "problem_name": "line_dangle",
+            "count": 59,
+            "percent": 36.42
+          },
+          {
+            "problem_name": "below_minimum_feature_length",
+            "count": 51,
+            "percent": 31.48
+          },
+          {
+            "problem_name": "isolated_network_segment",
+            "count": 46,
+            "percent": 28.4
+          },
+          {
+            "problem_name": "suspicious_near_miss_endpoints",
+            "count": 4,
+            "percent": 2.47
+          },
+          {
+            "problem_name": "unsnapped_endpoints_within_tolerance",
+            "count": 2,
+            "percent": 1.23
+          }
+        ],
+        "top_actionable": [
+          {
+            "problem_name": "isolated_network_segment",
+            "feature_id": "way/1062910401",
+            "severity": "high",
+            "confidence": "medium",
+            "priority_score": 8
+          },
+          {
+            "problem_name": "isolated_network_segment",
+            "feature_id": "way/1079051397",
+            "severity": "high",
+            "confidence": "medium",
+            "priority_score": 8
+          },
+          {
+            "problem_name": "isolated_network_segment",
+            "feature_id": "way/1223319408",
+            "severity": "high",
+            "confidence": "medium",
+            "priority_score": 8
+          },
+          {
+            "problem_name": "isolated_network_segment",
+            "feature_id": "way/1223319418",
+            "severity": "high",
+            "confidence": "medium",
+            "priority_score": 8
+          },
+          {
+            "problem_name": "isolated_network_segment",
+            "feature_id": "way/1223319425",
+            "severity": "high",
+            "confidence": "medium",
+            "priority_score": 8
+          }
+        ],
+        "suppressed_issue_count": 0,
+        "execution_status": "full",
+        "execution_reason": null,
+        "validators_attempted": [
+          "null_geometry",
+          "duplicate_vertex",
+          "below_minimum_feature_length",
+          "sharp_angle_cutback",
+          "self_intersection",
+          "line_intersection_same_layer",
+          "line_dangle",
+          "duplicate_geometry_same_layer",
+          "feature_not_split_at_intersection",
+          "isolated_network_segment",
+          "suspicious_near_miss_endpoints",
+          "unsnapped_endpoints_within_tolerance",
+          "required_nulls",
+          "uniqueness",
+          "diameter_domain",
+          "material_domain",
+          "status_domain",
+          "missing_crs",
+          "invalid_crs",
+          "coordinate_precision",
+          "xy_tolerance"
+        ],
+        "validators_completed": [
+          "null_geometry",
+          "duplicate_vertex",
+          "below_minimum_feature_length",
+          "sharp_angle_cutback",
+          "self_intersection",
+          "line_intersection_same_layer",
+          "line_dangle",
+          "duplicate_geometry_same_layer",
+          "feature_not_split_at_intersection",
+          "isolated_network_segment",
+          "suspicious_near_miss_endpoints",
+          "unsnapped_endpoints_within_tolerance",
+          "required_nulls",
+          "uniqueness",
+          "diameter_domain",
+          "material_domain",
+          "status_domain",
+          "missing_crs",
+          "invalid_crs",
+          "coordinate_precision",
+          "xy_tolerance"
+        ],
+        "validators_deferred": [],
+        "validator_coverage": [
+          {
+            "validator_name": "null_geometry",
+            "status": "completed",
+            "reason": null,
+            "layer_geometry_type": "LineString",
+            "expected_geometry_types": [],
+            "profile": "water_network_quick:geometry",
+            "notes": null,
+            "family": "geometry",
+            "layer_name": "water-network-utility-lines",
+            "layer_path": "apps\\atlas\\public\\demo-data\\geojson\\water-network-utility-lines.geojson",
+            "geometry_type": "LineString"
+          },
+          {
+            "validator_name": "duplicate_vertex",
+            "status": "completed",
+            "reason": null,
+            "layer_geometry_type": "LineString",
+            "expected_geometry_types": [],
+            "profile": "water_network_quick:geometry",
+            "notes": null,
+            "family": "geometry",
+            "layer_name": "water-network-utility-lines",
+            "layer_path": "apps\\atlas\\public\\demo-data\\geojson\\water-network-utility-lines.geojson",
+            "geometry_type": "LineString"
+          },
+          {
+            "validator_name": "below_minimum_feature_length",
+            "status": "completed",
+            "reason": null,
+            "layer_geometry_type": "LineString",
+            "expected_geometry_types": [
+              "LineString",
+              "MultiLineString"
+            ],
+            "profile": "water_network_quick:geometry",
+            "notes": null,
+            "family": "geometry",
+            "layer_name": "water-network-utility-lines",
+            "layer_path": "apps\\atlas\\public\\demo-data\\geojson\\water-network-utility-lines.geojson",
+            "geometry_type": "LineString"
+          },
+          {
+            "validator_name": "sharp_angle_cutback",
+            "status": "completed",
+            "reason": null,
+            "layer_geometry_type": "LineString",
+            "expected_geometry_types": [
+              "LineString",
+              "MultiLineString"
+            ],
+            "profile": "water_network_quick:geometry",
+            "notes": null,
+            "family": "geometry",
+            "layer_name": "water-network-utility-lines",
+            "layer_path": "apps\\atlas\\public\\demo-data\\geojson\\water-network-utility-lines.geojson",
+            "geometry_type": "LineString"
+          },
+          {
+            "validator_name": "self_intersection",
+            "status": "completed",
+            "reason": null,
+            "layer_geometry_type": "LineString",
+            "expected_geometry_types": [
+              "LineString",
+              "MultiLineString",
+              "Polygon",
+              "MultiPolygon"
+            ],
+            "profile": "water_network_quick:geometry",
+            "notes": null,
+            "family": "geometry",
+            "layer_name": "water-network-utility-lines",
+            "layer_path": "apps\\atlas\\public\\demo-data\\geojson\\water-network-utility-lines.geojson",
+            "geometry_type": "LineString"
+          },
+          {
+            "validator_name": "line_intersection_same_layer",
+            "status": "completed",
+            "reason": null,
+            "layer_geometry_type": "LineString",
+            "expected_geometry_types": [
+              "LineString",
+              "MultiLineString"
+            ],
+            "profile": "water_network_quick:topology",
+            "notes": null,
+            "family": "topology",
+            "layer_name": "water-network-utility-lines",
+            "layer_path": "apps\\atlas\\public\\demo-data\\geojson\\water-network-utility-lines.geojson",
+            "geometry_type": "LineString"
+          },
+          {
+            "validator_name": "line_dangle",
+            "status": "completed",
+            "reason": null,
+            "layer_geometry_type": "LineString",
+            "expected_geometry_types": [
+              "LineString",
+              "MultiLineString"
+            ],
+            "profile": "water_network_quick:topology",
+            "notes": null,
+            "family": "topology",
+            "layer_name": "water-network-utility-lines",
+            "layer_path": "apps\\atlas\\public\\demo-data\\geojson\\water-network-utility-lines.geojson",
+            "geometry_type": "LineString"
+          },
+          {
+            "validator_name": "duplicate_geometry_same_layer",
+            "status": "completed",
+            "reason": null,
+            "layer_geometry_type": "LineString",
+            "expected_geometry_types": [],
+            "profile": "water_network_quick:topology",
+            "notes": null,
+            "family": "topology",
+            "layer_name": "water-network-utility-lines",
+            "layer_path": "apps\\atlas\\public\\demo-data\\geojson\\water-network-utility-lines.geojson",
+            "geometry_type": "LineString"
+          },
+          {
+            "validator_name": "feature_not_split_at_intersection",
+            "status": "completed",
+            "reason": null,
+            "layer_geometry_type": "LineString",
+            "expected_geometry_types": [
+              "LineString",
+              "MultiLineString"
+            ],
+            "profile": "water_network_quick:topology",
+            "notes": null,
+            "family": "topology",
+            "layer_name": "water-network-utility-lines",
+            "layer_path": "apps\\atlas\\public\\demo-data\\geojson\\water-network-utility-lines.geojson",
+            "geometry_type": "LineString"
+          },
+          {
+            "validator_name": "isolated_network_segment",
+            "status": "completed",
+            "reason": null,
+            "layer_geometry_type": "LineString",
+            "expected_geometry_types": [
+              "LineString",
+              "MultiLineString"
+            ],
+            "profile": "water_network_quick:topology",
+            "notes": null,
+            "family": "topology",
+            "layer_name": "water-network-utility-lines",
+            "layer_path": "apps\\atlas\\public\\demo-data\\geojson\\water-network-utility-lines.geojson",
+            "geometry_type": "LineString"
+          },
+          {
+            "validator_name": "suspicious_near_miss_endpoints",
+            "status": "completed",
+            "reason": null,
+            "layer_geometry_type": "LineString",
+            "expected_geometry_types": [
+              "LineString",
+              "MultiLineString"
+            ],
+            "profile": "water_network_quick:topology",
+            "notes": null,
+            "family": "topology",
+            "layer_name": "water-network-utility-lines",
+            "layer_path": "apps\\atlas\\public\\demo-data\\geojson\\water-network-utility-lines.geojson",
+            "geometry_type": "LineString"
+          },
+          {
+            "validator_name": "unsnapped_endpoints_within_tolerance",
+            "status": "completed",
+            "reason": null,
+            "layer_geometry_type": "LineString",
+            "expected_geometry_types": [
+              "LineString",
+              "MultiLineString"
+            ],
+            "profile": "water_network_quick:topology",
+            "notes": null,
+            "family": "topology",
+            "layer_name": "water-network-utility-lines",
+            "layer_path": "apps\\atlas\\public\\demo-data\\geojson\\water-network-utility-lines.geojson",
+            "geometry_type": "LineString"
+          },
+          {
+            "validator_name": "required_nulls",
+            "status": "completed",
+            "reason": null,
+            "layer_geometry_type": "LineString",
+            "expected_geometry_types": [],
+            "profile": "water_network_quick:attributes",
+            "notes": null,
+            "family": "attributes",
+            "layer_name": "water-network-utility-lines",
+            "layer_path": "apps\\atlas\\public\\demo-data\\geojson\\water-network-utility-lines.geojson",
+            "geometry_type": "LineString"
+          },
+          {
+            "validator_name": "uniqueness",
+            "status": "completed",
+            "reason": null,
+            "layer_geometry_type": "LineString",
+            "expected_geometry_types": [],
+            "profile": "water_network_quick:attributes",
+            "notes": null,
+            "family": "attributes",
+            "layer_name": "water-network-utility-lines",
+            "layer_path": "apps\\atlas\\public\\demo-data\\geojson\\water-network-utility-lines.geojson",
+            "geometry_type": "LineString"
+          },
+          {
+            "validator_name": "diameter_domain",
+            "status": "completed",
+            "reason": null,
+            "layer_geometry_type": "LineString",
+            "expected_geometry_types": [],
+            "profile": "water_network_quick:attributes",
+            "notes": null,
+            "family": "attributes",
+            "layer_name": "water-network-utility-lines",
+            "layer_path": "apps\\atlas\\public\\demo-data\\geojson\\water-network-utility-lines.geojson",
+            "geometry_type": "LineString"
+          },
+          {
+            "validator_name": "material_domain",
+            "status": "completed",
+            "reason": null,
+            "layer_geometry_type": "LineString",
+            "expected_geometry_types": [],
+            "profile": "water_network_quick:attributes",
+            "notes": null,
+            "family": "attributes",
+            "layer_name": "water-network-utility-lines",
+            "layer_path": "apps\\atlas\\public\\demo-data\\geojson\\water-network-utility-lines.geojson",
+            "geometry_type": "LineString"
+          },
+          {
+            "validator_name": "status_domain",
+            "status": "completed",
+            "reason": null,
+            "layer_geometry_type": "LineString",
+            "expected_geometry_types": [],
+            "profile": "water_network_quick:attributes",
+            "notes": null,
+            "family": "attributes",
+            "layer_name": "water-network-utility-lines",
+            "layer_path": "apps\\atlas\\public\\demo-data\\geojson\\water-network-utility-lines.geojson",
+            "geometry_type": "LineString"
+          },
+          {
+            "validator_name": "missing_crs",
+            "status": "completed",
+            "reason": null,
+            "layer_geometry_type": "LineString",
+            "expected_geometry_types": [],
+            "profile": "water_network_quick:crs",
+            "notes": null,
+            "family": "crs",
+            "layer_name": "water-network-utility-lines",
+            "layer_path": "apps\\atlas\\public\\demo-data\\geojson\\water-network-utility-lines.geojson",
+            "geometry_type": "LineString"
+          },
+          {
+            "validator_name": "invalid_crs",
+            "status": "completed",
+            "reason": null,
+            "layer_geometry_type": "LineString",
+            "expected_geometry_types": [],
+            "profile": "water_network_quick:crs",
+            "notes": null,
+            "family": "crs",
+            "layer_name": "water-network-utility-lines",
+            "layer_path": "apps\\atlas\\public\\demo-data\\geojson\\water-network-utility-lines.geojson",
+            "geometry_type": "LineString"
+          },
+          {
+            "validator_name": "coordinate_precision",
+            "status": "completed",
+            "reason": null,
+            "layer_geometry_type": "LineString",
+            "expected_geometry_types": [],
+            "profile": "water_network_quick:accuracy",
+            "notes": null,
+            "family": "accuracy",
+            "layer_name": "water-network-utility-lines",
+            "layer_path": "apps\\atlas\\public\\demo-data\\geojson\\water-network-utility-lines.geojson",
+            "geometry_type": "LineString"
+          },
+          {
+            "validator_name": "xy_tolerance",
+            "status": "completed",
+            "reason": null,
+            "layer_geometry_type": "LineString",
+            "expected_geometry_types": [],
+            "profile": "water_network_quick:accuracy",
+            "notes": null,
+            "family": "accuracy",
+            "layer_name": "water-network-utility-lines",
+            "layer_path": "apps\\atlas\\public\\demo-data\\geojson\\water-network-utility-lines.geojson",
+            "geometry_type": "LineString"
+          }
+        ],
+        "plugin_validators_attempted": [],
+        "plugin_validators_completed": [],
+        "partial_result": false,
+        "operator_next_steps": [
+          "Review the highest-volume issue first: line_dangle.",
+          "Enable a cache directory on repeated runs to reduce redundant validator work."
+        ],
+        "pack_summary": {
+          "pack": "water_network",
+          "schema": {
+            "strength": "weak",
+            "recognized_fields": [],
+            "missing_hints": [
+              "asset_id",
+              "diameter",
+              "material",
+              "status",
+              "role"
+            ],
+            "enabled_attribute_checks": [],
+            "disabled_attribute_checks": [
+              "asset_id uniqueness",
+              "diameter domain",
+              "material domain",
+              "status domain",
+              "endpoint role classification"
+            ],
+            "explanation": "Schema-aware checks were enabled only for recognized water-network fields. Missing fields reduce attribute coverage but do not block linework or connectivity QA."
+          },
+          "thresholds": {
+            "snap_tolerance": 50.0,
+            "near_miss_tolerance": 100.0,
+            "minimum_length": 0.1,
+            "minimum_angle_degrees": 12.5
+          },
+          "network_metrics": {
+            "segment_count": 60,
+            "multipart_segment_count": 0,
+            "junction_count": 1,
+            "terminal_endpoint_count": 105
+          },
+          "counts": {
+            "disconnected_endpoints": 59,
+            "isolated_segments": 46,
+            "near_miss_endpoints": 4,
+            "unsnapped_endpoints": 2,
+            "self_intersections": 0,
+            "short_segments": 51,
+            "sharp_cutbacks": 0,
+            "duplicate_geometries": 0,
+            "intersection_splits_needed": 0
+          },
+          "limitations": [
+            "Deterministic linework and schema QA only; no hydraulic simulation, demand modeling, or flow direction logic.",
+            "Connectivity findings depend on configured tolerances and recognized endpoint-role fields."
+          ]
         }
       },
       "hasCleanedLayer": false,
       "has_cleaned_layer": false,
       "cleanedLayerNote": "No cleaned layer is available for this demo.",
-      "cleaned_layer_note": "No cleaned layer is available for this demo."
+      "cleaned_layer_note": "No cleaned layer is available for this demo.",
+      "cleanedPreview": {
+        "available": false,
+        "meaningful": false,
+        "supportedIssueTypes": [],
+        "supported_issue_types": [],
+        "note": "No cleaned preview is available for this demo."
+      },
+      "cleaned_preview": {
+        "available": false,
+        "meaningful": false,
+        "supportedIssueTypes": [],
+        "supported_issue_types": [],
+        "note": "No cleaned preview is available for this demo."
+      }
     },
     {
       "id": "places-facilities",
@@ -657,12 +1219,26 @@
       "hasCleanedLayer": false,
       "has_cleaned_layer": false,
       "cleanedLayerNote": "No cleaned layer is available for this demo.",
-      "cleaned_layer_note": "No cleaned layer is available for this demo."
+      "cleaned_layer_note": "No cleaned layer is available for this demo.",
+      "cleanedPreview": {
+        "available": false,
+        "meaningful": false,
+        "supportedIssueTypes": [],
+        "supported_issue_types": [],
+        "note": "No cleaned preview is available for this demo."
+      },
+      "cleaned_preview": {
+        "available": false,
+        "meaningful": false,
+        "supportedIssueTypes": [],
+        "supported_issue_types": [],
+        "note": "No cleaned preview is available for this demo."
+      }
     }
   ],
   "stats": {
     "datasets": 6,
-    "checks": 9,
-    "issues": 149
+    "checks": 11,
+    "issues": 307
   }
 }

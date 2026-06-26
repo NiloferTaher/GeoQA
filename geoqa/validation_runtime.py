@@ -81,6 +81,7 @@ class ValidationPlanResult:
     validators_deferred: tuple[str, ...]
     partial_result: bool
     stop_reason: str | None = None
+    validator_coverage: tuple[dict[str, Any], ...] = ()
 
 
 @dataclass(slots=True)
@@ -89,6 +90,7 @@ class _ValidatorSpec:
     func: ValidatorCallable
     context: dict[str, Any]
     base_cost: int = 5
+    expected_geometry_types: tuple[str, ...] = ()
 
 
 class InMemoryValidationCache:
@@ -298,6 +300,51 @@ def _layer_complexity_metrics(layer: Any) -> dict[str, int]:
     return {"row_count": int(row_count), "total_vertices": int(total_vertices)}
 
 
+def _layer_geometry_types(layer: Any) -> tuple[str, ...]:
+    columns = getattr(layer, "columns", [])
+    if "geometry" not in columns:
+        return ()
+    geometry_types: set[str] = set()
+    try:
+        for geometry in layer["geometry"]:
+            if geometry is None or getattr(geometry, "is_empty", False):
+                continue
+            geometry_name = getattr(geometry, "geom_type", None)
+            if geometry_name:
+                geometry_types.add(str(geometry_name))
+    except Exception:
+        return ()
+    return tuple(sorted(geometry_types))
+
+
+def _geometry_types_compatible(actual: tuple[str, ...], expected: tuple[str, ...]) -> bool:
+    if not expected:
+        return True
+    if not actual:
+        return True
+    return bool(set(actual) & set(expected))
+
+
+def _coverage_row(
+    spec: _ValidatorSpec,
+    status: str,
+    *,
+    reason: str | None,
+    layer_geometry_types: tuple[str, ...],
+    profile: ValidationProfile | None,
+    notes: str | None = None,
+) -> dict[str, Any]:
+    return {
+        "validator_name": spec.name,
+        "status": status,
+        "reason": reason,
+        "layer_geometry_type": ", ".join(layer_geometry_types) if layer_geometry_types else "unknown",
+        "expected_geometry_types": list(spec.expected_geometry_types),
+        "profile": profile.name if profile is not None else None,
+        "notes": notes,
+    }
+
+
 def _context_signature(context: dict[str, Any]) -> dict[str, Any]:
     reference_layer = context.get("reference_layer")
     return {
@@ -477,7 +524,7 @@ def _run_missing_crs(layer: Any, **_: Any) -> list[ValidationIssue]:
     return missing_crs(layer)
 
 
-def _run_invalid_crs(layer: Any, *, expected_crs: Any = "EPSG:4326", **_: Any) -> list[ValidationIssue]:
+def _run_invalid_crs(layer: Any, *, expected_crs: Any = None, **_: Any) -> list[ValidationIssue]:
     return invalid_crs(layer, expected_crs)
 
 
@@ -581,9 +628,10 @@ def _run_suspicious_near_miss_endpoints(
     allowed_terminal_values: set[str] | None = None,
     **_: Any,
 ) -> list[ValidationIssue]:
+    resolved_tolerance = 0.0 if snap_tolerance is None else snap_tolerance
     return suspicious_near_miss_endpoints(
         layer,
-        snap_tolerance=snap_tolerance,
+        snap_tolerance=resolved_tolerance,
         role_field=role_field,
         allowed_terminal_values=allowed_terminal_values,
     )
@@ -597,9 +645,10 @@ def _run_unsnapped_endpoints_within_tolerance(
     allowed_terminal_values: set[str] | None = None,
     **_: Any,
 ) -> list[ValidationIssue]:
+    resolved_tolerance = 0.0 if snap_tolerance is None else snap_tolerance
     return unsnapped_endpoints_within_tolerance(
         layer,
-        snap_tolerance=snap_tolerance,
+        snap_tolerance=resolved_tolerance,
         role_field=role_field,
         allowed_terminal_values=allowed_terminal_values,
     )
@@ -636,14 +685,22 @@ def _builtin_specs(dataset_type: str, context: dict[str, Any]) -> list[_Validato
                 _run_below_minimum_feature_length,
                 {"min_length": context.get("min_length")},
                 base_cost=2,
+                expected_geometry_types=("LineString", "MultiLineString"),
             ),
             _ValidatorSpec(
                 "sharp_angle_cutback",
                 _run_sharp_angle_cutback,
                 {"min_angle_degrees": context.get("min_angle_degrees")},
                 base_cost=3,
+                expected_geometry_types=("LineString", "MultiLineString"),
             ),
-            _ValidatorSpec("self_intersection", _run_self_intersection, {}, base_cost=4),
+            _ValidatorSpec(
+                "self_intersection",
+                _run_self_intersection,
+                {},
+                base_cost=4,
+                expected_geometry_types=("LineString", "MultiLineString", "Polygon", "MultiPolygon"),
+            ),
         ],
         "attributes": [
             _ValidatorSpec("required_nulls", _run_required_nulls, {"required_fields": context.get("required_fields")}, base_cost=1),
@@ -695,10 +752,34 @@ def _builtin_specs(dataset_type: str, context: dict[str, Any]) -> list[_Validato
             _ValidatorSpec("non_rfc7946_geojson", _run_non_rfc7946_geojson, {"geojson_input": context.get("geojson_input")}, base_cost=1),
         ],
         "topology": [
-            _ValidatorSpec("polygon_overlap_same_layer", _run_polygon_overlap_same_layer, {}, base_cost=8),
-            _ValidatorSpec("polygon_gap_same_layer", _run_polygon_gap_same_layer, {}, base_cost=9),
-            _ValidatorSpec("feature_within_feature", _run_feature_within_feature, {}, base_cost=7),
-            _ValidatorSpec("line_intersection_same_layer", _run_line_intersection_same_layer, {}, base_cost=7),
+            _ValidatorSpec(
+                "polygon_overlap_same_layer",
+                _run_polygon_overlap_same_layer,
+                {},
+                base_cost=8,
+                expected_geometry_types=("Polygon", "MultiPolygon"),
+            ),
+            _ValidatorSpec(
+                "polygon_gap_same_layer",
+                _run_polygon_gap_same_layer,
+                {},
+                base_cost=9,
+                expected_geometry_types=("Polygon", "MultiPolygon"),
+            ),
+            _ValidatorSpec(
+                "feature_within_feature",
+                _run_feature_within_feature,
+                {},
+                base_cost=7,
+                expected_geometry_types=("Polygon", "MultiPolygon"),
+            ),
+            _ValidatorSpec(
+                "line_intersection_same_layer",
+                _run_line_intersection_same_layer,
+                {},
+                base_cost=7,
+                expected_geometry_types=("LineString", "MultiLineString"),
+            ),
             _ValidatorSpec(
                 "line_dangle",
                 _run_line_dangle,
@@ -707,14 +788,22 @@ def _builtin_specs(dataset_type: str, context: dict[str, Any]) -> list[_Validato
                     "allowed_endpoint_values": context.get("allowed_endpoint_values"),
                 },
                 base_cost=3,
+                expected_geometry_types=("LineString", "MultiLineString"),
             ),
             _ValidatorSpec("duplicate_geometry_same_layer", _run_duplicate_geometry_same_layer, {}, base_cost=4),
-            _ValidatorSpec("feature_not_split_at_intersection", _run_feature_not_split_at_intersection, {}, base_cost=7),
+            _ValidatorSpec(
+                "feature_not_split_at_intersection",
+                _run_feature_not_split_at_intersection,
+                {},
+                base_cost=7,
+                expected_geometry_types=("LineString", "MultiLineString"),
+            ),
             _ValidatorSpec(
                 "isolated_network_segment",
                 _run_isolated_network_segment,
                 {"role_field": context.get("role_field"), "allowed_terminal_values": context.get("allowed_terminal_values")},
                 base_cost=3,
+                expected_geometry_types=("LineString", "MultiLineString"),
             ),
             _ValidatorSpec(
                 "suspicious_near_miss_endpoints",
@@ -725,6 +814,7 @@ def _builtin_specs(dataset_type: str, context: dict[str, Any]) -> list[_Validato
                     "allowed_terminal_values": context.get("allowed_terminal_values"),
                 },
                 base_cost=5,
+                expected_geometry_types=("LineString", "MultiLineString"),
             ),
             _ValidatorSpec(
                 "unsnapped_endpoints_within_tolerance",
@@ -735,12 +825,14 @@ def _builtin_specs(dataset_type: str, context: dict[str, Any]) -> list[_Validato
                     "allowed_terminal_values": context.get("allowed_terminal_values"),
                 },
                 base_cost=5,
+                expected_geometry_types=("LineString", "MultiLineString"),
             ),
             _ValidatorSpec(
                 "boundary_mismatch_against_reference",
                 _run_boundary_mismatch_against_reference,
                 {"reference_layer": context.get("reference_layer")},
                 base_cost=8,
+                expected_geometry_types=("Polygon", "MultiPolygon"),
             ),
         ],
     }
@@ -814,7 +906,15 @@ def _apply_profile(
         if normalized_name in disabled:
             continue
         overrides = profile.validator_options.get(spec.name) or profile.validator_options.get(normalized_name) or {}
-        filtered.append(_ValidatorSpec(spec.name, spec.func, {**spec.context, **overrides}))
+        filtered.append(
+            _ValidatorSpec(
+                spec.name,
+                spec.func,
+                {**spec.context, **overrides},
+                base_cost=spec.base_cost,
+                expected_geometry_types=spec.expected_geometry_types,
+            )
+        )
     return filtered
 
 
@@ -823,7 +923,7 @@ def execute_validation_plan(
     dataset_type: str,
     *,
     metadata: dict[str, Any] | None = None,
-    expected_crs: Any = "EPSG:4326",
+    expected_crs: Any = None,
     reference_layer: Any | None = None,
     required_fields: list[str] | None = None,
     unique_field: str | None = None,
@@ -865,6 +965,7 @@ def execute_validation_plan(
     }
     resolved_profile = get_validation_profile(profile)
     layer_metrics = _layer_complexity_metrics(layer)
+    layer_geometry_types = _layer_geometry_types(layer)
     specs = _apply_profile(
         _builtin_specs(normalized_dataset_type, context) + _custom_specs(normalized_dataset_type, context),
         resolved_profile,
@@ -881,6 +982,7 @@ def execute_validation_plan(
     issues: list[ValidationIssue] = []
     validators_attempted: list[str] = []
     validators_completed: list[str] = []
+    validator_coverage: list[dict[str, Any]] = []
     pending_parallel: list[tuple[int, _ValidatorSpec, str | None]] = []
     started_at = time.perf_counter()
     partial_result = False
@@ -919,6 +1021,30 @@ def execute_validation_plan(
             )
 
     for index, spec in enumerate(specs, start=1):
+        if not _geometry_types_compatible(layer_geometry_types, spec.expected_geometry_types):
+            validator_coverage.append(
+                _coverage_row(
+                    spec,
+                    "skipped",
+                    reason="incompatible_geometry_type",
+                    layer_geometry_types=layer_geometry_types,
+                    profile=resolved_profile,
+                )
+            )
+            if progress_callback is not None:
+                progress_callback(
+                    ValidationProgressEvent(
+                        dataset_type=normalized_dataset_type,
+                        validator_name=spec.name,
+                        status="skipped",
+                        index=index,
+                        total=total,
+                        issue_count=0,
+                        message="incompatible_geometry_type",
+                    )
+                )
+            continue
+
         stop_reason = should_stop_early()
         if stop_reason is not None:
             partial_result = True
@@ -957,6 +1083,16 @@ def execute_validation_plan(
         if cached_result is not None:
             issues.extend(cached_result)
             validators_completed.append(spec.name)
+            validator_coverage.append(
+                _coverage_row(
+                    spec,
+                    "completed",
+                    reason=None,
+                    layer_geometry_types=layer_geometry_types,
+                    profile=resolved_profile,
+                    notes="cache_hit",
+                )
+            )
             emit_completed(index, spec, cached_result, cache_hit=True)
             stop_reason = should_stop_early()
             if stop_reason is not None:
@@ -979,6 +1115,15 @@ def execute_validation_plan(
             cache.set(cache_key, validator_result)
         issues.extend(validator_result)
         validators_completed.append(spec.name)
+        validator_coverage.append(
+            _coverage_row(
+                spec,
+                "completed",
+                reason=None,
+                layer_geometry_types=layer_geometry_types,
+                profile=resolved_profile,
+            )
+        )
         emit_completed(index, spec, validator_result, cache_hit=False)
         stop_reason = should_stop_early()
         if stop_reason is not None:
@@ -998,6 +1143,15 @@ def execute_validation_plan(
                 if cache is not None and cache_key is not None:
                     cache.set(cache_key, validator_result)
                 ordered_results[index] = (spec, validator_result, cache_key)
+                validator_coverage.append(
+                    _coverage_row(
+                        spec,
+                        "completed",
+                        reason=None,
+                        layer_geometry_types=layer_geometry_types,
+                        profile=resolved_profile,
+                    )
+                )
                 emit_completed(index, spec, validator_result, cache_hit=False)
 
         for index in sorted(ordered_results):
@@ -1008,7 +1162,22 @@ def execute_validation_plan(
     if stop_reason is None and partial_result:
         stop_reason = "partial_execution"
 
-    deferred = [spec.name for spec in specs if spec.name not in validators_completed]
+    skipped_names = {str(row["validator_name"]) for row in validator_coverage if row.get("status") == "skipped"}
+    deferred = [spec.name for spec in specs if spec.name not in validators_completed and spec.name not in skipped_names]
+    for spec in specs:
+        if spec.name in validators_completed:
+            continue
+        if any(row["validator_name"] == spec.name and row["status"] == "skipped" for row in validator_coverage):
+            continue
+        validator_coverage.append(
+            _coverage_row(
+                spec,
+                "deferred",
+                reason=stop_reason or "not_run",
+                layer_geometry_types=layer_geometry_types,
+                profile=resolved_profile,
+            )
+        )
     result = ValidationPlanResult(
         issues=issues,
         validators_attempted=tuple(validators_attempted),
@@ -1016,6 +1185,7 @@ def execute_validation_plan(
         validators_deferred=tuple(deferred),
         partial_result=partial_result,
         stop_reason=stop_reason,
+        validator_coverage=tuple(validator_coverage),
     )
     if return_result:
         return result

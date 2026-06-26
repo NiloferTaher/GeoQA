@@ -1,9 +1,13 @@
+import { lazy, Suspense } from "react"
 import { NavLink, Route, Routes } from "react-router-dom"
 import { ExternalLink, Map, PlayCircle } from "lucide-react"
-import DatasetGallery from "./pages/DatasetGallery"
-import DatasetWorkspace from "./pages/DatasetWorkspace"
-import LandingPage from "./pages/LandingPage"
-import RunQaPage from "./pages/RunQaPage"
+import AppFooter from "./components/AppFooter"
+import LoadingState from "./components/LoadingState"
+
+const LandingPage = lazy(() => import("./pages/LandingPage"))
+const DatasetGallery = lazy(() => import("./pages/DatasetGallery"))
+const DatasetWorkspace = lazy(() => import("./pages/DatasetWorkspace"))
+const RunQaPage = lazy(() => import("./pages/RunQaPage"))
 
 export default function App() {
   return (
@@ -25,16 +29,23 @@ export default function App() {
             <ExternalLink size={16} />
             GitHub
           </a>
+          <a href="https://ae.linkedin.com/in/nilofertaher" target="_blank" rel="noreferrer">
+            <ExternalLink size={16} />
+            LinkedIn
+          </a>
         </nav>
       </header>
       <main>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/datasets" element={<DatasetGallery />} />
-          <Route path="/datasets/:datasetId" element={<DatasetWorkspace />} />
-          <Route path="/run" element={<RunQaPage />} />
-        </Routes>
+        <Suspense fallback={<LoadingState label="Loading Atlas page" />}>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/datasets" element={<DatasetGallery />} />
+            <Route path="/datasets/:datasetId" element={<DatasetWorkspace />} />
+            <Route path="/run" element={<RunQaPage />} />
+          </Routes>
+        </Suspense>
       </main>
+      <AppFooter />
     </div>
   )
 }
