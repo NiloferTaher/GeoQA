@@ -6,6 +6,10 @@ It presents precomputed GeoQA reports through a polished dark interface with a l
 Atlas is not the validation engine.
 The GeoQA Python package and CLI remain responsible for validation logic, profiles, report generation, and conservative fixes.
 
+### Visual overview
+
+See the root README and [../../docs/assets/GeoQA_Atlas_preview.pdf](../../docs/assets/GeoQA_Atlas_preview.pdf) for screenshots and a walkthrough of Atlas features.
+
 ## Run Locally
 
 ```powershell

@@ -30,6 +30,9 @@
 - [x] Footer text is clean and not sticky
 - [x] Dataset pages are not sampled
 - [x] Run QA public demo limits verified
+- [ ] README includes Atlas screenshot
+- [ ] Visual assets are public-safe and compressed
+- [ ] No private filenames or local paths appear in screenshots/PDF
 
 ## Vercel
 

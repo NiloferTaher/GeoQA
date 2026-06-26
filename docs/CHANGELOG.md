@@ -8,6 +8,7 @@ For the full internal build history, design rationale, and implementation notes,
 ## Unreleased
 
 ### Added
+- Added public GeoQA Atlas screenshots and visual overview PDF to the repository documentation.
 - Added Apache License 2.0 project licensing and package metadata.
 - Added public GitHub and Vercel release checklist documentation.
 - Added a public Atlas footer with maintainer and copyright text.
