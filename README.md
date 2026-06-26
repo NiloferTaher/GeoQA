@@ -1,6 +1,8 @@
 # GeoQA - Deterministic Geospatial QA Engine
 
-GeoQA prepares geospatial datasets for AI by detecting, explaining, and fixing data quality issues.
+GeoQA finds, explains, and fixes geospatial data-quality issues before they break GIS, GeoAI, ML, analysis, publishing, or delivery workflows.
+
+GeoQA is the Python validation engine for deterministic geospatial QA.
 
 GeoQA can also load additive domain plugins for real-world operational rules. In the current repo, DMA-specific polygon QA logic from legacy operational scripts is available through the normal `geoqa.validate(...)` path without changing the core engine.
 
@@ -13,8 +15,8 @@ It prioritizes useful results over complete runs when necessary.
 
 ## GeoQA Atlas
 
-GeoQA Atlas is the public WebGIS demo layer for this engine.
-It lives in `apps/atlas` and shows GeoQA reports through a dark map-first interface with demo datasets, issue overlays, report downloads, and an upload workflow preview.
+GeoQA Atlas is the map-first WebGIS demo and review layer for this engine.
+It lives under `apps/atlas` and shows GeoQA reports through a dark interface with demo datasets, issue overlays, report downloads, and an upload workflow preview.
 
 Atlas does not replace the GeoQA internals.
 The deterministic CLI and Python package remain the source of validation logic, profiles, reports, and conservative fixes.
@@ -39,7 +41,7 @@ Atlas uses a centralized dark basemap config with no-key CARTO fallback tiles an
 The CPU temperature card is hidden in public mode and appears only when `VITE_ATLAS_SHOW_THERMAL=true` is set for local developer review.
 Current demo cards cover roads, zoning polygons, public administrative boundaries, public flood risk zones, OSM water and drainage lines, and places.
 Runtime errors are labeled operational in Atlas and cleaned layers appear only when real cleaned output exists.
-Screenshots can be added under `docs/assets/` after the Atlas preview is captured.
+TODO: Add Atlas screenshots under docs/assets after the deployed demo is captured.
 
 ### Deploy Atlas on Vercel
 
@@ -395,7 +397,7 @@ See:
 
 Current automated baseline:
 - `python -m unittest discover -s tests -p 'test_*.py'`
-- result: `OK` (`144` tests)
+- result: `OK` (`169` tests)
 
 ## Security
 
