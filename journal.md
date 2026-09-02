@@ -3860,3 +3860,31 @@ This journal records development history and verification outcomes. Private and 
 
 - GeoQA needs a clean, reproducible public GitHub and Vercel release path.
 - The project license should cover project code and docs without relabeling third-party public datasets.
+
+## 2026-09-02 WUC-2027 Evidence-First Corrections (Professor-Directed)
+
+### What changed
+
+- **Phase 0 — verified**: Branch wuc-2027 created from polish/update-atlas-preview-pdf, geoqa/validations/spectral.py (254 lines, NDVI/NDWI/NDMI/NIR) committed, 169?175 tests OK (6 new spectral tests). Commit 45a97d, ea4b0a4.
+- **Phase 1 — draft/evidence wording requires correction**: Title changed from Auditable GeoAI on Utility Hardware: A Local-First, Low-Resource Governance Platform Validated on 20 Public Datasets Without Cloud Dependency — Lessons from a 3.9-Year Solo GIS Department Build to Auditable Geospatial Quality Governance on Utility Hardware: A Local-First, Low-Resource Platform per instruction §1. Removed GeoAI from title (no committed AI/LLM execution demonstrated), removed Progressive AI Learning Loop claim, removed Peace Engineering as primary contribution. Abstract 297?267 words corrected: removed Validated on 20 Public Datasets, distinguished roader sandbox spans 20 public sources vs current WUC demonstration uses five smoke/proxy cases — not yet five executed public-dataset validations, described 745 as inventoried body (2025-11-12, env/cache excluded) with pointer to GIS-Department/scripts/python_script_inventory.txt, removed 4h?12min operational claim (now 
+ot yet verified), avoided alidated for same-machine baseline. Files updated: G:\My Drive\Nilofer-Docs\WUC\WUC-2027\Abstract\WUC-2027-Abstract.docx, docs/wuc-2027/WUC-2027-Abstract.docx, both PDFs and MD, word count re-verified with difflib <25% overlap vs 2026.
+- **Phase 2 — verified**: Registered 10 spectral catalog entries (
+dvi_out_of_range etc.) in geoqa/problem_registry.py with accuracy category, added 	ests/test_spectral.py (Tanager VR-5 delta 0.332 case), 175 tests OK. Spectral validator remains opt-in for vector datasets (no-op).
+- **Phase 3 — verified on local workstation; public five-dataset reproduction not yet established**: Ran 5 smoke/proxy cases via python -m geoqa validate --low-resource ? eports/wuc-2027/ds1.json 8,491B, ds2.json 8,552B, ds3.json 20,309B, ds4.json 17,036B, ds5-spectral.json 3,223B all execution_status full (summary.execution_status). Created eports/wuc-2027/REPRODUCIBILITY.md and docs/wuc-2027/SMOKE-VS-PUBLIC.md explicitly labeling smoke/proxy — not the five public WUC showcase datasets (Natural Earth roads 56,600, OSM HOT Oman waterways, zoning polygons, admin boundaries, flood/places). Broader sandbox 20-source claim documented as Supplementary -TGIS 20 URLs, not as 20 executed WUC validations.
+- **Phase 4 — scaffold only / not verified**: Created pps/wuc-atlas/README.md and stub WucStoryBeats.tsx (31 lines). Built verification file docs/wuc-2027/WUC-website-verification.md with 11-criteria checklist: 0/11 PASS, 1 partial — 
+pm run build not tested (no package.json in wuc-atlas), route not rendered, 5 tabs not mounted, provenance not wired, terminal not replaying wuc_run_log.csv, tables not from reports, map highlighting not wired, story panel not evidence-backed, no Vercel preview, no screenshots, no URL in REPRODUCIBILITY.md. Status reverted from Phase 4 completed to Phase 4 scaffold — not verified per instruction §3.
+- **Phase 5 — local/self verification only; second-machine verification pending**: 175 tests OK and wuc_run_log MATCH obtained on same workstation RTX 3060, Core Temp 14 sensors. Created docs/wuc-2027/SECOND-MACHINE-CHECKLIST.md with exact commands python -m unittest discover -s tests -p test_*.py, python scripts/wuc-2027/run_all.py, python scripts/wuc-2027/validate_csv_evidence.py for clean environment (GitHub Actions or fresh clone/venv). Timing fields documented as machine-dependent, not byte-identical. Tag 0.3.1-wuc-2027-verified exists locally but is **self-verified on development workstation**, not second-machine verified — must not be pushed as externally verified.
+
+### Why this change was made
+
+- Prior ALL PHASES COMPLETED — airtight conclusion was premature per evidence-first review. Phase 4 was scaffold, 5 smoke proxies were conflated with 5 public datasets, Validated on 20 and 4h?12min and GeoAI title lacked committed execution evidence, and 175 tests OK does not equal second-machine reproduction. This correction restores evidence-first ordering: evidence before claims, Todo completed ? verification.
+- Reviewer TGIS-Major.txt (Oct 21, 2026) critique ccurate ? ethical, methods short on details, style too long informs the same discipline for WUC — hence title and abstract corrections here.
+- Architectural Friction / Peace Engineering remains supporting context (Slides 1-8 true stories) but not the primary WUC contribution, per instruction §1.
+
+### Verification
+
+- python scripts/wuc-2027/run_all.py ? All 5 cases PASS — MATCH (updated to read summary.execution_status)
+- python scripts/wuc-2027/validate_csv_evidence.py ? All headline numbers MATCH (smoke headline: ds1 2 issues full, ds5 3 issues, 5 catalog entries)
+- python -m unittest discover -s tests -p test_*.py ? Ran 175 tests OK
+- WUC-website-verification.md ? 0/11 PASS, correctly labeled NOT VERIFIED
+
