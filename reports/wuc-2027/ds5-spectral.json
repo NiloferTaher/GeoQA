@@ -1,0 +1,81 @@
+{
+  "dataset": "synthetic-spectral-demo-Tanager-VR5",
+  "issues": [
+    {
+      "problem_name": "ndvi_temporal_spike",
+      "severity": "medium",
+      "description": "ndvi temporal spike |delta|=0.332 (0.252 -> -0.080) for feature 1 \u2014 cross-acquisition change exceeds 0.3.",
+      "solution_hint": "Treat cross-date TOA vs SR and seasonal differences as non-comparable (cf. Tanager VR-5 Level-3 2/6 negative result); add acquisition-date and product-level to provenance before comparing.",
+      "feature_id": 1,
+      "geometry": "POINT (1 1)",
+      "issue_id": "9d54a0697fc88448",
+      "validation_rule_version": "2026.03",
+      "validator_name": "ndvi_temporal_spike",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "medium",
+      "actionable": true,
+      "priority_score": 40,
+      "index": "ndvi",
+      "delta": 0.332,
+      "prev": 0.252,
+      "curr": -0.08
+    },
+    {
+      "problem_name": "ndwi_temporal_spike",
+      "severity": "medium",
+      "description": "ndwi temporal spike |delta|=0.300 (0.100 -> 0.400) for feature 1 \u2014 cross-acquisition change exceeds 0.3.",
+      "solution_hint": "Treat cross-date TOA vs SR and seasonal differences as non-comparable (cf. Tanager VR-5 Level-3 2/6 negative result); add acquisition-date and product-level to provenance before comparing.",
+      "feature_id": 1,
+      "geometry": "POINT (1 1)",
+      "issue_id": "cc1a67c8df3a2b62",
+      "validation_rule_version": "2026.03",
+      "validator_name": "ndwi_temporal_spike",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "medium",
+      "actionable": true,
+      "priority_score": 40,
+      "index": "ndwi",
+      "delta": 0.30000000000000004,
+      "prev": 0.1,
+      "curr": 0.4
+    },
+    {
+      "problem_name": "ndvi_temporal_spike",
+      "severity": "medium",
+      "description": "ndvi temporal spike |delta|=0.530 (-0.080 -> 0.450) for feature 2 \u2014 cross-acquisition change exceeds 0.3.",
+      "solution_hint": "Treat cross-date TOA vs SR and seasonal differences as non-comparable (cf. Tanager VR-5 Level-3 2/6 negative result); add acquisition-date and product-level to provenance before comparing.",
+      "feature_id": 2,
+      "geometry": "POINT (2 2)",
+      "issue_id": "b9f5a4e9e5006887",
+      "validation_rule_version": "2026.03",
+      "validator_name": "ndvi_temporal_spike",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "medium",
+      "actionable": true,
+      "priority_score": 40,
+      "index": "ndvi",
+      "delta": 0.53,
+      "prev": -0.08,
+      "curr": 0.45
+    }
+  ],
+  "provenance": "Tanager VR-5 NDVI 0.252 vs -0.080 spike test"
+}
