@@ -8,6 +8,65 @@
 
 This journal records development history and verification outcomes. Private and local datasets are described by role, geometry type, scale, and observed behavior rather than by source filenames, client names, or local filesystem paths.
 
+## 2026-09-04 Fix O(n²) endpoint validation scalability — Riyadh 147,590 waterways
+
+**Branch:** `wuc-2027`
+**Files changed:** `geoqa/validations/topology.py` (only core change; `reruns/` evidence updated)
+**Author:** Nilofer Taher — Independent Researcher; Doctoral Candidate, School of Business, Edgewood University — ORCID 0009-0006-5453-9652
+
+### Observation
+Riyadh `gis_osm_waterways_free_1.shp` — 147,590 LineString features, EPSG:4326, 63,412,260 bytes, SHA `6a14cf89e371096d1250faf06bef7721eadbe9a7dc8431a4cb7e4704121ef6cc` — verified (DBF==SHX==SHP, 0 null-geom, bounds 34.71,16.31,59.70,32.32) — failed to complete under `water_network` (rule 2026.03). Multiple foreground (>25 min) and background runs held flat ~796 MB with no report. Previous country layers (Amman 7,857; Cyprus 13,865) had completed, so Riyadh at ~10× scale exposed a scaling cliff, not a corrupt/invalid dataset.
+
+### Diagnosis
+Two topology validators — `suspicious_near_miss_endpoints` (`topology.py:625`, 100 m) and `unsnapped_endpoints_within_tolerance` (`topology.py:692`, 50 m) — used exhaustive O(n²) nested loops (`for left in items: for right in items[position+1:]`) with up to four pure-Python Haversine (`_endpoint_distance_meters`) calculations per pair. No spatial index. Riyadh → 10,891,330,255 pairs per validator (≈21.7B combined, ~87B distance calcs) → computationally intractable. Even Amman 7,857 (≈31M pairs) took >20 min CPU in the old baseline and had not finished Cyprus in the same wall-clock window. Sibling validators (`line_intersection_same_layer`, `feature_not_split_at_intersection`) already used `layer.sindex` via `_pairwise_rows_spatial` — these two did not.
+
+### Intervention
+Changed endpoint **candidate generation only**; exact Haversine remains the authoritative final distance test; tolerances unchanged (50 m snap, 100 m near-miss); deterministic; no new dependency; no chunking; unrelated validators unchanged.
+
+- Added `_meter_tolerance_to_degree_radius(layer, tolerance)` — converts meter tolerance to a safe-inclusive degree search radius derived from the dataset's maximum absolute latitude (longitude degrees-per-meter shrink with |lat|). Upper bound, 5% safety factor, fail-open to brute-force when latitude extent indeterminate. For non-geographic CRS, radius = tolerance×1.01 in source units.
+- Added `_endpoint_candidate_provider(layer, items, tolerance)` — builds a Shapely `STRtree` over 2×n endpoint `Point`s (one per feature endpoint in `items` order). Per left feature, queries each endpoint's degree box (endpoint ± radius) and collects `rightPos = ptPos//2 > leftPos` in `sorted` order, preserving brute-force positional order and `flagged_features`/`seen_pairs` dedup semantics. Falls back to `range(pos+1,n)` when `layer.sindex is None` (preserves `SimpleLayer` test fakes, no spatial index → exact O(n²)).
+- Refactored inner loops at `suspicious_near_miss_endpoints:749-756` and `unsnapped_endpoints_within_tolerance:818-825` from `items[position+1:]` to `nearby(position)` provider iteration.
+
+Existing finding semantics, severity/actionable, and deterministic behavior preserved.
+
+### Verification
+- **175 tests PASS** (`python -m pytest -q` — full suite, 53s).
+- **Synthetic equivalence (real GeoDataFrame sindex path):** 5 seeds × 400 scattered fars — new fast-path ≡ replicated brute-force reference on identical data for both validators — all PASS (near 1/1 snap 1/1 per seed).
+- **Real OSM subsample equivalence:** Amman/Cyprus n=500/2000 on real waterways geometry — near 136/495/115/938 and snap 17/145/16/38 — all PASS vs brute-force reference on identical subsamples.
+- **Multipart case retained:** `MultiLineString` fixture endpoint gap 55.6 m within 100 m correctly fires near-miss (was 0 before fixture correction from 0.0209° ~100.2 m to 0.0205° ~55.6 m; now validated).
+- **Candidate reduction (measured, Riyadh subsamples):** 10k: 49,995,000 → 9,768 (0.0195%); 25k: 312,487,500 → 23,866 (0.0076%); 50k: 1,249,975,000 → 43,514 (0.0035%); 100k: 4,999,950,000 → 67,040 (0.00134%); 147,590: 10,891,330,255 → **92,669 (0.00085%) near-miss** / **61,637 (0.00057%) snap** candidates.
+- **Riyadh full run completed** (previous pending → completed): load ~259 s; topology ~106 s (isolated near 101.3s snap 102.3s, combined ~203s validators); full `water_network` (topology+geometry+attributes+crs) completed with status `full`.
+- **Files updated:** `country_runs.json` now 12 entries (added `riyadh/gis_osm_waterways_free_1`), `RUN_MANIFEST.md` pending 🔶→completed ✅, `engineering_report.md` generated, `baseline_optimized.json` generated (Amman 2,241/406 in 6.2/5.7s, Cyprus 6,234/392 in 10.2/10.1s vs old intractable).
+
+### Result
+Riyadh `gis_osm_waterways_free_1.shp`:
+- source: `gis_osm_waterways_free_1.shp` (Geofabrik GCC-states `riyadh/saudi_osm`)
+- features: 147,590
+- CRS: EPSG:4326
+- source size: 63,412,260 bytes
+- SHA: `6a14cf89e371096d1250faf06bef7721eadbe9a7dc8431a4cb7e4704121ef6cc`
+- load: ~259 s
+- topology: ~106 s
+- full water_network validation: **completed** (status `full`, rule 2026.03)
+- total findings: **408,595**
+- actionable: 100% (408,595)
+- high: 238,325
+- medium: 170,270
+- Rule breakdown (topology+geometry union):
+  - below_min: 140,366
+  - dangle: 130,382
+  - isolated: 102,051
+  - near_miss: 29,884
+  - unsnapped: 4,412
+  - intersection: 738
+  - not_split: 738
+  - cutback: 20
+  - self: 4
+- **408,595 is the number of validation findings, NOT the number of erroneous waterways/features.** A single feature can contribute to multiple findings; counts are per-validator detections.
+
+### Lesson
+The Riyadh failure was an O(n²) endpoint-candidate bottleneck, not a data-quality or format limit. Replacing exhaustive endpoint-pair generation with spatially constrained candidate generation — while keeping the exact meter-based distance as the final gate and tolerances unchanged — preserved existing validation semantics and allowed the 147,590-feature waterways validation to complete. The fix demonstrates that the demonstrated scalability was for endpoint-candidate pruning on EPSG:4326 line data at this scale; it does not imply GeoQA now handles every spatial format, that all geospatial datasets are scalable, or that STRtree solves every scalability problem.
+
 ## 2026-06-26 GeoQA public privacy scrub
 
 - Added the journal privacy note.
@@ -3865,25 +3924,25 @@ This journal records development history and verification outcomes. Private and 
 
 ### What changed
 
-- **Phase 0 � verified**: Branch wuc-2027 created from polish/update-atlas-preview-pdf, geoqa/validations/spectral.py (254 lines, NDVI/NDWI/NDMI/NIR) committed, 169?175 tests OK (6 new spectral tests). Commit 45a97d, ea4b0a4.
-- **Phase 1 � draft/evidence wording requires correction**: Title changed from Auditable GeoAI on Utility Hardware: A Local-First, Low-Resource Governance Platform Validated on 20 Public Datasets Without Cloud Dependency � Lessons from a 3.9-Year Solo GIS Department Build to Auditable Geospatial Quality Governance on Utility Hardware: A Local-First, Low-Resource Platform per instruction �1. Removed GeoAI from title (no committed AI/LLM execution demonstrated), removed Progressive AI Learning Loop claim, removed Peace Engineering as primary contribution. Abstract 297?267 words corrected: removed Validated on 20 Public Datasets, distinguished roader sandbox spans 20 public sources vs current WUC demonstration uses five smoke/proxy cases � not yet five executed public-dataset validations, described 745 as inventoried body (2025-11-12, env/cache excluded) with pointer to GIS-Department/scripts/python_script_inventory.txt, removed 4h?12min operational claim (now 
+- **Phase 0 � verified**: Branch wuc-2027 created from polish/update-atlas-preview-pdf, geoqa/validations/spectral.py (254 lines, NDVI/NDWI/NDMI/NIR) committed, 169?175 tests OK (6 new spectral tests). Commit 45a97d, ea4b0a4.
+- **Phase 1 � draft/evidence wording requires correction**: Title changed from Auditable GeoAI on Utility Hardware: A Local-First, Low-Resource Governance Platform Validated on 20 Public Datasets Without Cloud Dependency � Lessons from a 3.9-Year Solo GIS Department Build to Auditable Geospatial Quality Governance on Utility Hardware: A Local-First, Low-Resource Platform per instruction �1. Removed GeoAI from title (no committed AI/LLM execution demonstrated), removed Progressive AI Learning Loop claim, removed Peace Engineering as primary contribution. Abstract 297?267 words corrected: removed Validated on 20 Public Datasets, distinguished roader sandbox spans 20 public sources vs current WUC demonstration uses five smoke/proxy cases � not yet five executed public-dataset validations, described 745 as inventoried body (2025-11-12, env/cache excluded) with pointer to GIS-Department/scripts/python_script_inventory.txt, removed 4h?12min operational claim (now 
 ot yet verified), avoided alidated for same-machine baseline. Files updated: G:\My Drive\Nilofer-Docs\WUC\WUC-2027\Abstract\WUC-2027-Abstract.docx, docs/wuc-2027/WUC-2027-Abstract.docx, both PDFs and MD, word count re-verified with difflib <25% overlap vs 2026.
-- **Phase 2 � verified**: Registered 10 spectral catalog entries (
+- **Phase 2 � verified**: Registered 10 spectral catalog entries (
 dvi_out_of_range etc.) in geoqa/problem_registry.py with accuracy category, added 	ests/test_spectral.py (Tanager VR-5 delta 0.332 case), 175 tests OK. Spectral validator remains opt-in for vector datasets (no-op).
-- **Phase 3 � verified on local workstation; public five-dataset reproduction not yet established**: Ran 5 smoke/proxy cases via python -m geoqa validate --low-resource ? eports/wuc-2027/ds1.json 8,491B, ds2.json 8,552B, ds3.json 20,309B, ds4.json 17,036B, ds5-spectral.json 3,223B all execution_status full (summary.execution_status). Created eports/wuc-2027/REPRODUCIBILITY.md and docs/wuc-2027/SMOKE-VS-PUBLIC.md explicitly labeling smoke/proxy � not the five public WUC showcase datasets (Natural Earth roads 56,600, OSM HOT Oman waterways, zoning polygons, admin boundaries, flood/places). Broader sandbox 20-source claim documented as Supplementary -TGIS 20 URLs, not as 20 executed WUC validations.
-- **Phase 4 � scaffold only / not verified**: Created pps/wuc-atlas/README.md and stub WucStoryBeats.tsx (31 lines). Built verification file docs/wuc-2027/WUC-website-verification.md with 11-criteria checklist: 0/11 PASS, 1 partial � 
-pm run build not tested (no package.json in wuc-atlas), route not rendered, 5 tabs not mounted, provenance not wired, terminal not replaying wuc_run_log.csv, tables not from reports, map highlighting not wired, story panel not evidence-backed, no Vercel preview, no screenshots, no URL in REPRODUCIBILITY.md. Status reverted from Phase 4 completed to Phase 4 scaffold � not verified per instruction �3.
-- **Phase 5 � local/self verification only; second-machine verification pending**: 175 tests OK and wuc_run_log MATCH obtained on same workstation RTX 3060, Core Temp 14 sensors. Created docs/wuc-2027/SECOND-MACHINE-CHECKLIST.md with exact commands python -m unittest discover -s tests -p test_*.py, python scripts/wuc-2027/run_all.py, python scripts/wuc-2027/validate_csv_evidence.py for clean environment (GitHub Actions or fresh clone/venv). Timing fields documented as machine-dependent, not byte-identical. Tag 0.3.1-wuc-2027-verified exists locally but is **self-verified on development workstation**, not second-machine verified � must not be pushed as externally verified.
+- **Phase 3 � verified on local workstation; public five-dataset reproduction not yet established**: Ran 5 smoke/proxy cases via python -m geoqa validate --low-resource ? eports/wuc-2027/ds1.json 8,491B, ds2.json 8,552B, ds3.json 20,309B, ds4.json 17,036B, ds5-spectral.json 3,223B all execution_status full (summary.execution_status). Created eports/wuc-2027/REPRODUCIBILITY.md and docs/wuc-2027/SMOKE-VS-PUBLIC.md explicitly labeling smoke/proxy � not the five public WUC showcase datasets (Natural Earth roads 56,600, OSM HOT Oman waterways, zoning polygons, admin boundaries, flood/places). Broader sandbox 20-source claim documented as Supplementary -TGIS 20 URLs, not as 20 executed WUC validations.
+- **Phase 4 � scaffold only / not verified**: Created pps/wuc-atlas/README.md and stub WucStoryBeats.tsx (31 lines). Built verification file docs/wuc-2027/WUC-website-verification.md with 11-criteria checklist: 0/11 PASS, 1 partial � 
+pm run build not tested (no package.json in wuc-atlas), route not rendered, 5 tabs not mounted, provenance not wired, terminal not replaying wuc_run_log.csv, tables not from reports, map highlighting not wired, story panel not evidence-backed, no Vercel preview, no screenshots, no URL in REPRODUCIBILITY.md. Status reverted from Phase 4 completed to Phase 4 scaffold � not verified per instruction �3.
+- **Phase 5 � local/self verification only; second-machine verification pending**: 175 tests OK and wuc_run_log MATCH obtained on same workstation RTX 3060, Core Temp 14 sensors. Created docs/wuc-2027/SECOND-MACHINE-CHECKLIST.md with exact commands python -m unittest discover -s tests -p test_*.py, python scripts/wuc-2027/run_all.py, python scripts/wuc-2027/validate_csv_evidence.py for clean environment (GitHub Actions or fresh clone/venv). Timing fields documented as machine-dependent, not byte-identical. Tag 0.3.1-wuc-2027-verified exists locally but is **self-verified on development workstation**, not second-machine verified � must not be pushed as externally verified.
 
 ### Why this change was made
 
-- Prior ALL PHASES COMPLETED � airtight conclusion was premature per evidence-first review. Phase 4 was scaffold, 5 smoke proxies were conflated with 5 public datasets, Validated on 20 and 4h?12min and GeoAI title lacked committed execution evidence, and 175 tests OK does not equal second-machine reproduction. This correction restores evidence-first ordering: evidence before claims, Todo completed ? verification.
-- Reviewer TGIS-Major.txt (Oct 21, 2026) critique ccurate ? ethical, methods short on details, style too long informs the same discipline for WUC � hence title and abstract corrections here.
-- Architectural Friction / Peace Engineering remains supporting context (Slides 1-8 true stories) but not the primary WUC contribution, per instruction �1.
+- Prior ALL PHASES COMPLETED � airtight conclusion was premature per evidence-first review. Phase 4 was scaffold, 5 smoke proxies were conflated with 5 public datasets, Validated on 20 and 4h?12min and GeoAI title lacked committed execution evidence, and 175 tests OK does not equal second-machine reproduction. This correction restores evidence-first ordering: evidence before claims, Todo completed ? verification.
+- Reviewer TGIS-Major.txt (Oct 21, 2026) critique ccurate ? ethical, methods short on details, style too long informs the same discipline for WUC � hence title and abstract corrections here.
+- Architectural Friction / Peace Engineering remains supporting context (Slides 1-8 true stories) but not the primary WUC contribution, per instruction �1.
 
 ### Verification
 
-- python scripts/wuc-2027/run_all.py ? All 5 cases PASS � MATCH (updated to read summary.execution_status)
+- python scripts/wuc-2027/run_all.py ? All 5 cases PASS � MATCH (updated to read summary.execution_status)
 - python scripts/wuc-2027/validate_csv_evidence.py ? All headline numbers MATCH (smoke headline: ds1 2 issues full, ds5 3 issues, 5 catalog entries)
 - python -m unittest discover -s tests -p test_*.py ? Ran 175 tests OK
 - WUC-website-verification.md ? 0/11 PASS, correctly labeled NOT VERIFIED

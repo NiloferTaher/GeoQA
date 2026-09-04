@@ -52,6 +52,117 @@ def _query_sindex_positions(sindex: Any, geometry: Any) -> set[int] | None:
     return None
 
 
+def _meter_tolerance_to_degree_radius(layer: Any, tolerance: float) -> float | None:
+    """Convert a meter tolerance into a safe-inclusive degree search radius.
+
+    Endpoint validators run on EPSG:4326 (degree) coordinates while the snapping
+    tolerances are expressed in meters. The degree distance that `tolerance`
+    meters can span depends on latitude (longitude degrees-per-meter shrink as
+    |latitude| grows), so the radius is derived from the dataset's maximum
+    absolute latitude. The returned radius is an upper bound, ensuring that any
+    endpoint pair actually within `tolerance` meters is also within the radius —
+    it may be generous, never exclusive. The exact distance function remains the
+    authoritative final test.
+
+    Returns None (fail-open to the brute-force path) when the latitude extent
+    cannot be determined or the tolerance is non-positive.
+    """
+    if tolerance <= 0:
+        return None
+
+    max_abs_lat: float | None = None
+    total_bounds = getattr(layer, "total_bounds", None)
+    if total_bounds is not None:
+        try:
+            max_abs_lat = max(abs(float(total_bounds[1])), abs(float(total_bounds[3])))
+        except Exception:
+            max_abs_lat = None
+
+    if max_abs_lat is None:
+        low, high = 90.0, -90.0
+        try:
+            for _, row in layer.iterrows():
+                bounds = _geometry_bounds(_geometry(row))
+                if bounds is not None:
+                    if bounds[1] < low:
+                        low = bounds[1]
+                    if bounds[3] > high:
+                        high = bounds[3]
+            max_abs_lat = max(abs(low), abs(high))
+        except Exception:
+            return None
+
+    if max_abs_lat > 90.0:
+        return None
+    cos_lat = math.cos(math.radians(min(max_abs_lat, 89.99)))
+    if cos_lat <= 0.0:
+        return None
+
+    meters_per_deg = 111320.0
+    radius_lat = tolerance / meters_per_deg
+    radius_lon = tolerance / (meters_per_deg * cos_lat)
+    return max(radius_lat, radius_lon) * 1.05
+
+
+def _endpoint_candidate_provider(layer: Any, items: list[Any], tolerance: float):
+    """Build a spatial candidate provider over endpoint items.
+
+    Returns ``provider(left_pos)`` yielding candidate right-positions whose
+    feature endpoints lie spatially near the left feature's endpoints (within
+    ``tolerance`` meters), in ascending order with ``right_pos > left_pos``.
+
+    The spatial index is used only to prune candidate pairs; the exact distance
+    function in the callers remains the authoritative final test, so output is
+    identical to the brute-force pass. When no spatial index or dependable
+    radius is available it falls back to the exact brute-force window order,
+    preserving behavior for layers without an index.
+    """
+    n = len(items)
+    if n == 0:
+        return lambda left_pos: iter(())
+
+    try:
+        from shapely.geometry import Point, box
+        from shapely.strtree import STRtree
+    except Exception:
+        return lambda left_pos: range(left_pos + 1, n)
+
+    if getattr(layer, "sindex", None) is None:
+        return lambda left_pos: range(left_pos + 1, n)
+
+    if _uses_geographic_distance(layer):
+        radius = _meter_tolerance_to_degree_radius(layer, tolerance)
+    else:
+        radius = float(tolerance) * 1.01 if float(tolerance) > 0 else None
+    if radius is None or radius <= 0:
+        return lambda left_pos: range(left_pos + 1, n)
+
+    points = []
+    for _pos, (_index, (_row, start, end)) in enumerate(items):
+        points.append(Point(start))
+        points.append(Point(end))
+    try:
+        tree = STRtree(points)
+    except Exception:
+        return lambda left_pos: range(left_pos + 1, n)
+
+    def provider(left_pos: int):
+        _left_index, (_left_row, left_start, left_end) = items[left_pos]
+        found: set[int] = set()
+        for ep in (left_start, left_end):
+            query_box = box(
+                ep[0] - radius, ep[1] - radius, ep[0] + radius, ep[1] + radius
+            )
+            for pt_pos in tree.query(query_box):
+                right_pos = int(pt_pos) // 2
+                if right_pos > left_pos:
+                    found.add(right_pos)
+        for right_pos in sorted(found):
+            yield right_pos
+
+    return provider
+
+
 def _linear_endpoint_pair(geometry: Any) -> tuple[tuple[float, float], tuple[float, float]] | None:
     if geometry is None:
         return None
@@ -638,13 +749,15 @@ def suspicious_near_miss_endpoints(
     flagged_features: set[Any] = set()
     issues: list[ValidationIssue] = []
     items = list(endpoint_rows.items())
+    nearby = _endpoint_candidate_provider(layer, items, float(snap_tolerance))
     for position, (left_index, (left_row, left_start, left_end)) in enumerate(items):
         left_role = _row_role_value(left_row, role_field)
         if left_role is not None and left_role in allowed:
             continue
         if left_index in flagged_features:
             continue
-        for right_index, (right_row, right_start, right_end) in items[position + 1 :]:
+        for right_pos in nearby(position):
+            right_index, (right_row, right_start, right_end) = items[right_pos]
             if right_index in flagged_features:
                 continue
             right_role = _row_role_value(right_row, role_field)
@@ -705,13 +818,15 @@ def unsnapped_endpoints_within_tolerance(
     flagged_features: set[Any] = set()
     issues: list[ValidationIssue] = []
     items = list(endpoint_rows.items())
+    nearby = _endpoint_candidate_provider(layer, items, float(snap_tolerance))
     for position, (left_index, (left_row, left_start, left_end)) in enumerate(items):
         left_role = _row_role_value(left_row, role_field)
         if left_role is not None and left_role in allowed:
             continue
         if left_index in flagged_features:
             continue
-        for right_index, (right_row, right_start, right_end) in items[position + 1 :]:
+        for right_pos in nearby(position):
+            right_index, (right_row, right_start, right_end) = items[right_pos]
             if right_index in flagged_features:
                 continue
             right_role = _row_role_value(right_row, role_field)
