@@ -8,6 +8,23 @@
 
 This journal records development history and verification outcomes. Private and local datasets are described by role, geometry type, scale, and observed behavior rather than by source filenames, client names, or local filesystem paths.
 
+## 2026-09-25 P0 repair: below_minimum_feature_length CRS units + generic_audit None-float crash
+
+**Files changed:** `geoqa/validations/geometry.py`, `geoqa/validation_runtime.py`, `tests/test_geometry_validation.py`, `tests/test_validation_runtime.py`
+**Trigger:** frozen hostile validation campaign — two P0 findings (F-01 units bug, F-02 deterministic crash). P1/P2 findings intentionally not addressed.
+
+### Observation
+- **F-01 (units bug):** `below_minimum_feature_length` compared raw shapely `geometry.length` (CRS units) against meter thresholds (`water_network` `min_length=0.1`). On EPSG:4326 every sub-0.1-degree segment was flagged: the clean 3×3 control grid produced 26 issues with 6 false `below_minimum_feature_length`; the identical grid in EPSG:32618 produced 0 — proof the check was unit-blind.
+- **F-02 (crash):** `_builtin_specs` passed `{"min_length": context.get("min_length")}` / `{"min_angle_degrees": context.get("min_angle_degrees")}` (both `None` under `generic_audit`, which enables the two validators without options). The validators call `float(min_length)`/`float(min_angle_degrees)` → `TypeError: float() ... not 'NoneType'` at the unguarded dispatch, aborting the whole run on any line layer (case A10 figure-eight).
+
+### Intervention
+- **P0-1:** `below_minimum_feature_length` now measures length in meters via the layer CRS: geodesic (pyproj Geod) for geographic CRSs; raw CRS-unit length × axis unit-conversion factor for projected CRSs. Missing/unparseable CRS → no below-minimum issues (CRS finding stays with `missing_crs`/`invalid_crs`). Threshold remains in meters; exact `<` comparison unchanged; no scoring changes.
+- **P0-2:** `_builtin_specs` omits `min_length` / `min_angle_degrees` when the profile context supplies none, so the runners' documented defaults apply (0.0 m / 15.0 degrees), matching how `coordinate_precision` already default-applies. No try/except around the dispatch, no suppression; explicit `water_network` thresholds round-trip unchanged.
+
+### Verification
+- 184 tests PASS (full `python -m unittest discover -s tests`), including 7 new CRS-aware length tests (projected meters, geodesic meters, strict boundary, cross-CRS metamorphic equivalence, missing/unparseable CRS, zero-length true positive, multi-part total) and 2 generic_audit line regressions (figure-eight completes and flags `self_intersection`; co-linear spike fires `sharp_angle_cutback` at the default).
+- Targeted hostile re-run (A–D, E01, F01–F03, G00–G50, H01, I01–I04, M01–M07, R01–R10): baseline P0 exposures resolved — B07 grid 26→20 (6 FPs removed), B03 8→6, M01–M07 all lose exactly their 6/12 FPs, C04 unchanged, A03 unchanged, A10 completes with `self_intersection`. R02/R03/R05/R08 remain load-failure adversarial cases exactly as in the frozen baseline (unrelated to P0). Full evidence in the P0 repair report.
+
 ## 2026-09-04 Fix O(n²) endpoint validation scalability — Riyadh 147,590 waterways
 
 **Branch:** `wuc-2027`

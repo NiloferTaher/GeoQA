@@ -674,6 +674,15 @@ def _run_boundary_mismatch_against_reference(
     )
 
 
+def _optional_context(context: dict[str, Any], *keys: str) -> dict[str, Any]:
+    """Copy context keys only when a usable value is supplied.
+
+    Validators whose options are absent (e.g. a profile enabling them without options)
+    then run at their declared defaults instead of receiving an explicit None.
+    """
+    return {key: context[key] for key in keys if context.get(key) is not None}
+
+
 def _builtin_specs(dataset_type: str, context: dict[str, Any]) -> list[_ValidatorSpec]:
     metadata = context.get("metadata")
     specs_by_type: dict[str, list[_ValidatorSpec]] = {
@@ -683,14 +692,14 @@ def _builtin_specs(dataset_type: str, context: dict[str, Any]) -> list[_Validato
             _ValidatorSpec(
                 "below_minimum_feature_length",
                 _run_below_minimum_feature_length,
-                {"min_length": context.get("min_length")},
+                _optional_context(context, "min_length"),
                 base_cost=2,
                 expected_geometry_types=("LineString", "MultiLineString"),
             ),
             _ValidatorSpec(
                 "sharp_angle_cutback",
                 _run_sharp_angle_cutback,
-                {"min_angle_degrees": context.get("min_angle_degrees")},
+                _optional_context(context, "min_angle_degrees"),
                 base_cost=3,
                 expected_geometry_types=("LineString", "MultiLineString"),
             ),

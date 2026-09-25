@@ -281,5 +281,36 @@ class TestValidationRuntime(unittest.TestCase):
         self.assertIn("informational_validator", result.validators_deferred)
 
 
+try:
+    from shapely.geometry import LineString
+except ImportError:  # pragma: no cover
+    LineString = None
+
+
+@unittest.skipIf(LineString is None, "Shapely required for generic_audit LineString regression tests.")
+class TestGenericAuditLineRegression(unittest.TestCase):
+    """generic_audit on line layers must run, not crash (hostile campaign P0-2 / F-02)."""
+
+    def setUp(self) -> None:
+        clear_custom_validators()
+        clear_validation_profiles()
+
+    def tearDown(self) -> None:
+        clear_custom_validators()
+        clear_validation_profiles()
+
+    def test_generic_audit_figure_eight_line_completes_and_flags_self_intersection(self) -> None:
+        layer = SimpleLayer([{"ID": 1, "geometry": LineString([(0, 0), (1, 1), (0, 1), (1, 0)])}])
+        issues = validate_layer(layer, "geometry", profile="generic_audit")
+        self.assertIn("self_intersection", {issue.problem_name for issue in issues})
+
+    def test_generic_audit_sharp_spike_line_uses_default_angle_threshold(self) -> None:
+        # A co-linear backtrack is a 0-degree turn; the default 15.0-degree threshold
+        # must fire instead of crashing on a None min_angle_degrees option.
+        layer = SimpleLayer([{"ID": 1, "geometry": LineString([(0, 0), (2, 0), (1, 0), (2, 0)])}])
+        issues = validate_layer(layer, "geometry", profile="generic_audit")
+        self.assertIn("sharp_angle_cutback", {issue.problem_name for issue in issues})
+
+
 if __name__ == "__main__":
     unittest.main()

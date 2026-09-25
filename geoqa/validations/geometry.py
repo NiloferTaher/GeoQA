@@ -121,6 +121,61 @@ def _geometry_length(geometry: Any) -> float:
     return total
 
 
+def _crs_length_mode(layer: Any) -> tuple[str, Any] | None:
+    """Return ('projected', meters_per_unit) or ('geographic', geod) for the layer CRS.
+
+    Returns None when the CRS is missing or cannot be interpreted as a length unit,
+    meaning meter values cannot be derived from raw geometry units.
+    """
+    crs = getattr(layer, "crs", None)
+    if crs is None:
+        return None
+    try:
+        from pyproj import CRS
+    except ImportError as exc:
+        raise RuntimeError(
+            "Below-minimum-length validation requires pyproj to interpret the layer CRS. "
+            "Install pyproj to use this validator."
+        ) from exc
+    try:
+        parsed = crs if isinstance(crs, CRS) else CRS.from_user_input(crs)
+    except Exception:
+        return None
+    try:
+        if parsed.is_geographic:
+            return ("geographic", parsed.get_geod())
+    except Exception:
+        return None
+    try:
+        if parsed.is_projected and parsed.axis_info:
+            factor = float(parsed.axis_info[0].unit_conversion_factor)
+            if factor > 0.0:
+                return ("projected", factor)
+    except Exception:
+        return None
+    return None
+
+
+def _geodesic_length(geometry: Any, geod) -> float:
+    total = 0.0
+    for coords in _iter_coordinate_sequences(geometry):
+        for start, end in zip(coords, coords[1:]):
+            try:
+                total += float(geod.inv(float(start[0]), float(start[1]), float(end[0]), float(end[1]))[2])
+            except Exception:
+                continue
+    return total
+
+
+def _feature_length_meters(geometry: Any, mode: tuple[str, Any]) -> float:
+    kind, value = mode
+    if kind == "projected":
+        return _geometry_length(geometry) * value
+    if kind == "geographic":
+        return _geodesic_length(geometry, value)
+    return 0.0
+
+
 def _interior_angles(coords: list[tuple[float, ...]]) -> Iterable[float]:
     for left, middle, right in zip(coords, coords[1:], coords[2:]):
         try:
@@ -138,7 +193,17 @@ def _interior_angles(coords: list[tuple[float, ...]]) -> Iterable[float]:
 
 
 def below_minimum_feature_length(layer: Any, *, min_length: float = 0.0) -> list[ValidationIssue]:
-    """Detect line-like features whose total length falls below a configured minimum."""
+    """Detect line-like features whose total length (in meters) falls below a configured minimum.
+
+    ``min_length`` is interpreted in meters. Lengths are measured in the layer's CRS:
+    geodesic over geographic (lat/lon) CRSs, and raw CRS-unit length scaled by the axis
+    unit conversion factor for projected CRSs. When the layer CRS is missing or cannot be
+    interpreted as a length unit, no below-minimum-length issues are reported (the CRS
+    finding is carried by the missing_crs / invalid_crs validators instead).
+    """
+    length_mode = _crs_length_mode(layer)
+    if length_mode is None:
+        return []
 
     def check(record: tuple[Any, Any]) -> ValidationIssue | None:
         index, row = record
@@ -146,7 +211,7 @@ def below_minimum_feature_length(layer: Any, *, min_length: float = 0.0) -> list
         geom_type = getattr(geometry, "geom_type", "")
         if geometry is None or geom_type not in {"LineString", "LinearRing", "MultiLineString"}:
             return None
-        if _geometry_length(geometry) < float(min_length):
+        if _feature_length_meters(geometry, length_mode) < float(min_length):
             return build_issue(
                 "below_minimum_feature_length",
                 row=row,
