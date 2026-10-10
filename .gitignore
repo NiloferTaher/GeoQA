@@ -71,4 +71,17 @@ apps/atlas/AGENTS.md
 docs/strategy_*.md
 docs/landscape_and_roadmap.md
 
+# Internal working documents. Not part of the published record: they record
+# planning state, local test ledgers against datasets that are deliberately
+# not published, and personal machine constraints.
+docs/future/
+docs/checklist.md
+docs/tests.md
+docs/local_data_tests.md
+docs/github_about.txt
+docs/project_schedule.xlsx
+docs/release_checklist.md
+docs/dma_plugin_analysis.md
+docs/solo_operator_guide.md
+
 # Genuinely local: caches, build output, and datasets too large to host.

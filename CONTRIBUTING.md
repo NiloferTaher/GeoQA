@@ -55,6 +55,7 @@ A new validator should include:
 If you add or materially change a public feature, update:
 - `README.md`
 - `docs/user_guide.md`
-- `docs/tests.md` if coverage changed
 - `docs/CHANGELOG.md`
-- `journal.md`
+- `docs/modules/` by re-running `python tools/generate_module_docs.py` if the
+  change touches a registered condition; the pages are generated and should not
+  be edited by hand

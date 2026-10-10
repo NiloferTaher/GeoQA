@@ -128,5 +128,4 @@ Use `streamlit run streamlit_app.py` only after:
 - you want a local inspection shell
 
 The app is not the core product surface.
-Future-facing design notes are kept under `docs/future/`.
-Use those for later architecture work, not for current shipped capability.
+For a browser front end to the same library, see `apps/atlas/`.

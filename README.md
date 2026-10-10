@@ -31,7 +31,7 @@ These are the rules the library holds itself to. They are what make a GeoQA
 report citable.
 
 **Named conditions, not generic warnings.** Every finding carries a
-`problem_name` from a registry of 252 conditions, each with a description, a
+`problem_name` from a registry of 253 conditions, each with a description, a
 repair hint, a severity, a confidence and an issue class. A report can be
 diffed, counted and audited because the vocabulary is fixed.
 
@@ -153,11 +153,43 @@ recorded baseline.
 
 ---
 
+## GeoQA Atlas
+
+The library is the product. **Atlas** is the interface to it: a browser front
+end for running a validation, reading the findings against the geometry that
+produced them, and exporting the result.
+
+Live: **[geo.vercel.app](https://geo.vercel.app)**
+
+Source lives in [`apps/atlas/`](apps/atlas/) and is a Vite + React + MapLibre
+front end. It talks to the same `geoqa` package the CLI does; there is no second
+implementation of any rule. Screenshots are in
+[`docs/assets/`](docs/assets/), and the product brief is in
+[`docs/geoqa_atlas_product_brief.md`](docs/geoqa_atlas_product_brief.md).
+
+```bash
+cd apps/atlas
+npm install
+npm run dev        # http://localhost:5173
+npm test           # demo limits and idle-safety checks
+npm run build      # production bundle
+```
+
+Basemaps use Esri's keyless endpoints. The previous CARTO endpoint began
+returning watermarked tiles and now requires an API key, so it is not usable
+for a public demo; `npm test` fails if a watermarking provider is reintroduced.
+
+The Atlas front end is published here but is not imported by the library, so
+the web stack is an optional extra (`pip install -e ".[app]"`) rather than a
+dependency of `geoqa` itself.
+
+---
+
 ## Package layout
 
 ```
 geoqa/                  the library
-  problem_registry.py   252 named conditions with severity, class and repair hints
+  problem_registry.py   253 named conditions with severity, class and repair hints
   validation_runtime.py dataset-type dispatch, profiles, limits, cost ordering
   validations/          one module per concern
   packs/                domain packs declaring which conditions apply where
@@ -168,7 +200,10 @@ geoqa/                  the library
   proj_env.py           PROJ database resolution
   ai_guard.py           disclosure screening
 geoai/                  the optional GeoAI layer
-tools/                  capability workbook generator
+apps/atlas/             the Atlas browser front end (not imported by the library)
+docs/modules/           one generated page per validation module
+docs/assets/            Atlas screenshots
+tools/                  capability workbook and module documentation generators
 scripts/                evidence suite runner
 tests/                  969 tests
 ```

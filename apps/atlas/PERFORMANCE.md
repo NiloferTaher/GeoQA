@@ -13,7 +13,7 @@ GeoQA Atlas must remain idle safe. Opening the app, landing page, gallery, or Ru
 7. Do not add CSS blur, glow, or animation to many map features.
 8. Do not remount Leaflet maps on unrelated state changes.
 9. Toggling layers should change visibility, not refetch or reparse data.
-10. Any future feature touching maps, uploads, or reports must include a performance note in `journal.md` and `docs/CHANGELOG.md`.
+10. Any future feature touching maps, uploads, or reports must include a performance note in `docs/CHANGELOG.md`.
 
 ## Current Idle Safe Shape
 

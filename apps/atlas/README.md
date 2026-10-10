@@ -58,7 +58,7 @@ They do not import Leaflet, mount maps, parse demo GeoJSON, parse report JSON, o
 Dataset detail pages lazy load only the selected dataset raw layer, report, and issue overlay.
 Cleaned GeoJSON waits until the cleaned layer toggle is available and requested.
 Run QA does not parse files, scan ZIP archives, call preview endpoints, poll thermal status, or run validation until the user selects a file or starts a run.
-Permanent rules for this contract live in `PERFORMANCE.md` and `AGENTS.md`.
+Permanent rules for this contract live in `PERFORMANCE.md`, which is enforced by `npm test`.
 
 ## Backend Note
 
