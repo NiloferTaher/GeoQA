@@ -38,8 +38,9 @@ hyperspectral = [
     "numpy",
     "h5py",
 ]
-# The local Streamlit front end is not published with the library, so the
-# web stack is optional. Install this to run it from a local checkout.
+# The Streamlit front end ships with the repository but is not part of the
+# library import graph, so the web stack stays optional. Install this to run
+# streamlit_app.py from a checkout.
 app = [
     "streamlit",
     "streamlit-folium",

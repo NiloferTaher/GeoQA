@@ -38,43 +38,16 @@ data/integration_results/
 data/public_samples/data_gov/
 data/public_samples/derived/
 data/public_samples/natural_earth/
-# Conference submission material - never publish
+# ---------------------------------------------------------------------------
+# Conference submission material - never publish.
+# WUC-2027 is an active submission; the pre-push hook also enforces this.
+# ---------------------------------------------------------------------------
 docs/wuc-2027/
 reports/wuc-2027/
 apps/wuc-atlas/
-streamlit_app.py
-docs/strategy_2026-10.md
-docs/geoqa_atlas_product_brief.md
-.vercelignore
-reruns/
-
-# ---------------------------------------------------------------------------
-# Working material, kept locally. Not part of the published library.
-# Untracked on purpose: remove with `git rm --cached`, do not delete.
-# ---------------------------------------------------------------------------
-.opencode/
-journal.md
-Marketing.md
-plan_of_action.md
-codex_prompt.md
-SKILLS.md
-AGENTS.md
-docs/strategy-*.md
-docs/landscape_and_roadmap.md
-docs/CHANGELOG.md
-docs/assets/
-data/integration_results/
-data/public_samples/natural_earth/
-data/public_samples/data_gov/
-data/public_samples/derived/
-docs/wuc-2027/
-reports/wuc-2027/
-apps/wuc-atlas/
-streamlit_app.py
-docs/strategy_2026-10.md
-docs/geoqa_atlas_product_brief.md
-.vercelignore
 reruns/
 api_key.txt
 *.env
 *.env.*
+
+# Genuinely local: caches, build output, and datasets too large to host.
