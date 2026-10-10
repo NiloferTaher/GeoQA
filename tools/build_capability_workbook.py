@@ -264,10 +264,39 @@ def _coverage_summary() -> list[dict[str, Any]]:
             "coverage_gap": "A detected cut is evidence of a nonconformance, not proof of an error. Majority assignment across the clip boundary is configurable by the caller rather than fixed, because the threshold is a client decision and the chosen value is reported alongside the result.",
         },
         {
+            "area": "Cloud-optimized GeoTIFF",
+            "status": "built",
+            "coverage": "4 conditions: cloud-optimized layout, missing or undersized overviews, tile size against the declared block size, and whether the format is marked as standing rather than transitional.",
+            "notes": "Layout only. It reads structure, not pixels; band content validation is the raster adapter's job.",
+        },
+        {
+            "area": "OSM data",
+            "status": "built",
+            "coverage": "5 conditions: licence and attribution declaration, version and timestamp metadata, and geometry emergent from unconnected ways rather than authored as features.",
+            "notes": "The point is that OSM geometry is assembled from relations at render time. A validator that assumes a closed polygon is testing the extractor's behaviour rather than the data's.",
+        },
+        {
+            "area": "Vertical datum",
+            "status": "built",
+            "coverage": "7 conditions: declared reference surface, depth sign convention, missing vertical component on data that requires one, compound CRS requirements, and unit reasoning on vertical attributes.",
+        },
+        {
+            "area": "Hardware feasibility",
+            "status": "built",
+            "coverage": "CPU temperature and throttling headroom, available memory against the estimated working set, free disk against the projected output, and GPU presence where a step needs one.",
+            "notes": "Reports whether this machine can carry out the operation before it is attempted, so a long run stops on evidence rather than on the operator noticing a hot laptop.",
+        },
+        {
+            "area": "Governance gates",
+            "status": "built",
+            "coverage": "Declared release gates that evaluate findings, record which issues triggered them, and hold for a named human decision. llm_involved is a class constant rather than a setting, so a gate cannot be constructed that claims not to consult a model while doing so.",
+            "notes": "Recall is scored against expected outcomes rather than remembered, so the hit rate is a number the library produces. Each property is covered by a test that fails if it stops being true.",
+        },
+        {
             "area": "Spatial chunking",
-            "status": "partial",
-            "coverage": "Chunking exists but is unsafe for global topology without halo buffering.",
-            "coverage_gap": "Naive chunking splits connectivity. Halo-buffered chunks required; whole-layer union checks may need a single global pass.",
+            "status": "not built",
+            "coverage": "No spatial chunking exists. The agent layer batches features by vertex weight to keep memory bounded; that is a batching strategy, not a spatial tiling, and it does not preserve topology across batches.",
+            "coverage_gap": "A tiled implementation must buffer each tile by a halo so a feature crossing a boundary is present on both sides, otherwise connectivity checks report false breaks at the seams. Whole-layer union and degree checks cannot be tiled at all and need a single global pass. Until both exist, any large-layer run must complete in one pass.",
         },
         {
             "area": "Conflict resolution",
