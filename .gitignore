@@ -50,4 +50,25 @@ api_key.txt
 *.env
 *.env.*
 
+# ---------------------------------------------------------------------------
+# Local working notes and agent configuration.
+#
+# Not part of the library, not part of the Atlas front end, and not part of
+# the published record. Kept on disk, untracked on purpose. Restore with
+# `git add -f`, remove again with `git rm --cached`. Do not delete.
+#
+# apps/atlas itself IS published, including its assets, its product brief
+# and its changelog. Only these paths are held back.
+# ---------------------------------------------------------------------------
+.opencode/
+journal.md
+Marketing.md
+plan_of_action.md
+codex_prompt.md
+SKILLS.md
+AGENTS.md
+apps/atlas/AGENTS.md
+docs/strategy_*.md
+docs/landscape_and_roadmap.md
+
 # Genuinely local: caches, build output, and datasets too large to host.
