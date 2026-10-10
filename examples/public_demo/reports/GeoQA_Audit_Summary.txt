@@ -1,0 +1,1 @@
+GeoQA reviewed 2 detected layer(s) in source_data and validated 2 layer(s): point_assets, line_network. GeoQA found 12 issue(s). Source layers were not modified. Validator coverage records show which checks completed or were skipped because the geometry type was not applicable.

@@ -1,0 +1,755 @@
+{
+  "validation_rule_version": "2026.03",
+  "issue_count": 8,
+  "summary": {
+    "validation_rule_version": "2026.03",
+    "issue_count": 8,
+    "total_issues": 8,
+    "actionable": 8,
+    "informational": 0,
+    "actionable_ratio": 1.0,
+    "by_problem": {
+      "feature_not_split_at_intersection": 2,
+      "isolated_network_segment": 2,
+      "line_dangle": 2,
+      "line_intersection_same_layer": 2
+    },
+    "problem_breakdown": [
+      {
+        "name": "feature_not_split_at_intersection",
+        "count": 2,
+        "percent": 25.0
+      },
+      {
+        "name": "isolated_network_segment",
+        "count": 2,
+        "percent": 25.0
+      },
+      {
+        "name": "line_dangle",
+        "count": 2,
+        "percent": 25.0
+      },
+      {
+        "name": "line_intersection_same_layer",
+        "count": 2,
+        "percent": 25.0
+      }
+    ],
+    "by_severity": {
+      "high": 6,
+      "medium": 2
+    },
+    "severity_distribution": [
+      {
+        "name": "high",
+        "count": 6,
+        "percent": 75.0
+      },
+      {
+        "name": "medium",
+        "count": 2,
+        "percent": 25.0
+      }
+    ],
+    "by_issue_class": {
+      "data_issue": 8
+    },
+    "by_validator": {
+      "feature_not_split_at_intersection": 2,
+      "isolated_network_segment": 2,
+      "line_dangle": 2,
+      "line_intersection_same_layer": 2
+    },
+    "by_iso_category": {
+      "Logical Consistency": 8
+    },
+    "by_root_cause": {
+      "topology": 8
+    },
+    "by_priority_band": {
+      "low": 8
+    },
+    "top_issues": [
+      {
+        "problem_name": "feature_not_split_at_intersection",
+        "count": 2,
+        "percent": 25.0
+      },
+      {
+        "problem_name": "isolated_network_segment",
+        "count": 2,
+        "percent": 25.0
+      },
+      {
+        "problem_name": "line_dangle",
+        "count": 2,
+        "percent": 25.0
+      },
+      {
+        "problem_name": "line_intersection_same_layer",
+        "count": 2,
+        "percent": 25.0
+      }
+    ],
+    "top_actionable": [
+      {
+        "problem_name": "feature_not_split_at_intersection",
+        "feature_id": 10,
+        "severity": "high",
+        "confidence": "high",
+        "priority_score": 8
+      },
+      {
+        "problem_name": "feature_not_split_at_intersection",
+        "feature_id": 11,
+        "severity": "high",
+        "confidence": "high",
+        "priority_score": 8
+      },
+      {
+        "problem_name": "isolated_network_segment",
+        "feature_id": 10,
+        "severity": "high",
+        "confidence": "medium",
+        "priority_score": 8
+      },
+      {
+        "problem_name": "isolated_network_segment",
+        "feature_id": 11,
+        "severity": "high",
+        "confidence": "medium",
+        "priority_score": 8
+      },
+      {
+        "problem_name": "line_intersection_same_layer",
+        "feature_id": 10,
+        "severity": "high",
+        "confidence": "high",
+        "priority_score": 8
+      }
+    ],
+    "suppressed_issue_count": 0,
+    "execution_status": "full",
+    "execution_reason": null,
+    "validators_attempted": [
+      "self_intersection",
+      "duplicate_vertex",
+      "below_minimum_feature_length",
+      "sharp_angle_cutback",
+      "null_geometry",
+      "isolated_network_segment",
+      "duplicate_geometry_same_layer",
+      "unsnapped_endpoints_within_tolerance",
+      "feature_not_split_at_intersection",
+      "line_intersection_same_layer",
+      "suspicious_near_miss_endpoints",
+      "line_dangle",
+      "required_nulls",
+      "diameter_domain",
+      "material_domain",
+      "status_domain",
+      "uniqueness",
+      "invalid_crs",
+      "missing_crs",
+      "xy_tolerance",
+      "coordinate_precision"
+    ],
+    "validators_completed": [
+      "self_intersection",
+      "duplicate_vertex",
+      "below_minimum_feature_length",
+      "sharp_angle_cutback",
+      "null_geometry",
+      "isolated_network_segment",
+      "duplicate_geometry_same_layer",
+      "unsnapped_endpoints_within_tolerance",
+      "feature_not_split_at_intersection",
+      "line_intersection_same_layer",
+      "suspicious_near_miss_endpoints",
+      "line_dangle",
+      "required_nulls",
+      "diameter_domain",
+      "material_domain",
+      "status_domain",
+      "uniqueness",
+      "invalid_crs",
+      "missing_crs",
+      "xy_tolerance",
+      "coordinate_precision"
+    ],
+    "validators_deferred": [],
+    "validator_coverage": [
+      {
+        "validator_name": "self_intersection",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "LineString",
+        "expected_geometry_types": [
+          "LineString",
+          "MultiLineString",
+          "Polygon",
+          "MultiPolygon"
+        ],
+        "profile": "water_network_quick:geometry",
+        "notes": null,
+        "family": "geometry",
+        "layer_name": "line_network",
+        "layer_path": "examples/public_demo/source_data/line_network.geojson",
+        "geometry_type": "LineString"
+      },
+      {
+        "validator_name": "duplicate_vertex",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "LineString",
+        "expected_geometry_types": [],
+        "profile": "water_network_quick:geometry",
+        "notes": null,
+        "family": "geometry",
+        "layer_name": "line_network",
+        "layer_path": "examples/public_demo/source_data/line_network.geojson",
+        "geometry_type": "LineString"
+      },
+      {
+        "validator_name": "below_minimum_feature_length",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "LineString",
+        "expected_geometry_types": [
+          "LineString",
+          "MultiLineString"
+        ],
+        "profile": "water_network_quick:geometry",
+        "notes": null,
+        "family": "geometry",
+        "layer_name": "line_network",
+        "layer_path": "examples/public_demo/source_data/line_network.geojson",
+        "geometry_type": "LineString"
+      },
+      {
+        "validator_name": "sharp_angle_cutback",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "LineString",
+        "expected_geometry_types": [
+          "LineString",
+          "MultiLineString"
+        ],
+        "profile": "water_network_quick:geometry",
+        "notes": null,
+        "family": "geometry",
+        "layer_name": "line_network",
+        "layer_path": "examples/public_demo/source_data/line_network.geojson",
+        "geometry_type": "LineString"
+      },
+      {
+        "validator_name": "null_geometry",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "LineString",
+        "expected_geometry_types": [],
+        "profile": "water_network_quick:geometry",
+        "notes": null,
+        "family": "geometry",
+        "layer_name": "line_network",
+        "layer_path": "examples/public_demo/source_data/line_network.geojson",
+        "geometry_type": "LineString"
+      },
+      {
+        "validator_name": "isolated_network_segment",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "LineString",
+        "expected_geometry_types": [
+          "LineString",
+          "MultiLineString"
+        ],
+        "profile": "water_network_quick:topology",
+        "notes": null,
+        "family": "topology",
+        "layer_name": "line_network",
+        "layer_path": "examples/public_demo/source_data/line_network.geojson",
+        "geometry_type": "LineString"
+      },
+      {
+        "validator_name": "duplicate_geometry_same_layer",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "LineString",
+        "expected_geometry_types": [],
+        "profile": "water_network_quick:topology",
+        "notes": null,
+        "family": "topology",
+        "layer_name": "line_network",
+        "layer_path": "examples/public_demo/source_data/line_network.geojson",
+        "geometry_type": "LineString"
+      },
+      {
+        "validator_name": "unsnapped_endpoints_within_tolerance",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "LineString",
+        "expected_geometry_types": [
+          "LineString",
+          "MultiLineString"
+        ],
+        "profile": "water_network_quick:topology",
+        "notes": null,
+        "family": "topology",
+        "layer_name": "line_network",
+        "layer_path": "examples/public_demo/source_data/line_network.geojson",
+        "geometry_type": "LineString"
+      },
+      {
+        "validator_name": "feature_not_split_at_intersection",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "LineString",
+        "expected_geometry_types": [
+          "LineString",
+          "MultiLineString"
+        ],
+        "profile": "water_network_quick:topology",
+        "notes": null,
+        "family": "topology",
+        "layer_name": "line_network",
+        "layer_path": "examples/public_demo/source_data/line_network.geojson",
+        "geometry_type": "LineString"
+      },
+      {
+        "validator_name": "line_intersection_same_layer",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "LineString",
+        "expected_geometry_types": [
+          "LineString",
+          "MultiLineString"
+        ],
+        "profile": "water_network_quick:topology",
+        "notes": null,
+        "family": "topology",
+        "layer_name": "line_network",
+        "layer_path": "examples/public_demo/source_data/line_network.geojson",
+        "geometry_type": "LineString"
+      },
+      {
+        "validator_name": "suspicious_near_miss_endpoints",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "LineString",
+        "expected_geometry_types": [
+          "LineString",
+          "MultiLineString"
+        ],
+        "profile": "water_network_quick:topology",
+        "notes": null,
+        "family": "topology",
+        "layer_name": "line_network",
+        "layer_path": "examples/public_demo/source_data/line_network.geojson",
+        "geometry_type": "LineString"
+      },
+      {
+        "validator_name": "line_dangle",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "LineString",
+        "expected_geometry_types": [
+          "LineString",
+          "MultiLineString"
+        ],
+        "profile": "water_network_quick:topology",
+        "notes": null,
+        "family": "topology",
+        "layer_name": "line_network",
+        "layer_path": "examples/public_demo/source_data/line_network.geojson",
+        "geometry_type": "LineString"
+      },
+      {
+        "validator_name": "required_nulls",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "LineString",
+        "expected_geometry_types": [],
+        "profile": "water_network_quick:attributes",
+        "notes": null,
+        "family": "attributes",
+        "layer_name": "line_network",
+        "layer_path": "examples/public_demo/source_data/line_network.geojson",
+        "geometry_type": "LineString"
+      },
+      {
+        "validator_name": "diameter_domain",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "LineString",
+        "expected_geometry_types": [],
+        "profile": "water_network_quick:attributes",
+        "notes": null,
+        "family": "attributes",
+        "layer_name": "line_network",
+        "layer_path": "examples/public_demo/source_data/line_network.geojson",
+        "geometry_type": "LineString"
+      },
+      {
+        "validator_name": "material_domain",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "LineString",
+        "expected_geometry_types": [],
+        "profile": "water_network_quick:attributes",
+        "notes": null,
+        "family": "attributes",
+        "layer_name": "line_network",
+        "layer_path": "examples/public_demo/source_data/line_network.geojson",
+        "geometry_type": "LineString"
+      },
+      {
+        "validator_name": "status_domain",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "LineString",
+        "expected_geometry_types": [],
+        "profile": "water_network_quick:attributes",
+        "notes": null,
+        "family": "attributes",
+        "layer_name": "line_network",
+        "layer_path": "examples/public_demo/source_data/line_network.geojson",
+        "geometry_type": "LineString"
+      },
+      {
+        "validator_name": "uniqueness",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "LineString",
+        "expected_geometry_types": [],
+        "profile": "water_network_quick:attributes",
+        "notes": null,
+        "family": "attributes",
+        "layer_name": "line_network",
+        "layer_path": "examples/public_demo/source_data/line_network.geojson",
+        "geometry_type": "LineString"
+      },
+      {
+        "validator_name": "invalid_crs",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "LineString",
+        "expected_geometry_types": [],
+        "profile": "water_network_quick:crs",
+        "notes": null,
+        "family": "crs",
+        "layer_name": "line_network",
+        "layer_path": "examples/public_demo/source_data/line_network.geojson",
+        "geometry_type": "LineString"
+      },
+      {
+        "validator_name": "missing_crs",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "LineString",
+        "expected_geometry_types": [],
+        "profile": "water_network_quick:crs",
+        "notes": null,
+        "family": "crs",
+        "layer_name": "line_network",
+        "layer_path": "examples/public_demo/source_data/line_network.geojson",
+        "geometry_type": "LineString"
+      },
+      {
+        "validator_name": "xy_tolerance",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "LineString",
+        "expected_geometry_types": [],
+        "profile": "water_network_quick:accuracy",
+        "notes": null,
+        "family": "accuracy",
+        "layer_name": "line_network",
+        "layer_path": "examples/public_demo/source_data/line_network.geojson",
+        "geometry_type": "LineString"
+      },
+      {
+        "validator_name": "coordinate_precision",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "LineString",
+        "expected_geometry_types": [],
+        "profile": "water_network_quick:accuracy",
+        "notes": null,
+        "family": "accuracy",
+        "layer_name": "line_network",
+        "layer_path": "examples/public_demo/source_data/line_network.geojson",
+        "geometry_type": "LineString"
+      }
+    ],
+    "plugin_validators_attempted": [],
+    "plugin_validators_completed": [],
+    "partial_result": false,
+    "operator_next_steps": [
+      "Review the highest-volume issue first: feature_not_split_at_intersection.",
+      "Enable a cache directory on repeated runs to reduce redundant validator work.",
+      "Low-resource mode favors actionable checks first; rerun without it if you need the fullest audit signal."
+    ],
+    "pack_summary": {
+      "pack": "water_network",
+      "schema": {
+        "strength": "weak",
+        "recognized_fields": [
+          "asset_id"
+        ],
+        "missing_hints": [
+          "diameter",
+          "material",
+          "status",
+          "role"
+        ],
+        "enabled_attribute_checks": [
+          "asset_id uniqueness"
+        ],
+        "disabled_attribute_checks": [
+          "diameter domain",
+          "material domain",
+          "status domain",
+          "endpoint role classification"
+        ],
+        "explanation": "Schema-aware checks were enabled only for recognized water-network fields. Missing fields reduce attribute coverage but do not block linework or connectivity QA."
+      },
+      "thresholds": {
+        "snap_tolerance": 0.05,
+        "near_miss_tolerance": 0.1,
+        "minimum_length": 0.1,
+        "minimum_angle_degrees": 12.5
+      },
+      "network_metrics": {
+        "segment_count": 2,
+        "multipart_segment_count": 0,
+        "junction_count": 0,
+        "terminal_endpoint_count": 4
+      },
+      "counts": {
+        "disconnected_endpoints": 2,
+        "isolated_segments": 2,
+        "near_miss_endpoints": 0,
+        "unsnapped_endpoints": 0,
+        "self_intersections": 0,
+        "short_segments": 0,
+        "sharp_cutbacks": 0,
+        "duplicate_geometries": 0,
+        "intersection_splits_needed": 2
+      },
+      "limitations": [
+        "Deterministic linework and schema QA only; no hydraulic simulation, demand modeling, or flow direction logic.",
+        "Connectivity findings depend on configured tolerances and recognized endpoint-role fields."
+      ]
+    },
+    "layer_inventory": {
+      "archive_name": "source_data",
+      "layer_id": "line_network.geojson",
+      "layer_path": "line_network.geojson",
+      "layer_name": "line_network",
+      "source_path": "examples/public_demo/source_data/line_network.geojson",
+      "ogr_layer": null,
+      "geometry_type": "LineString",
+      "feature_count": 2,
+      "source_crs": "EPSG:4326",
+      "bbox": "0.000000, 0.000000, 2.000000, 2.000000",
+      "attribute_fields": [
+        "ID",
+        "asset_id"
+      ],
+      "recommended_profile": "water_network_quick",
+      "profile_reason": "Line layer name matched network or pipe delivery terms.",
+      "validated_yes_no": "yes",
+      "validation_status": "full",
+      "issue_count": 8
+    },
+    "plain_english_summary": "GeoQA reviewed 2 detected layer(s) in source_data and validated 1 layer(s): line_network. GeoQA found 8 issue(s). Source layers were not modified. Validator coverage records show which checks completed or were skipped because the geometry type was not applicable."
+  },
+  "issues": [
+    {
+      "problem_name": "isolated_network_segment",
+      "severity": "high",
+      "description": "This line segment is isolated from the rest of the network at both endpoints.",
+      "solution_hint": "Review whether the segment should connect to nearby infrastructure, be merged, or be classified as a valid standalone feature.",
+      "feature_id": 10,
+      "geometry": "LINESTRING (0 0, 2 2)",
+      "issue_id": "16badabb8a47ce14",
+      "validation_rule_version": "2026.03",
+      "validator_name": "isolated_network_segment",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "topology",
+        "profile": "water_network_quick",
+        "family": "topology"
+      },
+      "iso_category": "Logical Consistency",
+      "confidence": "medium",
+      "actionable": true,
+      "priority_score": 8
+    },
+    {
+      "problem_name": "isolated_network_segment",
+      "severity": "high",
+      "description": "This line segment is isolated from the rest of the network at both endpoints.",
+      "solution_hint": "Review whether the segment should connect to nearby infrastructure, be merged, or be classified as a valid standalone feature.",
+      "feature_id": 11,
+      "geometry": "LINESTRING (0 2, 2 0)",
+      "issue_id": "a989e5a941ffb981",
+      "validation_rule_version": "2026.03",
+      "validator_name": "isolated_network_segment",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "topology",
+        "profile": "water_network_quick",
+        "family": "topology"
+      },
+      "iso_category": "Logical Consistency",
+      "confidence": "medium",
+      "actionable": true,
+      "priority_score": 8
+    },
+    {
+      "problem_name": "feature_not_split_at_intersection",
+      "severity": "high",
+      "description": "This line crosses another line at an interior point but is not split into a network junction.",
+      "solution_hint": "Split both features at the intersection or document why an interior crossing is valid in this network.",
+      "feature_id": 10,
+      "geometry": "LINESTRING (0 0, 2 2)",
+      "issue_id": "c5bfa662d32d69cd",
+      "validation_rule_version": "2026.03",
+      "validator_name": "feature_not_split_at_intersection",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "topology",
+        "profile": "water_network_quick",
+        "family": "topology"
+      },
+      "iso_category": "Logical Consistency",
+      "confidence": "high",
+      "actionable": true,
+      "priority_score": 8
+    },
+    {
+      "problem_name": "feature_not_split_at_intersection",
+      "severity": "high",
+      "description": "This line crosses another line at an interior point but is not split into a network junction.",
+      "solution_hint": "Split both features at the intersection or document why an interior crossing is valid in this network.",
+      "feature_id": 11,
+      "geometry": "LINESTRING (0 2, 2 0)",
+      "issue_id": "15875ff858a24a80",
+      "validation_rule_version": "2026.03",
+      "validator_name": "feature_not_split_at_intersection",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "topology",
+        "profile": "water_network_quick",
+        "family": "topology"
+      },
+      "iso_category": "Logical Consistency",
+      "confidence": "high",
+      "actionable": true,
+      "priority_score": 8
+    },
+    {
+      "problem_name": "line_intersection_same_layer",
+      "severity": "high",
+      "description": "This line intersects another feature in the same layer where a simple endpoint connection is expected.",
+      "solution_hint": "Split features at valid junctions or correct line placement so only allowed crossings remain.",
+      "feature_id": 10,
+      "geometry": "LINESTRING (0 0, 2 2)",
+      "issue_id": "54e7a7b75a7366ab",
+      "validation_rule_version": "2026.03",
+      "validator_name": "line_intersection_same_layer",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "topology",
+        "profile": "water_network_quick",
+        "family": "topology"
+      },
+      "iso_category": "Logical Consistency",
+      "confidence": "high",
+      "actionable": true,
+      "priority_score": 8
+    },
+    {
+      "problem_name": "line_intersection_same_layer",
+      "severity": "high",
+      "description": "This line intersects another feature in the same layer where a simple endpoint connection is expected.",
+      "solution_hint": "Split features at valid junctions or correct line placement so only allowed crossings remain.",
+      "feature_id": 11,
+      "geometry": "LINESTRING (0 2, 2 0)",
+      "issue_id": "41d07552229db299",
+      "validation_rule_version": "2026.03",
+      "validator_name": "line_intersection_same_layer",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "topology",
+        "profile": "water_network_quick",
+        "family": "topology"
+      },
+      "iso_category": "Logical Consistency",
+      "confidence": "high",
+      "actionable": true,
+      "priority_score": 8
+    },
+    {
+      "problem_name": "line_dangle",
+      "severity": "medium",
+      "description": "This line has a dangling endpoint that is not explained by the configured endpoint role rules.",
+      "solution_hint": "Review whether the endpoint should connect to the network, terminate at an approved service endpoint, or be excluded from the profile.",
+      "feature_id": 10,
+      "geometry": "LINESTRING (0 0, 2 2)",
+      "issue_id": "79586b31ba9afbc4",
+      "validation_rule_version": "2026.03",
+      "validator_name": "line_dangle",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "topology",
+        "profile": "water_network_quick",
+        "family": "topology"
+      },
+      "iso_category": "Logical Consistency",
+      "confidence": "medium",
+      "actionable": true,
+      "priority_score": 6
+    },
+    {
+      "problem_name": "line_dangle",
+      "severity": "medium",
+      "description": "This line has a dangling endpoint that is not explained by the configured endpoint role rules.",
+      "solution_hint": "Review whether the endpoint should connect to the network, terminate at an approved service endpoint, or be excluded from the profile.",
+      "feature_id": 11,
+      "geometry": "LINESTRING (0 2, 2 0)",
+      "issue_id": "a43ebb1ef8a192e7",
+      "validation_rule_version": "2026.03",
+      "validator_name": "line_dangle",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "topology",
+        "profile": "water_network_quick",
+        "family": "topology"
+      },
+      "iso_category": "Logical Consistency",
+      "confidence": "medium",
+      "actionable": true,
+      "priority_score": 6
+    }
+  ]
+}

@@ -1,0 +1,732 @@
+[
+  {
+    "problem_name": "null_geometry",
+    "description": "A feature has no valid geometry payload, so it cannot be drawn or spatially analyzed.",
+    "category": "geometry",
+    "example": "A record exists in the feature class but its shape is null.",
+    "source_name": "ArcGIS Pro Repair Geometry",
+    "source_link": "https://pro.arcgis.com/en/pro-app/latest/tool-reference/data-management/repair-geometry.htm",
+    "severity": "critical",
+    "repair_hint": "Inspect source records and recreate missing shapes; ArcGIS Repair Geometry can remove null geometries."
+  },
+  {
+    "problem_name": "short_segment",
+    "description": "A segment is shorter than the system tolerance and can collapse during processing or repair.",
+    "category": "geometry",
+    "example": "A tiny line stub created during editing shorter than the dataset tolerance.",
+    "source_name": "ArcGIS Pro Repair Geometry",
+    "source_link": "https://pro.arcgis.com/en/pro-app/latest/tool-reference/data-management/repair-geometry.htm",
+    "severity": "high",
+    "repair_hint": "Review the feature against tolerance settings and merge or redigitize segments that are shorter than the dataset tolerance."
+  },
+  {
+    "problem_name": "incorrect_ring_ordering",
+    "description": "Polygon rings are stored in the wrong orientation, which can invert shells and holes.",
+    "category": "geometry",
+    "example": "An exterior ring is clockwise when the storage model expects the opposite orientation.",
+    "source_name": "ArcGIS Pro Repair Geometry",
+    "source_link": "https://pro.arcgis.com/en/pro-app/latest/tool-reference/data-management/repair-geometry.htm",
+    "severity": "high",
+    "repair_hint": "Run geometry repair tools or rewrite polygons with a library such as Shapely or PostGIS to normalize shell and hole orientation."
+  },
+  {
+    "problem_name": "incorrect_segment_orientation",
+    "description": "A segment direction is inconsistent with adjacent geometry and breaks expected shape construction.",
+    "category": "geometry",
+    "example": "A polygon part contains a segment digitized in reverse relative to the ring.",
+    "source_name": "ArcGIS Pro Repair Geometry",
+    "source_link": "https://pro.arcgis.com/en/pro-app/latest/tool-reference/data-management/repair-geometry.htm",
+    "severity": "high",
+    "repair_hint": "Use geometry repair or rebuild the affected feature so segment direction matches the expected ring or line orientation."
+  },
+  {
+    "problem_name": "self_intersection",
+    "description": "A line or polygon crosses itself, producing invalid geometry or ambiguous interiors.",
+    "category": "geometry",
+    "example": "A bow-tie polygon where edges cross in the middle.",
+    "source_name": "ArcGIS Pro Repair Geometry",
+    "source_link": "https://pro.arcgis.com/en/pro-app/latest/tool-reference/data-management/repair-geometry.htm",
+    "severity": "high",
+    "repair_hint": "Use QGIS Fix Geometries, ArcGIS Repair Geometry, PostGIS ST_MakeValid, or buffer(0) for simple polygon cleanup."
+  },
+  {
+    "problem_name": "unclosed_ring",
+    "description": "A polygon ring is not properly closed, so the area boundary is incomplete.",
+    "category": "geometry",
+    "example": "The first and last vertex of a polygon ring do not match.",
+    "source_name": "ArcGIS Pro Repair Geometry",
+    "source_link": "https://pro.arcgis.com/en/pro-app/latest/tool-reference/data-management/repair-geometry.htm",
+    "severity": "high",
+    "repair_hint": "Use geometry repair tools to close rings or redigitize the polygon boundary so the first and last vertex match."
+  },
+  {
+    "problem_name": "empty_part",
+    "description": "A multipart feature contains an empty part that contributes no valid shape information.",
+    "category": "geometry",
+    "example": "A multipart polygon has one part with no coordinates.",
+    "source_name": "ArcGIS Pro Repair Geometry",
+    "source_link": "https://pro.arcgis.com/en/pro-app/latest/tool-reference/data-management/repair-geometry.htm",
+    "severity": "high",
+    "repair_hint": "Remove empty parts from multipart geometries with geometry repair tools or by rewriting multipart features."
+  },
+  {
+    "problem_name": "duplicate_vertex",
+    "description": "Two consecutive vertices are identical, creating redundant geometry and potential validity issues.",
+    "category": "geometry",
+    "example": "A line stores the same coordinate twice in a row.",
+    "source_name": "ArcGIS Pro Repair Geometry",
+    "source_link": "https://pro.arcgis.com/en/pro-app/latest/tool-reference/data-management/repair-geometry.htm",
+    "severity": "high",
+    "repair_hint": "Remove repeated points using QGIS, FME, or PostGIS ST_RemoveRepeatedPoints."
+  },
+  {
+    "problem_name": "discontinuous_part",
+    "description": "A part is disconnected in a way that violates the expected contiguous geometry structure.",
+    "category": "geometry",
+    "example": "A single polygon part is split into disconnected pieces.",
+    "source_name": "ArcGIS Pro Repair Geometry",
+    "source_link": "https://pro.arcgis.com/en/pro-app/latest/tool-reference/data-management/repair-geometry.htm",
+    "severity": "high",
+    "repair_hint": "Split disconnected shapes into separate parts or rebuild the multipart geometry to reflect actual contiguous components."
+  },
+  {
+    "problem_name": "empty_z_value",
+    "description": "Geometry is expected to carry Z values but some vertices have empty Z coordinates.",
+    "category": "geometry",
+    "example": "A 3D polyline contains vertices with missing elevation values.",
+    "source_name": "ArcGIS Pro Repair Geometry",
+    "source_link": "https://pro.arcgis.com/en/pro-app/latest/tool-reference/data-management/repair-geometry.htm",
+    "severity": "high",
+    "repair_hint": "Populate missing Z values from elevation data or convert the layer to 2D if Z is not required."
+  },
+  {
+    "problem_name": "bad_envelope",
+    "description": "The stored bounding box does not match the actual geometry extent.",
+    "category": "anomalies",
+    "example": "A polygon's extent excludes one of its vertices.",
+    "source_name": "ArcGIS Pro Repair Geometry",
+    "source_link": "https://pro.arcgis.com/en/pro-app/latest/tool-reference/data-management/repair-geometry.htm",
+    "severity": "high",
+    "repair_hint": "Recalculate feature extents by repairing geometry or rewriting the affected records."
+  },
+  {
+    "problem_name": "bad_dataset_extent",
+    "description": "The feature class extent is incorrect relative to the geometries it contains.",
+    "category": "anomalies",
+    "example": "Dataset extent remains stale after edits and no longer covers all features.",
+    "source_name": "ArcGIS Pro Repair Geometry",
+    "source_link": "https://pro.arcgis.com/en/pro-app/latest/tool-reference/data-management/repair-geometry.htm",
+    "severity": "high",
+    "repair_hint": "Refresh or recalculate the dataset extent after edits using geodatabase maintenance tools."
+  },
+  {
+    "problem_name": "contains_nan_or_infinity",
+    "description": "Coordinates contain NaN or infinite numeric values, making the geometry unusable.",
+    "category": "anomalies",
+    "example": "A point has an X value of NaN after a failed transformation.",
+    "source_name": "FME GeometryValidator Issues Table",
+    "source_link": "https://docs.safe.com/fme/html/FME-Form-Documentation/FME-Transformers/Transformers/geometryvalidator_issues.htm",
+    "severity": "critical",
+    "repair_hint": "Filter or repair invalid coordinates before writing the geometry back to disk or database storage."
+  },
+  {
+    "problem_name": "contains_null_geometry_parts",
+    "description": "A geometry container includes null parts mixed with valid parts.",
+    "category": "geometry",
+    "example": "A multipart feature has one populated part and one null part.",
+    "source_name": "FME GeometryValidator Issues Table",
+    "source_link": "https://docs.safe.com/fme/html/FME-Form-Documentation/FME-Transformers/Transformers/geometryvalidator_issues.htm",
+    "severity": "high",
+    "repair_hint": "Remove null subparts and rebuild the geometry collection with only valid parts."
+  },
+  {
+    "problem_name": "degenerate_or_corrupt_geometry",
+    "description": "Geometry is structurally corrupted or degenerate and cannot be interpreted reliably.",
+    "category": "geometry",
+    "example": "An arc has endpoints inconsistent with its parameter-defined shape.",
+    "source_name": "FME GeometryValidator Issues Table",
+    "source_link": "https://docs.safe.com/fme/html/FME-Form-Documentation/FME-Transformers/Transformers/geometryvalidator_issues.htm",
+    "severity": "critical",
+    "repair_hint": "Use ST_MakeValid, QGIS Fix Geometries, or vendor repair tools and inspect any geometry that still fails validity checks."
+  },
+  {
+    "problem_name": "polygon_with_less_than_3_nodes",
+    "description": "A polygon has too few vertices to represent a valid area.",
+    "category": "geometry",
+    "example": "A polygon ring contains only two distinct nodes.",
+    "source_name": "QGIS Geometry Checker Plugin",
+    "source_link": "https://docs.qgis.org/3.10/en/docs/user_manual/plugins/core_plugins/plugins_geometry_checker.html",
+    "severity": "high",
+    "repair_hint": "Redigitize the polygon or remove the invalid feature because a valid area needs at least three distinct vertices."
+  },
+  {
+    "problem_name": "self_contact",
+    "description": "Geometry touches itself at a location that creates an invalid or suspicious configuration.",
+    "category": "geometry",
+    "example": "A polygon ring pinches so that one boundary point touches another non-adjacent boundary point.",
+    "source_name": "QGIS Geometry Checker Plugin",
+    "source_link": "https://docs.qgis.org/3.10/en/docs/user_manual/plugins/core_plugins/plugins_geometry_checker.html",
+    "severity": "high",
+    "repair_hint": "Run geometry validation tools and simplify or redraw the pinched section to remove self-contact."
+  },
+  {
+    "problem_name": "duplicate_node",
+    "description": "Adjacent nodes are duplicated, adding redundant vertices and often signaling editing artifacts.",
+    "category": "geometry",
+    "example": "A polygon boundary repeats the same node twice in sequence.",
+    "source_name": "QGIS Geometry Checker Plugin",
+    "source_link": "https://docs.qgis.org/3.10/en/docs/user_manual/plugins/core_plugins/plugins_geometry_checker.html",
+    "severity": "high",
+    "repair_hint": "Remove duplicated adjacent nodes with geometry cleaning tools or coordinate simplification."
+  },
+  {
+    "problem_name": "duplicate_feature_geometry",
+    "description": "Two or more features have the same geometry, creating duplicate spatial records.",
+    "category": "topology",
+    "example": "Two parcel polygons occupy exactly the same footprint.",
+    "source_name": "QGIS Geometry Checker Plugin",
+    "source_link": "https://docs.qgis.org/3.10/en/docs/user_manual/plugins/core_plugins/plugins_geometry_checker.html",
+    "severity": "high",
+    "repair_hint": "Find duplicate shapes and keep the authoritative record while deleting or merging duplicates."
+  },
+  {
+    "problem_name": "feature_within_feature",
+    "description": "One feature is completely contained inside another feature of the same layer where that relationship is not expected.",
+    "category": "topology",
+    "example": "A polygon lies entirely inside another polygon in a layer that should be mutually exclusive.",
+    "source_name": "QGIS Geometry Checker Plugin",
+    "source_link": "https://docs.qgis.org/3.10/en/docs/user_manual/plugins/core_plugins/plugins_geometry_checker.html",
+    "severity": "high",
+    "repair_hint": "Review whether containment is legitimate; otherwise split, merge, or delete the nested feature."
+  },
+  {
+    "problem_name": "small_polygon_overlap",
+    "description": "Adjacent polygons overlap by a small area, often due to snapping or editing errors.",
+    "category": "topology",
+    "example": "Two land-use polygons overlap by a narrow sliver.",
+    "source_name": "QGIS Geometry Checker Plugin",
+    "source_link": "https://docs.qgis.org/3.10/en/docs/user_manual/plugins/core_plugins/plugins_geometry_checker.html",
+    "severity": "high",
+    "repair_hint": "Use topology fixes, snapping, or edge matching to eliminate overlap slivers between adjacent polygons."
+  },
+  {
+    "problem_name": "small_polygon_gap",
+    "description": "A narrow unintended gap appears between polygons that should share boundaries.",
+    "category": "topology",
+    "example": "A tiny void exists between neighboring administrative polygons.",
+    "source_name": "QGIS Geometry Checker Plugin",
+    "source_link": "https://docs.qgis.org/3.10/en/docs/user_manual/plugins/core_plugins/plugins_geometry_checker.html",
+    "severity": "high",
+    "repair_hint": "Snap shared edges or use topology validation tools to close narrow gaps."
+  },
+  {
+    "problem_name": "point_not_covered_by_line",
+    "description": "A point that should coincide with a line is not located on any line feature.",
+    "category": "spatial_logic",
+    "example": "A road sign point is offset from the road centerline.",
+    "source_name": "QGIS Topology Checker Plugin",
+    "source_link": "https://docs.qgis.org/3.44/en/docs/user_manual/plugins/core_plugins/plugins_topology_checker.html",
+    "severity": "high",
+    "repair_hint": "Snap the point to the correct line or correct the point placement using a reference layer."
+  },
+  {
+    "problem_name": "point_not_inside_polygon",
+    "description": "A point expected to fall inside a polygon lies outside the target area.",
+    "category": "spatial_logic",
+    "example": "An address point falls outside its parcel polygon.",
+    "source_name": "QGIS Topology Checker Plugin",
+    "source_link": "https://docs.qgis.org/3.44/en/docs/user_manual/plugins/core_plugins/plugins_topology_checker.html",
+    "severity": "high",
+    "repair_hint": "Move the point into the correct polygon or repair the polygon boundary if the point placement is already trusted."
+  },
+  {
+    "problem_name": "line_intersection_same_layer",
+    "description": "Lines in the same layer cross where only endpoint connections are allowed.",
+    "category": "topology",
+    "example": "Contour lines cross each other.",
+    "source_name": "QGIS Topology Checker Plugin",
+    "source_link": "https://docs.qgis.org/3.44/en/docs/user_manual/plugins/core_plugins/plugins_topology_checker.html",
+    "severity": "high",
+    "repair_hint": "Split features at valid junctions or correct line placement so only allowed crossings remain."
+  },
+  {
+    "problem_name": "line_intersection_other_layer",
+    "description": "Lines intersect features in another layer where crossing is not permitted by the data model.",
+    "category": "spatial_logic",
+    "example": "A utility line crosses a restricted boundary layer without an allowed junction.",
+    "source_name": "QGIS Topology Checker Plugin",
+    "source_link": "https://docs.qgis.org/3.44/en/docs/user_manual/plugins/core_plugins/plugins_topology_checker.html",
+    "severity": "high",
+    "repair_hint": "Review the crossing rule and either create a valid junction or reroute the feature to avoid the prohibited crossing."
+  },
+  {
+    "problem_name": "polygon_boundary_mismatch",
+    "description": "A polygon boundary is not fully covered by the matching linework or other polygon boundaries.",
+    "category": "spatial_logic",
+    "example": "Parcel edges do not match the cadastral boundary lines.",
+    "source_name": "QGIS Topology Checker Plugin",
+    "source_link": "https://docs.qgis.org/3.44/en/docs/user_manual/plugins/core_plugins/plugins_topology_checker.html",
+    "severity": "high",
+    "repair_hint": "Use snapping or shared-boundary editing so polygon boundaries align exactly with the reference linework."
+  },
+  {
+    "problem_name": "polygon_overlap_same_layer",
+    "description": "Polygons in the same feature class overlap when they should form non-overlapping areas.",
+    "category": "topology",
+    "example": "Two zoning polygons claim the same area.",
+    "source_name": "ArcGIS Geodatabase Topology Rules",
+    "source_link": "https://desktop.arcgis.com/en/arcmap/latest/manage-data/editing-topology/geodatabase-topology-rules-and-topology-error-fixes.htm",
+    "severity": "high",
+    "repair_hint": "Validate topology and clip or reshape polygons so shared classes no longer overlap."
+  },
+  {
+    "problem_name": "polygon_gap",
+    "description": "Voids exist within or between polygons that should create a continuous surface.",
+    "category": "topology",
+    "example": "Soil polygons leave an uncovered hole in the mapped area.",
+    "source_name": "ArcGIS Geodatabase Topology Rules",
+    "source_link": "https://desktop.arcgis.com/en/arcmap/latest/manage-data/editing-topology/geodatabase-topology-rules-and-topology-error-fixes.htm",
+    "severity": "high",
+    "repair_hint": "Use topology gap fixes, polygonize workflows, or shared-edge snapping to close uncovered areas."
+  },
+  {
+    "problem_name": "polygon_overlap_other_layer",
+    "description": "Polygons from different classes overlap even though the same space should not belong to both classes.",
+    "category": "spatial_logic",
+    "example": "A conservation polygon overlaps a class that should be mutually exclusive.",
+    "source_name": "ArcGIS Geodatabase Topology Rules",
+    "source_link": "https://desktop.arcgis.com/en/arcmap/latest/manage-data/editing-topology/geodatabase-topology-rules-and-topology-error-fixes.htm",
+    "severity": "high",
+    "repair_hint": "Review class rules and edit one or both layers so only the correct polygon retains the overlapping area."
+  },
+  {
+    "problem_name": "polygon_not_covered_by_other_polygons",
+    "description": "A polygon should be fully covered by another polygon class, but parts of it fall outside coverage.",
+    "category": "spatial_logic",
+    "example": "A county polygon is not fully covered by state polygons.",
+    "source_name": "ArcGIS Geodatabase Topology Rules",
+    "source_link": "https://desktop.arcgis.com/en/arcmap/latest/manage-data/editing-topology/geodatabase-topology-rules-and-topology-error-fixes.htm",
+    "severity": "high",
+    "repair_hint": "Expand or correct the covering layer so the target polygon is fully covered where business rules require it."
+  },
+  {
+    "problem_name": "polygons_do_not_cover_each_other",
+    "description": "Two polygon classifications intended to represent the same space do not fully correspond.",
+    "category": "spatial_logic",
+    "example": "Slope class polygons and soil class polygons leave unmatched areas between layers.",
+    "source_name": "ArcGIS Geodatabase Topology Rules",
+    "source_link": "https://desktop.arcgis.com/en/arcmap/latest/manage-data/editing-topology/geodatabase-topology-rules-and-topology-error-fixes.htm",
+    "severity": "high",
+    "repair_hint": "Compare both polygon coverages and repair gaps or mismatches through snapping, union, or shared-boundary editing."
+  },
+  {
+    "problem_name": "polygon_boundary_not_covered_by_lines",
+    "description": "Polygon boundaries should match a line layer but some boundary segments have no corresponding line.",
+    "category": "spatial_logic",
+    "example": "Parcel polygon edges are missing parcel boundary lines.",
+    "source_name": "ArcGIS Geodatabase Topology Rules",
+    "source_link": "https://desktop.arcgis.com/en/arcmap/latest/manage-data/editing-topology/geodatabase-topology-rules-and-topology-error-fixes.htm",
+    "severity": "high",
+    "repair_hint": "Generate or edit missing boundary lines so the polygon perimeter is fully represented."
+  },
+  {
+    "problem_name": "polygon_missing_contained_point",
+    "description": "A polygon expected to contain at least one related point contains none.",
+    "category": "spatial_logic",
+    "example": "A parcel polygon lacks an address point.",
+    "source_name": "ArcGIS Geodatabase Topology Rules",
+    "source_link": "https://desktop.arcgis.com/en/arcmap/latest/manage-data/editing-topology/geodatabase-topology-rules-and-topology-error-fixes.htm",
+    "severity": "high",
+    "repair_hint": "Create the missing point or move an existing related point into the polygon if one should already exist."
+  },
+  {
+    "problem_name": "polygon_point_count_mismatch",
+    "description": "The polygon-to-point relationship violates a required one-to-one correspondence.",
+    "category": "spatial_logic",
+    "example": "A district polygon contains two capital-city points instead of exactly one.",
+    "source_name": "ArcGIS Geodatabase Topology Rules",
+    "source_link": "https://desktop.arcgis.com/en/arcmap/latest/manage-data/editing-topology/geodatabase-topology-rules-and-topology-error-fixes.htm",
+    "severity": "high",
+    "repair_hint": "Audit related point records and add, remove, or reassign points until the required count rule is satisfied."
+  },
+  {
+    "problem_name": "line_smaller_than_cluster_tolerance",
+    "description": "A line would collapse during topology validation because it is smaller than the cluster tolerance.",
+    "category": "geometry",
+    "example": "A tiny cul-de-sac segment disappears when topology is validated.",
+    "source_name": "ArcGIS Geodatabase Topology Rules",
+    "source_link": "https://desktop.arcgis.com/en/arcmap/latest/manage-data/editing-topology/geodatabase-topology-rules-and-topology-error-fixes.htm",
+    "severity": "high",
+    "repair_hint": "Redigitize or merge the feature so it remains meaningful at the dataset tolerance."
+  },
+  {
+    "problem_name": "line_has_dangle",
+    "description": "A line endpoint is not connected where network continuity is expected.",
+    "category": "topology",
+    "example": "A road segment stops short of the intersection node.",
+    "source_name": "ArcGIS Geodatabase Topology Rules",
+    "source_link": "https://desktop.arcgis.com/en/arcmap/latest/manage-data/editing-topology/geodatabase-topology-rules-and-topology-error-fixes.htm",
+    "severity": "medium",
+    "repair_hint": "Extend or snap the dangling endpoint to the intended junction if the network should be connected."
+  },
+  {
+    "problem_name": "line_has_pseudo_node",
+    "description": "A line network contains an unnecessary intermediate node that does not represent a true junction.",
+    "category": "topology",
+    "example": "A road centerline is split into two features at a point with no actual intersection.",
+    "source_name": "ArcGIS Geodatabase Topology Rules",
+    "source_link": "https://desktop.arcgis.com/en/arcmap/latest/manage-data/editing-topology/geodatabase-topology-rules-and-topology-error-fixes.htm",
+    "severity": "high",
+    "repair_hint": "Merge unnecessarily split line segments where no true junction exists."
+  },
+  {
+    "problem_name": "line_self_overlap",
+    "description": "A line overlaps itself, producing redundant segments and invalid network behavior.",
+    "category": "geometry",
+    "example": "A route doubles back over the same segment in the same feature.",
+    "source_name": "ArcGIS Geodatabase Topology Rules",
+    "source_link": "https://desktop.arcgis.com/en/arcmap/latest/manage-data/editing-topology/geodatabase-topology-rules-and-topology-error-fixes.htm",
+    "severity": "high",
+    "repair_hint": "Simplify or redraw the feature to remove duplicated segments within the same line."
+  },
+  {
+    "problem_name": "line_self_intersect",
+    "description": "A line crosses itself at a non-endpoint location.",
+    "category": "geometry",
+    "example": "A single road feature loops and crosses itself in the middle.",
+    "source_name": "ArcGIS Geodatabase Topology Rules",
+    "source_link": "https://desktop.arcgis.com/en/arcmap/latest/manage-data/editing-topology/geodatabase-topology-rules-and-topology-error-fixes.htm",
+    "severity": "high",
+    "repair_hint": "Split or redraw the line so it no longer crosses itself at a non-endpoint."
+  },
+  {
+    "problem_name": "multipart_line",
+    "description": "A line feature is multipart even though the model expects each feature to be a single continuous line.",
+    "category": "geometry",
+    "example": "One road feature stores two disconnected road segments.",
+    "source_name": "ArcGIS Geodatabase Topology Rules",
+    "source_link": "https://desktop.arcgis.com/en/arcmap/latest/manage-data/editing-topology/geodatabase-topology-rules-and-topology-error-fixes.htm",
+    "severity": "high",
+    "repair_hint": "Explode multipart features into singlepart records if the model requires continuous lines."
+  },
+  {
+    "problem_name": "point_not_coincident_with_point",
+    "description": "A point feature should align with a corresponding point in another layer but does not.",
+    "category": "spatial_logic",
+    "example": "A survey monument point is offset from the official boundary marker layer.",
+    "source_name": "ArcGIS Geodatabase Topology Rules",
+    "source_link": "https://desktop.arcgis.com/en/arcmap/latest/manage-data/editing-topology/geodatabase-topology-rules-and-topology-error-fixes.htm",
+    "severity": "high",
+    "repair_hint": "Snap the point to the authoritative location or adjust the paired feature so both coincide."
+  },
+  {
+    "problem_name": "duplicate_point",
+    "description": "Multiple points occupy the same location where duplicates are not allowed.",
+    "category": "topology",
+    "example": "Two well points share the exact same coordinates.",
+    "source_name": "ArcGIS Geodatabase Topology Rules",
+    "source_link": "https://desktop.arcgis.com/en/arcmap/latest/manage-data/editing-topology/geodatabase-topology-rules-and-topology-error-fixes.htm",
+    "severity": "high",
+    "repair_hint": "Remove duplicate point records or merge attributes into a single authoritative point."
+  },
+  {
+    "problem_name": "missing_spatial_reference",
+    "description": "A dataset has an unknown or undefined coordinate system, preventing correct overlay and projection.",
+    "category": "crs",
+    "example": "A shapefile loads with an Unknown Spatial Reference message.",
+    "source_name": "ArcGIS Desktop Identifying an Unknown Coordinate System",
+    "source_link": "https://desktop.arcgis.com/en/arcmap/latest/map/projections/identifying-an-unknown-coordinate-system.htm",
+    "severity": "critical",
+    "repair_hint": "Define the correct coordinate system from authoritative metadata before projecting or overlaying the data."
+  },
+  {
+    "problem_name": "datum_mismatch_requires_transformation",
+    "description": "Datasets use different geographic datums and need a proper transformation to align correctly.",
+    "category": "crs",
+    "example": "Layers in NAD27 and WGS84 display with a systematic offset.",
+    "source_name": "ArcGIS Support 000365",
+    "source_link": "https://support.esri.com/en-us/knowledge-base/why-does-my-data-not-line-up-with-a-basemap-146248006200-000012110",
+    "severity": "critical",
+    "repair_hint": "Apply the correct geographic transformation when projecting between datums."
+  },
+  {
+    "problem_name": "invalid_spatial_reference",
+    "description": "The spatial reference definition stored with data is invalid and must be detected or repaired.",
+    "category": "crs",
+    "example": "A feature class carries a corrupted WKID definition after import.",
+    "source_name": "ArcGIS Pro Detect and Repair Invalid Spatial References",
+    "source_link": "https://pro.arcgis.com/en/pro-app/latest/tool-reference/data-management/detect-and-repair-invalid-spatial-references.htm",
+    "severity": "critical",
+    "repair_hint": "Repair or redefine the spatial reference using authoritative CRS information and revalidate the dataset."
+  },
+  {
+    "problem_name": "domain_violation",
+    "description": "An attribute value falls outside the allowed coded or range domain for the field.",
+    "category": "attributes",
+    "example": "A land-use code of 99 appears in a field whose domain only allows 1 through 7.",
+    "source_name": "ArcGIS Pro Domain Check",
+    "source_link": "https://pro.arcgis.com/en/pro-app/latest/help/data/validating-data/domain.htm",
+    "severity": "high",
+    "repair_hint": "Clean invalid values by enforcing coded-value or range domains during edit and import workflows."
+  },
+  {
+    "problem_name": "null_attribute_in_required_field",
+    "description": "A required attribute is missing even though the field is expected to contain a value.",
+    "category": "attributes",
+    "example": "A parcel record has a null parcel ID.",
+    "source_name": "QGIS Vector Layer Properties",
+    "source_link": "https://docs.qgis.org/3.10/en/docs/user_manual/working_with_vector/vector_properties.html",
+    "severity": "high",
+    "repair_hint": "Populate required values from source systems, lookup tables, or QA review before release."
+  },
+  {
+    "problem_name": "invalid_subtype",
+    "description": "A feature carries an invalid subtype assignment relative to the configured subtype rules.",
+    "category": "attributes",
+    "example": "A water-main feature is assigned a subtype not defined for the class.",
+    "source_name": "ArcGIS Pro Subtype Check",
+    "source_link": "https://pro.arcgis.com/en/pro-app/latest/help/data/validating-data/subtype.htm",
+    "severity": "high",
+    "repair_hint": "Reassign invalid subtype values to permitted subtype codes and revalidate the feature class."
+  },
+  {
+    "problem_name": "non_unique_attribute",
+    "description": "Values expected to be unique are duplicated across records.",
+    "category": "attributes",
+    "example": "Two features share the same asset identifier.",
+    "source_name": "QGIS Vector Layer Properties",
+    "source_link": "https://docs.qgis.org/3.10/en/docs/user_manual/working_with_vector/vector_properties.html",
+    "severity": "medium",
+    "repair_hint": "Deduplicate or rekey the records so fields that must be unique contain unique values."
+  },
+  {
+    "problem_name": "field_constraint_expression_violation",
+    "description": "An attribute value fails a configured validation expression or field constraint.",
+    "category": "attributes",
+    "example": "A road speed field contains a negative value when the expression requires values greater than zero.",
+    "source_name": "QGIS Vector Layer Properties",
+    "source_link": "https://docs.qgis.org/3.10/en/docs/user_manual/working_with_vector/vector_properties.html",
+    "severity": "medium",
+    "repair_hint": "Review the failing expression and correct source values that violate the field rule."
+  },
+  {
+    "problem_name": "missing_metadata_title",
+    "description": "The dataset metadata lacks a descriptive title required for discovery and documentation.",
+    "category": "metadata",
+    "example": "The metadata record has no populated Title field.",
+    "source_name": "ArcGIS AllSource ISO Metadata",
+    "source_link": "https://doc.arcgis.com/en/allsource/latest/data/create-iso-19115-and-iso-19139-metadata.htm",
+    "severity": "low",
+    "repair_hint": "Populate the metadata title field with a clear dataset name."
+  },
+  {
+    "problem_name": "missing_metadata_abstract",
+    "description": "The metadata record lacks an abstract describing the dataset content and purpose.",
+    "category": "metadata",
+    "example": "The Description (Abstract) field is blank.",
+    "source_name": "ArcGIS AllSource ISO Metadata",
+    "source_link": "https://doc.arcgis.com/en/allsource/latest/data/create-iso-19115-and-iso-19139-metadata.htm",
+    "severity": "low",
+    "repair_hint": "Write a concise abstract describing the dataset purpose, scope, and contents."
+  },
+  {
+    "problem_name": "missing_metadata_topic_category",
+    "description": "The metadata does not specify a topic category used for classification and discovery.",
+    "category": "metadata",
+    "example": "A dataset has no ISO topic category assigned.",
+    "source_name": "ArcGIS AllSource ISO Metadata",
+    "source_link": "https://doc.arcgis.com/en/allsource/latest/data/create-iso-19115-and-iso-19139-metadata.htm",
+    "severity": "low",
+    "repair_hint": "Assign the correct ISO topic category for discovery and cataloging."
+  },
+  {
+    "problem_name": "missing_metadata_extent",
+    "description": "The metadata omits the geographic extent needed to communicate where the dataset applies.",
+    "category": "metadata",
+    "example": "No bounding box or place identifier is provided for the dataset.",
+    "source_name": "ArcGIS AllSource ISO Metadata",
+    "source_link": "https://doc.arcgis.com/en/allsource/latest/data/create-iso-19115-and-iso-19139-metadata.htm",
+    "severity": "low",
+    "repair_hint": "Add the geographic extent or bounding box to metadata from the dataset footprint."
+  },
+  {
+    "problem_name": "missing_metadata_lineage",
+    "description": "The metadata does not explain source inputs and processing history used to build the dataset.",
+    "category": "metadata",
+    "example": "No lineage or process-step information is documented.",
+    "source_name": "USGS FGDC Metadata Standard",
+    "source_link": "https://geology.usgs.gov/tools/metadata/standard/02.html",
+    "severity": "low",
+    "repair_hint": "Document source inputs and process steps in the metadata lineage section."
+  },
+  {
+    "problem_name": "missing_metadata_completeness_report",
+    "description": "The metadata does not describe omissions, selection criteria, or generalization affecting completeness.",
+    "category": "metadata",
+    "example": "The Completeness Report section is absent.",
+    "source_name": "USGS FGDC Metadata Standard",
+    "source_link": "https://geology.usgs.gov/tools/metadata/standard/02.html",
+    "severity": "low",
+    "repair_hint": "Describe omissions, selection rules, and known completeness limits in the metadata record."
+  },
+  {
+    "problem_name": "missing_metadata_horizontal_positional_accuracy",
+    "description": "The metadata lacks a report or measure describing horizontal positional accuracy.",
+    "category": "metadata",
+    "example": "No horizontal positional accuracy report or value is recorded.",
+    "source_name": "USGS FGDC Metadata Standard",
+    "source_link": "https://geology.usgs.gov/tools/metadata/standard/02.html",
+    "severity": "low",
+    "repair_hint": "Add positional accuracy statements or measured accuracy values to metadata."
+  },
+  {
+    "problem_name": "missing_or_stale_spatial_index",
+    "description": "A feature class lacks an effective spatial index or its index is stale after heavy edits, degrading spatial query performance. Diagnose with index validation/rebuild tools and recalculate the spatial index when query performance drops.",
+    "category": "integrity",
+    "example": "After bulk loading parcels, map selection and intersection queries become unusually slow until the spatial index is rebuilt.",
+    "source_name": "ArcGIS Pro Modify a Spatial Index",
+    "source_link": "https://pro.arcgis.com/en/pro-app/latest/help/data/geodatabases/overview/modifying-a-spatial-index.htm",
+    "severity": "medium",
+    "repair_hint": "Rebuild or recreate the spatial index after bulk edits or loads."
+  },
+  {
+    "problem_name": "outdated_attribute_or_spatial_indexes",
+    "description": "Attribute or spatial indexes become inefficient after large update, delete, or compress operations. Diagnose with database administration tools and rebuild indexes to restore query efficiency.",
+    "category": "integrity",
+    "example": "Enterprise geodatabase road layers perform poorly after a large edit session because base and delta-table indexes were not rebuilt.",
+    "source_name": "ArcGIS Pro Rebuild Indexes",
+    "source_link": "https://pro.arcgis.com/en/pro-app/3.3/tool-reference/data-management/rebuild-indexes.htm",
+    "severity": "medium",
+    "repair_hint": "Rebuild attribute and spatial indexes as part of post-edit geodatabase maintenance."
+  },
+  {
+    "problem_name": "database_geometry_without_required_spatial_index",
+    "description": "Database-backed geometry storage may require a spatial index for spatial queries to work correctly and efficiently. Diagnose by checking storage properties and index metadata, then create the required database spatial index.",
+    "category": "integrity",
+    "example": "An Oracle SDO_GEOMETRY feature class cannot support expected spatial filtering until its Oracle spatial index exists.",
+    "source_name": "ArcGIS Pro SDO_GEOMETRY and ArcGIS",
+    "source_link": "https://pro.arcgis.com/en/pro-app/3.3/help/data/geodatabases/manage-oracle/sdogeometry-feature-classes.htm",
+    "severity": "high",
+    "repair_hint": "Create the required database spatial index using the native DBMS or geodatabase tooling."
+  },
+  {
+    "problem_name": "non_rfc7946_geojson_output",
+    "description": "GeoJSON written outside RFC 7946 expectations can carry incompatible CRS assumptions, polygon winding, or antimeridian handling. Diagnose by validating export options and rewrite with RFC7946-compliant settings when interchange requires it.",
+    "category": "integrity",
+    "example": "A GeoJSON export preserves a non-WGS84 CRS and legacy polygon orientation, causing downstream web clients to misinterpret it.",
+    "source_name": "GDAL RFC 65: RFC 7946 GeoJSON",
+    "source_link": "https://gdal.org/en/stable/development/rfc/rfc65_rfc7946_geojson.html",
+    "severity": "medium",
+    "repair_hint": "Rewrite the file with RFC 7946-compliant export settings in GDAL, QGIS, or another writer."
+  },
+  {
+    "problem_name": "coordinate_precision_not_fit_for_use",
+    "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+    "category": "accuracy",
+    "example": "GeoJSON is exported with far more decimal places than needed for web mapping, inflating file size and token cost without improving usable accuracy.",
+    "source_name": "GDAL GeoJSON Driver",
+    "source_link": "https://gdal.org/en/stable/drivers/vector/geojson.html",
+    "severity": "medium",
+    "repair_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery."
+  },
+  {
+    "problem_name": "precision_loss_from_coarse_xy_resolution",
+    "description": "XY resolution is set too coarsely, causing coordinates to lose precision and boundaries to smooth or collapse. Diagnose by inspecting spatial reference properties and restore default or finer resolution where appropriate.",
+    "category": "accuracy",
+    "example": "A narrow polygon corridor cannot be preserved because the feature class XY resolution stores coordinates too coarsely.",
+    "source_name": "ArcGIS Pro The Properties of a Spatial Reference",
+    "source_link": "https://pro.arcgis.com/en/pro-app/3.3/help/data/geodatabases/overview/the-properties-of-a-spatial-reference.htm",
+    "severity": "high",
+    "repair_hint": "Increase XY resolution or migrate the data into a feature class with finer coordinate storage."
+  },
+  {
+    "problem_name": "inappropriate_xy_tolerance",
+    "description": "XY tolerance is configured too aggressively or inconsistently, causing nearby coordinates to collapse or be treated as identical. Diagnose by checking spatial reference defaults and avoid overriding XY tolerance unless there is a justified need.",
+    "category": "accuracy",
+    "example": "Two distinct boundary vertices are merged during overlay because the dataset tolerance was set larger than intended.",
+    "source_name": "ArcGIS Pro XY Tolerance Environment",
+    "source_link": "https://pro.arcgis.com/fr/pro-app/latest/tool-reference/environment-settings/xy-tolerance.htm",
+    "severity": "high",
+    "repair_hint": "Restore a safer XY tolerance and rerun topology or overlay operations."
+  },
+  {
+    "problem_name": "positional_accuracy_exceeds_reference_tolerance",
+    "description": "Feature locations deviate from a trusted reference layer beyond the accepted positional accuracy threshold. Diagnose by comparing to a known reference and measuring circular or linear error before accepting the dataset.",
+    "category": "accuracy",
+    "example": "Road centerlines are consistently offset from orthophoto imagery by more than the project tolerance.",
+    "source_name": "ArcMap What is positional accuracy assessment?",
+    "source_link": "https://desktop.arcgis.com/en/arcmap/latest/extensions/data-reviewer/what-is-positional-accuracy-assessment.htm",
+    "severity": "high",
+    "repair_hint": "Compare to a trusted reference and redigitize or adjust features that exceed the accepted offset threshold."
+  },
+  {
+    "problem_name": "non_edge_matched_polygon_coverage",
+    "description": "Adjacent polygons fail to share identical vertices along common edges, so the set does not form a valid coverage. Diagnose with coverage-validity checks and snap or clean neighboring edges until they match exactly.",
+    "category": "topology",
+    "example": "Administrative polygons appear to touch visually but shared boundaries contain mismatched vertex sequences.",
+    "source_name": "PostGIS ST_CoverageInvalidEdges",
+    "source_link": "https://postgis.net/docs/ST_CoverageInvalidEdges.html",
+    "severity": "high",
+    "repair_hint": "Snap shared polygon edges or rebuild the coverage so neighboring polygons share identical boundaries."
+  },
+  {
+    "problem_name": "narrow_invalid_coverage_gap",
+    "description": "A polygon coverage contains narrow gaps that violate practical edge-matching tolerances even if the gaps are visually subtle. Diagnose with coverage gap checks using a tolerance and clean or snap the coverage to remove slivers.",
+    "category": "topology",
+    "example": "A land-cover coverage contains hairline voids between polygons after editing from multiple sources.",
+    "source_name": "PostGIS ST_CoverageInvalidEdges",
+    "source_link": "https://postgis.net/docs/ST_CoverageInvalidEdges.html",
+    "severity": "medium",
+    "repair_hint": "Use coverage validation and snap/clean tools to close narrow gaps between polygons."
+  },
+  {
+    "problem_name": "unsnapped_vertices_within_tolerance",
+    "description": "Vertices that should align to a reference geometry remain slightly offset within an expected snapping tolerance. Diagnose by running snapping tools against the reference layer and review whether new vertices must be inserted.",
+    "category": "spatial_logic",
+    "example": "Parcel edges are close to cadastral lines but remain a few centimeters away, creating tiny mismatches.",
+    "source_name": "QGIS Vector Geometry Algorithms",
+    "source_link": "https://docs.qgis.org/latest/en/docs/user_manual/processing_algs/qgis/vectorgeometry.html",
+    "severity": "medium",
+    "repair_hint": "Run snapping tools against the reference layer using an appropriate tolerance."
+  },
+  {
+    "problem_name": "attribute_value_missing_from_reference_table",
+    "description": "An attribute value expected to match a reference table or master index is absent or inconsistent. Diagnose with table-to-table validation and repair by joining to the authoritative lookup and correcting mismatched values.",
+    "category": "attributes",
+    "example": "A road centerline Full Road Name does not match the master street index used for address workflows.",
+    "source_name": "ArcGIS Pro Evaluate features with attribute rules",
+    "source_link": "https://pro.arcgis.com/en/pro-app/latest/help/data/validating-data/tutorial-evaluate-features-with-attribute-rules.htm",
+    "severity": "medium",
+    "repair_hint": "Join to the authoritative lookup table and correct or populate unmatched values."
+  },
+  {
+    "problem_name": "feature_not_split_at_intersection",
+    "description": "A linear feature should split where it intersects another feature but remains unsplit, breaking network logic or event referencing. Diagnose with feature-on-feature rules and split features at valid intersections.",
+    "category": "spatial_logic",
+    "example": "A road centerline crosses another road but remains a single feature with no intersection break.",
+    "source_name": "ArcGIS Pro Evaluate features with attribute rules",
+    "source_link": "https://pro.arcgis.com/en/pro-app/latest/help/data/validating-data/tutorial-evaluate-features-with-attribute-rules.htm",
+    "severity": "high",
+    "repair_hint": "Split the feature at valid intersections so network and event logic works correctly."
+  },
+  {
+    "problem_name": "sharp_angle_cutback",
+    "description": "A line contains an unnaturally sharp cutback angle that suggests digitizing error or invalid cartographic geometry. Diagnose with cutback-angle checks and simplify or redigitize the offending segment.",
+    "category": "geometry",
+    "example": "A road centerline contains a 10-degree kink created by an accidental extra vertex during editing.",
+    "source_name": "ArcGIS Pro Evaluate features with attribute rules",
+    "source_link": "https://pro.arcgis.com/en/pro-app/latest/help/data/validating-data/tutorial-evaluate-features-with-attribute-rules.htm",
+    "severity": "medium",
+    "repair_hint": "Simplify or redigitize the line segment to remove the unrealistic cutback angle."
+  },
+  {
+    "problem_name": "below_minimum_feature_length",
+    "description": "A feature violates a business-rule minimum length threshold even if it is not geometrically invalid by storage rules. Diagnose with length-based validation rules and remove, merge, or redigitize undersized features.",
+    "category": "geometry",
+    "example": "A newly digitized road segment is shorter than the required 20-foot minimum for the road centerline model.",
+    "source_name": "ArcGIS Pro Evaluate features with attribute rules",
+    "source_link": "https://pro.arcgis.com/en/pro-app/latest/help/data/validating-data/tutorial-evaluate-features-with-attribute-rules.htm",
+    "severity": "medium",
+    "repair_hint": "Merge, remove, or redigitize the feature so it satisfies the minimum length rule."
+  }
+]

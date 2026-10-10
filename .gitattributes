@@ -1,0 +1,79 @@
+# Normalise line endings in the repository; check out with the platform default.
+#
+# Why this file exists
+# --------------------
+# Without it, Git guesses per-file whether text is binary, so the same checkout
+# can produce CRLF on Windows and LF on Linux for identical content. That makes
+# diffs unreadable (a whole file shows as changed) and makes "same code, same
+# result" claims false for any output whose bytes are compared.
+#
+# `text=auto` lets Git detect text vs binary. `eol=lf` stores LF in the
+# repository for every text file, so the committed content is identical
+# everywhere regardless of who commits from where.
+#
+# This is a version-control concern, not a code concern: the wrong fix is an
+# if/else on sys.platform inside the source. Platform branching belongs only
+# where behaviour genuinely differs, such as the Windows-only CPU temperature
+# reader in geoqa/thermal.py, which already degrades to no-op when no sensor is
+# present.
+
+# Default: treat as text unless detection says binary, and normalise to LF.
+* text=auto eol=lf
+
+# Explicit binary formats. Declared so detection can never be fooled by a
+# small header that happens to look like text.
+*.shp   binary
+*.shx   binary
+*.dbf   binary
+*.prj   binary
+*.cpg   binary
+*.gpkg  binary
+*.zip   binary
+*.gz    binary
+*.bz2   binary
+*.tar   binary
+*.pdf   binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+*.ico   binary
+*.xlsx  binary
+*.xls   binary
+*.docx  binary
+*.pptx  binary
+*.h5    binary
+*.hdf5  binary
+*.nc    binary
+*.tif   binary
+*.tiff  binary
+*.jp2   binary
+*.las   binary
+*.laz   binary
+
+# Scripts that must stay executable and keep their interpreter line intact.
+*.sh        text eol=lf
+*.bash      text eol=lf
+.githooks/* text eol=lf
+
+# Windows-only tooling still committed as text.
+*.bat       text eol=crlf
+*.cmd       text eol=crlf
+
+# Notebooks: JSON, but frequently huge and diff-hostile.
+*.ipynb     text eol=lf diff=json
+
+# Lockfiles and structured data.
+*.json      text eol=lf
+*.geojson   text eol=lf
+*.csv       text eol=lf
+*.md        text eol=lf
+*.yml       text eol=lf
+*.yaml      text eol=lf
+*.toml      text eol=lf
+*.txt       text eol=lf
+
+# Explicitly no line-ending translation for these, because they are written
+# with newline="" by the export/report code and must round-trip byte-exact.
+*.geojson.bak binary

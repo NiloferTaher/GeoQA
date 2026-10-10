@@ -1,0 +1,11 @@
+#!/bin/sh
+# WUC-2027 privacy gate — blocks absolute Windows paths and api_key.txt (mirrors Tanager replication-package)
+if git diff --cached --name-only | grep -q "api_key.txt"; then
+  echo "BLOCKED: api_key.txt must not be committed"
+  exit 1
+fi
+if git diff --cached --diff-filter=ACM | xargs grep -l "C:\\\\Users\\\\admin" 2>/dev/null | grep -q .; then
+  echo "BLOCKED: absolute Windows path C:\\Users\\admin found — use GEOQA_DATA_DIR env var"
+  exit 1
+fi
+exit 0

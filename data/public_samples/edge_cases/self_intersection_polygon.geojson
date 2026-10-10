@@ -1,0 +1,24 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "ID": 1,
+        "name": "bow_tie_polygon"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [0.0, 0.0],
+            [2.0, 2.0],
+            [2.0, 0.0],
+            [0.0, 2.0],
+            [0.0, 0.0]
+          ]
+        ]
+      }
+    }
+  ]
+}

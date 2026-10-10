@@ -1,0 +1,378 @@
+{
+  "validation_rule_version": "2026.03",
+  "issue_count": 4,
+  "summary": {
+    "validation_rule_version": "2026.03",
+    "issue_count": 4,
+    "total_issues": 4,
+    "actionable": 4,
+    "informational": 0,
+    "actionable_ratio": 1.0,
+    "by_problem": {
+      "duplicate_geometry_same_layer": 2,
+      "invalid_spatial_reference": 1,
+      "missing_or_stale_spatial_index": 1
+    },
+    "problem_breakdown": [
+      {
+        "name": "duplicate_geometry_same_layer",
+        "count": 2,
+        "percent": 50.0
+      },
+      {
+        "name": "invalid_spatial_reference",
+        "count": 1,
+        "percent": 25.0
+      },
+      {
+        "name": "missing_or_stale_spatial_index",
+        "count": 1,
+        "percent": 25.0
+      }
+    ],
+    "by_severity": {
+      "critical": 1,
+      "medium": 3
+    },
+    "severity_distribution": [
+      {
+        "name": "medium",
+        "count": 3,
+        "percent": 75.0
+      },
+      {
+        "name": "critical",
+        "count": 1,
+        "percent": 25.0
+      }
+    ],
+    "by_issue_class": {
+      "data_issue": 4
+    },
+    "by_validator": {
+      "duplicate_geometry_same_layer": 2,
+      "invalid_spatial_reference": 1,
+      "missing_or_stale_spatial_index": 1
+    },
+    "by_iso_category": {
+      "Logical Consistency": 3,
+      "Positional Accuracy": 1
+    },
+    "by_root_cause": {
+      "crs": 1,
+      "integrity": 1,
+      "topology": 2
+    },
+    "by_priority_band": {
+      "critical": 1,
+      "medium": 3
+    },
+    "top_issues": [
+      {
+        "problem_name": "duplicate_geometry_same_layer",
+        "count": 2,
+        "percent": 50.0
+      },
+      {
+        "problem_name": "invalid_spatial_reference",
+        "count": 1,
+        "percent": 25.0
+      },
+      {
+        "problem_name": "missing_or_stale_spatial_index",
+        "count": 1,
+        "percent": 25.0
+      }
+    ],
+    "top_actionable": [
+      {
+        "problem_name": "invalid_spatial_reference",
+        "feature_id": null,
+        "severity": "critical",
+        "confidence": "high",
+        "priority_score": 100
+      },
+      {
+        "problem_name": "duplicate_geometry_same_layer",
+        "feature_id": 1,
+        "severity": "medium",
+        "confidence": "high",
+        "priority_score": 50
+      },
+      {
+        "problem_name": "duplicate_geometry_same_layer",
+        "feature_id": 2,
+        "severity": "medium",
+        "confidence": "high",
+        "priority_score": 50
+      },
+      {
+        "problem_name": "missing_or_stale_spatial_index",
+        "feature_id": null,
+        "severity": "medium",
+        "confidence": "medium",
+        "priority_score": 40
+      }
+    ],
+    "suppressed_issue_count": 0,
+    "execution_status": "full",
+    "execution_reason": null,
+    "validators_attempted": [
+      "null_geometry",
+      "duplicate_vertex",
+      "duplicate_geometry_same_layer",
+      "invalid_crs",
+      "missing_crs",
+      "missing_spatial_index",
+      "outdated_index"
+    ],
+    "validators_completed": [
+      "null_geometry",
+      "duplicate_vertex",
+      "duplicate_geometry_same_layer",
+      "invalid_crs",
+      "missing_crs",
+      "missing_spatial_index",
+      "outdated_index"
+    ],
+    "validators_deferred": [],
+    "validator_coverage": [
+      {
+        "validator_name": "null_geometry",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "Point",
+        "expected_geometry_types": [],
+        "profile": "point_asset_quick:geometry",
+        "notes": null,
+        "family": "geometry",
+        "layer_name": "point_assets",
+        "layer_path": "examples/public_demo/source_data/point_assets.shp",
+        "geometry_type": "Point"
+      },
+      {
+        "validator_name": "duplicate_vertex",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "Point",
+        "expected_geometry_types": [],
+        "profile": "point_asset_quick:geometry",
+        "notes": null,
+        "family": "geometry",
+        "layer_name": "point_assets",
+        "layer_path": "examples/public_demo/source_data/point_assets.shp",
+        "geometry_type": "Point"
+      },
+      {
+        "validator_name": "self_intersection",
+        "status": "skipped",
+        "reason": "incompatible_geometry_type",
+        "layer_geometry_type": "Point",
+        "expected_geometry_types": [
+          "LineString",
+          "MultiLineString",
+          "Polygon",
+          "MultiPolygon"
+        ],
+        "profile": "point_asset_quick:geometry",
+        "notes": null,
+        "family": "geometry",
+        "layer_name": "point_assets",
+        "layer_path": "examples/public_demo/source_data/point_assets.shp",
+        "geometry_type": "Point"
+      },
+      {
+        "validator_name": "duplicate_geometry_same_layer",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "Point",
+        "expected_geometry_types": [],
+        "profile": "point_asset_quick:topology",
+        "notes": null,
+        "family": "topology",
+        "layer_name": "point_assets",
+        "layer_path": "examples/public_demo/source_data/point_assets.shp",
+        "geometry_type": "Point"
+      },
+      {
+        "validator_name": "invalid_crs",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "Point",
+        "expected_geometry_types": [],
+        "profile": "point_asset_quick:crs",
+        "notes": null,
+        "family": "crs",
+        "layer_name": "point_assets",
+        "layer_path": "examples/public_demo/source_data/point_assets.shp",
+        "geometry_type": "Point"
+      },
+      {
+        "validator_name": "missing_crs",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "Point",
+        "expected_geometry_types": [],
+        "profile": "point_asset_quick:crs",
+        "notes": null,
+        "family": "crs",
+        "layer_name": "point_assets",
+        "layer_path": "examples/public_demo/source_data/point_assets.shp",
+        "geometry_type": "Point"
+      },
+      {
+        "validator_name": "missing_spatial_index",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "Point",
+        "expected_geometry_types": [],
+        "profile": "point_asset_quick:integrity",
+        "notes": null,
+        "family": "integrity",
+        "layer_name": "point_assets",
+        "layer_path": "examples/public_demo/source_data/point_assets.shp",
+        "geometry_type": "Point"
+      },
+      {
+        "validator_name": "outdated_index",
+        "status": "completed",
+        "reason": null,
+        "layer_geometry_type": "Point",
+        "expected_geometry_types": [],
+        "profile": "point_asset_quick:integrity",
+        "notes": null,
+        "family": "integrity",
+        "layer_name": "point_assets",
+        "layer_path": "examples/public_demo/source_data/point_assets.shp",
+        "geometry_type": "Point"
+      }
+    ],
+    "plugin_validators_attempted": [],
+    "plugin_validators_completed": [],
+    "partial_result": false,
+    "operator_next_steps": [
+      "Review the highest-volume issue first: duplicate_geometry_same_layer.",
+      "Enable a cache directory on repeated runs to reduce redundant validator work.",
+      "Low-resource mode favors actionable checks first; rerun without it if you need the fullest audit signal."
+    ],
+    "layer_inventory": {
+      "archive_name": "source_data",
+      "layer_id": "point_assets",
+      "layer_path": "point_assets",
+      "layer_name": "point_assets",
+      "source_path": "examples/public_demo/source_data/point_assets.shp",
+      "ogr_layer": null,
+      "geometry_type": "Point",
+      "feature_count": 3,
+      "source_crs": "EPSG:32640",
+      "bbox": "500000.000000, 2500000.000000, 500050.000000, 2500050.000000",
+      "attribute_fields": [
+        "ID",
+        "asset_id"
+      ],
+      "recommended_profile": "point_asset_quick",
+      "profile_reason": "Point asset layer name matched asset delivery terms.",
+      "validated_yes_no": "yes",
+      "validation_status": "full",
+      "issue_count": 4
+    },
+    "plain_english_summary": "GeoQA reviewed 2 detected layer(s) in source_data and validated 1 layer(s): point_assets. GeoQA found 4 issue(s). Source layers were not modified. Validator coverage records show which checks completed or were skipped because the geometry type was not applicable."
+  },
+  "issues": [
+    {
+      "problem_name": "duplicate_geometry_same_layer",
+      "severity": "medium",
+      "description": "This geometry is duplicated by another feature in the same layer.",
+      "solution_hint": "Review whether duplicate features should be merged, removed, or linked by a shared identifier.",
+      "feature_id": 1,
+      "geometry": "POINT (500000 2500000)",
+      "issue_id": "c9b0656e61ce6b7e",
+      "validation_rule_version": "2026.03",
+      "validator_name": "duplicate_geometry_same_layer",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "topology",
+        "profile": "point_asset_quick",
+        "family": "topology"
+      },
+      "iso_category": "Logical Consistency",
+      "confidence": "high",
+      "actionable": true,
+      "priority_score": 50
+    },
+    {
+      "problem_name": "duplicate_geometry_same_layer",
+      "severity": "medium",
+      "description": "This geometry duplicates another feature in the same layer.",
+      "solution_hint": "Review whether duplicate features should be merged, removed, or linked by a shared identifier.",
+      "feature_id": 2,
+      "geometry": "POINT (500000 2500000)",
+      "issue_id": "ace7e827893ccdfb",
+      "validation_rule_version": "2026.03",
+      "validator_name": "duplicate_geometry_same_layer",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "topology",
+        "profile": "point_asset_quick",
+        "family": "topology"
+      },
+      "iso_category": "Logical Consistency",
+      "confidence": "high",
+      "actionable": true,
+      "priority_score": 50
+    },
+    {
+      "problem_name": "invalid_spatial_reference",
+      "severity": "critical",
+      "description": "The layer CRS is EPSG:32640, but the configured expected CRS is EPSG:4326.",
+      "solution_hint": "Confirm the authoritative CRS with the data owner before redefining or reprojecting the layer.",
+      "feature_id": null,
+      "geometry": null,
+      "issue_id": "f60ae2d16e37cd1d",
+      "validation_rule_version": "2026.03",
+      "validator_name": "invalid_spatial_reference",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "crs",
+        "source_crs": "EPSG:32640",
+        "expected_crs": "EPSG:4326",
+        "transformation_available": true,
+        "profile": "point_asset_quick",
+        "family": "crs"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "high",
+      "actionable": true,
+      "priority_score": 100
+    },
+    {
+      "problem_name": "missing_or_stale_spatial_index",
+      "severity": "medium",
+      "description": "The layer does not appear to have a usable spatial index.",
+      "solution_hint": "Create or rebuild the spatial index before running large spatial queries or overlays.",
+      "feature_id": null,
+      "geometry": null,
+      "issue_id": "0fa8c5e577b91a39",
+      "validation_rule_version": "2026.03",
+      "validator_name": "missing_or_stale_spatial_index",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "integrity",
+        "profile": "point_asset_quick",
+        "family": "integrity"
+      },
+      "iso_category": "Logical Consistency",
+      "confidence": "medium",
+      "actionable": true,
+      "priority_score": 40
+    }
+  ]
+}

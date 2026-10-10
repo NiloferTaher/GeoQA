@@ -1,0 +1,12 @@
+# Core geospatial runtime
+geopandas
+shapely
+pyproj
+psutil
+openpyxl
+
+# Local UI and preview support
+streamlit
+folium
+streamlit-folium
+zstandard

@@ -1,0 +1,29 @@
+About
+GeoQA finds, explains, and fixes geospatial data-quality issues before they break GIS, GeoAI, ML, or delivery workflows.
+
+Footer
+Built by Nilofer Taher · © 2026 GeoQA
+Licensed under Apache-2.0.
+
+GitHub
+https://github.com/NiloferTaher/GeoQA
+
+LinkedIn
+https://ae.linkedin.com/in/nilofertaher
+
+Suggested topics
+gis
+geospatial
+data-quality
+geoai
+geopandas
+shapely
+qa
+validation
+geospatial-data
+ml-preprocessing
+utility-networks
+geojson
+geoparquet
+leaflet
+react

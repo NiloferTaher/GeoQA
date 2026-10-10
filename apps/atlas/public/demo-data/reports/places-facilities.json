@@ -1,0 +1,362 @@
+{
+  "validation_rule_version": "2026.03",
+  "issue_count": 13,
+  "summary": {
+    "validation_rule_version": "2026.03",
+    "issue_count": 13,
+    "total_issues": 13,
+    "actionable": 1,
+    "informational": 12,
+    "actionable_ratio": 0.0769,
+    "by_problem": {
+      "coordinate_precision_not_fit_for_use": 12,
+      "missing_or_stale_spatial_index": 1
+    },
+    "problem_breakdown": [
+      {
+        "name": "coordinate_precision_not_fit_for_use",
+        "count": 12,
+        "percent": 92.31
+      },
+      {
+        "name": "missing_or_stale_spatial_index",
+        "count": 1,
+        "percent": 7.69
+      }
+    ],
+    "by_severity": {
+      "low": 12,
+      "medium": 1
+    },
+    "severity_distribution": [
+      {
+        "name": "low",
+        "count": 12,
+        "percent": 92.31
+      },
+      {
+        "name": "medium",
+        "count": 1,
+        "percent": 7.69
+      }
+    ],
+    "by_issue_class": {
+      "data_geometry_issue": 12,
+      "data_issue": 1
+    },
+    "by_validator": {
+      "coordinate_precision_not_fit_for_use": 12,
+      "missing_or_stale_spatial_index": 1
+    },
+    "by_iso_category": {
+      "Logical Consistency": 1,
+      "Positional Accuracy": 12
+    },
+    "by_root_cause": {
+      "accuracy": 12,
+      "integrity": 1
+    },
+    "by_priority_band": {
+      "low": 12,
+      "medium": 1
+    },
+    "top_issues": [
+      {
+        "problem_name": "coordinate_precision_not_fit_for_use",
+        "count": 12,
+        "percent": 92.31
+      },
+      {
+        "problem_name": "missing_or_stale_spatial_index",
+        "count": 1,
+        "percent": 7.69
+      }
+    ],
+    "top_actionable": [
+      {
+        "problem_name": "missing_or_stale_spatial_index",
+        "feature_id": 12,
+        "severity": "medium",
+        "confidence": "medium",
+        "priority_score": 40
+      }
+    ]
+  },
+  "issues": [
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "low",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 0,
+      "geometry": "POINT (12.453387 41.903282)",
+      "issue_id": "c26d340b1f20fb04",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_geometry_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 7
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "low",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 1,
+      "geometry": "POINT (12.44177 43.936096)",
+      "issue_id": "8d97ccad70e8389b",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_geometry_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 7
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "low",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 2,
+      "geometry": "POINT (9.51667 47.133724)",
+      "issue_id": "de51e2a3f195d87c",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_geometry_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 7
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "low",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 3,
+      "geometry": "POINT (31.199997 -26.466667)",
+      "issue_id": "1826c7bd071dc656",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_geometry_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 7
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "low",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 4,
+      "geometry": "POINT (6.130003 49.61166)",
+      "issue_id": "f009290e83bb6955",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_geometry_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 7
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "low",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 5,
+      "geometry": "POINT (158.149974 6.916644)",
+      "issue_id": "419e0563d241eca3",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_geometry_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 7
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "low",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 6,
+      "geometry": "POINT (171.38 7.103004)",
+      "issue_id": "33d8abc243ef30f1",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_geometry_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 7
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "low",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 7,
+      "geometry": "POINT (179.216647 -8.516652)",
+      "issue_id": "f64cf6918acfb0c5",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_geometry_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 7
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "low",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 8,
+      "geometry": "POINT (134.626549 7.487396)",
+      "issue_id": "7a237fa2ba7ba6d7",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_geometry_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 7
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "low",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 9,
+      "geometry": "POINT (-9.652522 26.119167)",
+      "issue_id": "27e86a8f624a77c1",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_geometry_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 7
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "low",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 10,
+      "geometry": "POINT (7.406913 43.739646)",
+      "issue_id": "74100e3b57d8fe7c",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_geometry_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 7
+    },
+    {
+      "problem_name": "coordinate_precision_not_fit_for_use",
+      "severity": "low",
+      "description": "Coordinate precision is stored at an inappropriate level for the intended analysis or delivery format, either bloating output or truncating meaningful detail. Diagnose by reviewing driver precision settings and align export precision with use-case tolerances.",
+      "solution_hint": "Adjust export precision or snap coordinates to an appropriate grid before delivery.",
+      "feature_id": 11,
+      "geometry": "POINT (173.017571 1.338188)",
+      "issue_id": "99e152358adbdbb9",
+      "validation_rule_version": "2026.03",
+      "validator_name": "coordinate_precision_not_fit_for_use",
+      "validator_version": "1",
+      "issue_class": "data_geometry_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "accuracy"
+      },
+      "iso_category": "Positional Accuracy",
+      "confidence": "low",
+      "actionable": false,
+      "priority_score": 7
+    },
+    {
+      "problem_name": "missing_or_stale_spatial_index",
+      "severity": "medium",
+      "description": "A feature class lacks an effective spatial index or its index is stale after heavy edits, degrading spatial query performance. Diagnose with index validation/rebuild tools and recalculate the spatial index when query performance drops.",
+      "solution_hint": "Rebuild or recreate the spatial index after bulk edits or loads.",
+      "feature_id": 12,
+      "geometry": "POINT (43.240244 -11.704158)",
+      "issue_id": "b3a4cb70c6c45eda",
+      "validation_rule_version": "2026.03",
+      "validator_name": "missing_or_stale_spatial_index",
+      "validator_version": "1",
+      "issue_class": "data_issue",
+      "suppression": null,
+      "provenance": {
+        "catalog_category": "integrity"
+      },
+      "iso_category": "Logical Consistency",
+      "confidence": "medium",
+      "actionable": true,
+      "priority_score": 40
+    }
+  ],
+  "dataset_id": "places-facilities",
+  "sample_note": "Public demo report generated from curated sample features with GeoQA report utilities."
+}

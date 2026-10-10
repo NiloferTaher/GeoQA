@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+# Pre-push guard: refuse to publish conference submission material.
+#
+# Rationale
+# ---------
+# WUC-2027 is an active submission. Its abstract, evidence audit, run manifests
+# and professor-facing plan document must never reach the public GeoQA repo.
+#
+# The tool improvements developed alongside that work - the spectral validator,
+# the endpoint scalability fix, the CRS-aware geometry fixes - SHOULD be
+# published: they carry no submission content. Code and paper are separable.
+# This hook enforces that separation.
+#
+# Design notes
+# ------------
+# The check enumerates the full tree of each ref being pushed, because that is
+# exactly the set of paths the remote will end up holding. Checking only the
+# commit diff is not sufficient: a branch pushed as new would reveal its whole
+# tree, and an older push may already contain protected paths.
+#
+# stdin is consumed once into an array, since two read-loops over stdin cannot
+# both see the input.
+#
+# Fails closed on a broken guard? No - deliberately not. If this script itself
+# errors, we report loudly and allow, because a guard that silently stops
+# protecting anything the day bash changes is worse than useless.
+#
+# Install:  git config core.hooksPath .githooks
+# Bypass (human-reviewed only):  git push --no-verify
+#
+set -uo pipefail
+
+ZERO="0000000000000000000000000000000000000000"
+
+PROTECTED_PREFIXES=(
+  "docs/wuc-2027"
+  "reports/wuc-2027"
+  "apps/wuc-atlas"
+  "reruns"
+)
+
+violations=()
+
+# stdin: "<local_ref> <local_sha> <remote_ref> <remote_sha>" per line
+refs=()
+while read -r lref lsha rref rsha; do
+  [ -z "${lsha:-}" ] && continue
+  [ "$lsha" = "$ZERO" ] && continue
+  refs+=("$lref $lsha")
+done
+
+if [ ${#refs[@]} -eq 0 ]; then
+  exit 0
+fi
+
+for entry in "${refs[@]}"; do
+  lref="${entry%% *}"
+  lsha="${entry##* }"
+  # Enumerate what this ref would actually publish.
+  while IFS= read -r path; do
+    for pat in "${PROTECTED_PREFIXES[@]}"; do
+      case "$path" in
+        "$pat"|"$pat"/*)
+          violations+=("$lref  $path")
+          ;;
+      esac
+    done
+  done < <(git ls-tree -r --name-only "$lsha" 2>/dev/null)
+done
+
+if [ ${#violations[@]} -eq 0 ]; then
+  exit 0
+fi
+
+{
+  echo "PUSH BLOCKED - conference submission material detected."
+  echo
+  echo "Protected paths that would become public:"
+  printf '  %s\n' "${violations[@]}" | sort -u | head -60
+  echo
+  echo "WUC-2027 is an active submission. Its abstract, evidence audit, run"
+  echo "manifests and plan document must stay local."
+  echo
+  echo "Publish the TOOL improvements only. The spectral validator, the"
+  echo "endpoint scalability fix and the CRS-aware geometry fixes carry no"
+  echo "submission content and are safe to release."
+  echo
+  echo "Override only after inspecting every path above:"
+  echo "  git push --no-verify"
+} >&2
+
+exit 1
