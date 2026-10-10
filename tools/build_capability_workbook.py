@@ -294,9 +294,10 @@ def _coverage_summary() -> list[dict[str, Any]]:
         },
         {
             "area": "Spatial chunking",
-            "status": "not built",
-            "coverage": "No spatial chunking exists. The agent layer batches features by vertex weight to keep memory bounded; that is a batching strategy, not a spatial tiling, and it does not preserve topology across batches.",
-            "coverage_gap": "A tiled implementation must buffer each tile by a halo so a feature crossing a boundary is present on both sides, otherwise connectivity checks report false breaks at the seams. Whole-layer union and degree checks cannot be tiled at all and need a single global pass. Until both exist, any large-layer run must complete in one pass.",
+            "status": "partial",
+            "coverage": "Halo-buffered tiling in geoqa/chunking.py. A tile selects every feature intersecting its bounds plus a declared halo, geometries whole and never clipped, so a feature crossing a boundary is validated identically on both sides. Findings are deduplicated on problem name and feature id.",
+            "notes": "Chunking is opt-in per validator: a validator runs on the whole layer unless it is named in CHUNK_LOCAL_VALIDATORS, because whole-layer correctness is the default and tiling has to earn the right to change what a validator can see. Twelve validators are declared tileable; the topology questions cannot be tiled at all and are listed with the reason.",
+            "coverage_gap": "An undeclared halo on a multi-tile run is reported as evidence rather than passing silently. scripts/verify_chunking_equivalence.py demonstrates the property: with a halo, a 64-tile run returns exactly the findings the whole-layer run returns; with the halo removed the same run invents one. Not yet wired into validation_runtime dispatch, and the budget is a vertex count rather than a measured memory ceiling.",
         },
         {
             "area": "Conflict resolution",
