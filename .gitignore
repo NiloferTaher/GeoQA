@@ -43,3 +43,34 @@ docs/wuc-2027/
 reports/wuc-2027/
 apps/wuc-atlas/
 reruns/
+
+# ---------------------------------------------------------------------------
+# Working material, kept locally. Not part of the published library.
+# Untracked on purpose: remove with `git rm --cached`, do not delete.
+# ---------------------------------------------------------------------------
+.opencode/
+journal.md
+Marketing.md
+plan_of_action.md
+codex_prompt.md
+SKILLS.md
+AGENTS.md
+streamlit_app.py
+apps/
+.vercelignore
+docs/strategy-*.md
+docs/landscape_and_roadmap.md
+docs/geoqa_atlas_product_brief.md
+docs/CHANGELOG.md
+docs/assets/
+data/integration_results/
+data/public_samples/natural_earth/
+data/public_samples/data_gov/
+data/public_samples/derived/
+docs/wuc-2027/
+reports/wuc-2027/
+apps/wuc-atlas/
+reruns/
+api_key.txt
+*.env
+*.env.*

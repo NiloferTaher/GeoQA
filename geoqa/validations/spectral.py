@@ -1,4 +1,4 @@
-"""
+﻿"""
 spectral.py — Satellite / spectral index anomaly validators for GeoQA
 
 Adds deterministic checks for common multi-spectral derived indices
@@ -26,7 +26,7 @@ pre-computed index columns — works in both low-resource and full modes):
 
 Design follows GeoQA conventions: ValidationIssue via build_issue(),
 catalog-backed problem_name, thermal-safe loops via ThermalGuard when
-iterating large arrays. See base.py, AGENTS.md, and journal.md.
+iterating large arrays. See base.py for the shared validation contract.
 
 Planned catalog entries (add to problem_registry.py):
   - ndvi_out_of_range, ndwi_out_of_range, ndmi_out_of_range

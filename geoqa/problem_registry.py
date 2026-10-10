@@ -820,6 +820,15 @@ _SUPPLEMENTAL_DEFINITIONS: dict[str, dict[str, Any]] = {
         "default_confidence": "medium",
         "default_actionable": True,
     },
+    "endpoint_unresolved": {
+        "category": "topology",
+        "description": "A line endpoint could not be classified as a near miss, an orphan, a legitimate terminal or a node-continuation, so the reason it is free is unknown.",
+        "severity": "medium",
+        "repair_hint": "Supply the companion node layer and widen the search radius, then re-triage. An endpoint nobody can explain is not the same as one that is merely tolerated.",
+        "issue_class": "evidence_condition",
+        "default_confidence": "medium",
+        "default_actionable": True,
+    },
     # --- archive inspection before extraction ---------------------------------
     "archive_path_traversal": {
         "category": "integrity",

@@ -1,447 +1,195 @@
-# GeoQA - Deterministic Geospatial QA Engine
+# GeoQA
 
-GeoQA finds, explains, and fixes geospatial data-quality issues before they break GIS, GeoAI, ML, analysis, publishing, or delivery workflows.
+Deterministic geospatial data-quality validation for research and delivery.
 
-![GeoQA Atlas landing page](docs/assets/geoqa-atlas-landing.png)
-
-### Visual overview
-
-See [docs/assets/GeoQA_Atlas_preview.pdf](docs/assets/GeoQA_Atlas_preview.pdf) for a visual walkthrough of Atlas: landing page, dataset gallery, map-first issue review, Run QA, and intended audiences.
-
-GeoQA is the Python validation engine for deterministic geospatial QA.
-
-GeoQA can also load additive domain plugins for real-world operational rules. In the current repo, DMA-specific polygon QA logic from legacy operational scripts is available through the normal `geoqa.validate(...)` path without changing the core engine.
-
-Future-only architecture notes and staged build plans live under `docs/future/` so they stay separate from shipped operator guidance.
-
-More precisely: GeoQA validates, audits, and prepares geospatial datasets for reliable GIS and GeoAI workflows using deterministic rules, not guesswork.
-
-GeoQA is designed for imperfect machines and imperfect data.
-It prioritizes useful results over complete runs when necessary.
-
-## GeoQA Atlas
-
-GeoQA Atlas is the map-first WebGIS demo and review layer for this engine.
-It lives under `apps/atlas` and shows GeoQA reports through a dark interface with demo datasets, issue overlays, report downloads, and an upload workflow preview.
-
-Atlas does not replace the GeoQA internals.
-The deterministic CLI and Python package remain the source of validation logic, profiles, reports, and conservative fixes.
-
-Run the Atlas demo with these commands.
-
-```powershell
-cd apps/atlas
-npm install
-npm run dev
-```
-
-The v1 app serves precomputed reports and static GeoJSON previews for public demo use.
-The Run QA page previews the upload workflow and clearly marks full validation as a backend-connected step.
-Atlas preview supports GeoJSON and zipped Shapefile where browser parsing is available.
-Full GeoQA validation through the Python backend can support additional GeoPandas-readable formats such as Shapefile, GeoPackage, CSV, GeoJSON, and GeoParquet.
-Atlas public demo mode highlights the exact uploaded features sent to GeoQA.
-It checks up to twenty point features and up to five line, polygon, mixed, or unknown features, while the rest of the loaded preview stays muted on the map.
-When a run is sampled, Atlas says how many features were analyzed and tells users to run GeoQA locally for full-layer validation.
-Run QA map legends are clickable layer toggles for raw preview, GeoQA-analyzed features, and issue overlays, which makes it easier to isolate what was checked.
-Atlas uses a centralized dark basemap config with no-key CARTO fallback tiles and optional `VITE_ATLAS_TILE_URL`, `VITE_ATLAS_LABEL_TILE_URL`, and `VITE_ATLAS_TILE_ATTRIBUTION` overrides for deployments that need a different English-label source.
-The CPU temperature card is hidden in public mode and appears only when `VITE_ATLAS_SHOW_THERMAL=true` is set for local developer review.
-Current demo cards cover roads, zoning polygons, public administrative boundaries, public flood risk zones, OSM water and drainage lines, and places.
-Runtime errors are labeled operational in Atlas and cleaned layers appear only when real cleaned output exists.
-TODO: Add Atlas screenshots under docs/assets after the deployed demo is captured.
-
-### Deploy Atlas on Vercel
-
-GeoQA Atlas is a Vite frontend under `apps/atlas`.
-
-Recommended Vercel settings:
-
-- Repository `NiloferTaher/GeoQA`
-- Root Directory `apps/atlas`
-- Build Command `npm run build`
-- Output Directory `dist`
-- Install Command `npm install`
-
-The public web demo uses sampled Run QA limits.
-Full GeoQA validation should be run locally through the Python CLI/API or through a separately hosted backend.
-
-### Atlas screenshots
-
-| Landing | Dataset review | Run QA |
-| --- | --- | --- |
-| ![Landing](docs/assets/geoqa-atlas-landing.png) | ![Dataset review](docs/assets/geoqa-atlas-dataset-review.png) | ![Run QA](docs/assets/geoqa-atlas-run-qa.png) |
-
-## Front-and-Center Proof
-
-One of the clearest current proof points is already in the repo:
-- Natural Earth roads
-- `56,600` features
-- low-resource CLI benchmark
-- completed successfully on the maintainer workstation
-- `49` structured findings
-
-That matters because GeoQA is designed for real constrained operator environments, not idealized cloud hardware only.
-
-## Real-World Constrained Execution
-
-GeoQA validated a `56,600`-feature road dataset in about `122` seconds
-on a heat-limited workstation using low-resource mode.
-
-Result:
-- execution status: `full`
-- issues found: `49`
-- prioritized, actionable output
-
-This is not a cloud benchmark.
-This is a real constrained-machine result.
-
-## Where GeoQA Fits
-
-GeoQA is:
-- the data-quality layer before downstream GIS or GeoAI work
-- a deterministic QA engine
-- a repeatable CLI and Python workflow
-
-GeoQA is not:
-- desktop GIS software
-- a machine-learning framework
-- a hydraulic or network simulation engine
-
-## Reading Order
-
-Start here:
-1. `README.md`
-2. `docs/START_HERE.md`
-3. `docs/user_guide.md`
-4. `docs/api_policy.md`
-5. `docs/tests.md`
-
-Contributor-oriented docs:
-- `CONTRIBUTING.md`
-- `ARCHITECTURE.md`
-- `docs/security.md`
-- `docs/solo_operator_guide.md`
-
-## Quick Start
-
-Install runtime dependencies:
-
-```powershell
-pip install -r requirements.txt
-```
-
-Run the CLI:
-
-```powershell
-python -m geoqa validate data/public_samples/edge_cases/duplicate_vertex_line.geojson --profile geometry
-```
-
-Run a local archive audit with JSON and Excel reports:
-
-```powershell
-python -m geoqa audit-archive path/to/archive_or_folder --out reports --profiles auto --all-layers --excel --json
-```
-
-Archive audit mode detects multi-layer Shapefile ZIPs, recommends geometry-aware profiles, records validator coverage, and keeps source data unchanged. See `docs/audit_archive.md` and `examples/public_demo/`.
-
-Low-resource first run on a weak or heat-limited machine:
-
-```powershell
-python -m geoqa validate data/public_samples/edge_cases/duplicate_vertex_line.geojson --profile generic_quick --low-resource --max-runtime-seconds 180 --report-path data/integration_results/quick_low_resource_demo
-```
-
-Editable development install:
-
-```powershell
-pip install -e .[dev]
-```
-
-## Python API
-
-GeoQA now has a simple public Python API on top of the existing engine:
+GeoQA checks whether a spatial dataset is fit for the purpose it is about to be
+put to. It reports **named, registered conditions** rather than ad-hoc warnings,
+and it separates *defects*, *evidence* and *governance gaps* so that a reviewer
+can tell the difference between "this is wrong", "this might be wrong" and
+"nobody recorded who decided this".
 
 ```python
-import geoqa
+from geoqa.validation_runtime import execute_validation_plan
+import geopandas as gpd
 
-report = geoqa.validate("data/public_samples/edge_cases/duplicate_vertex_line.geojson")
-print(report.summary)
-print(report.score())
-print(report.to_ml())
-
-score = geoqa.score("data/public_samples/edge_cases/duplicate_vertex_line.geojson")
-print(score)
-
-crs_issues = geoqa.expect.valid_crs(
-    "data/public_samples/edge_cases/duplicate_vertex_line.geojson",
-    expected_crs="EPSG:3857",
+layer = gpd.read_file("boundaries.gpkg")
+result = execute_validation_plan(
+    layer, "topology",
+    metadata={"licence": "CC BY 4.0", "lineage": "Digitised 2026 from survey."},
+    return_result=True,
 )
-print(crs_issues)
+
+for issue in result.issues:
+    print(issue.severity, issue.problem_name, "-", issue.description)
 ```
 
-This API is intentionally flat at the top and object-shaped after validation:
-- `geoqa.validate(...)`
-- `geoqa.score(...)`
-- `geoqa.expect.valid_crs(...)`
-- `geoqa.expect.crs.valid(...)`
-- `geoqa.expect.geometry.clean(...)`
-- `geoqa.expect.topology.connected(...)`
-- `geoqa.check(path).self_intersections()`
-- `GeoQAReport.summary`
-- `GeoQAReport.score()`
-- `GeoQAReport.to_ml()`
-- `GeoQAReport.export(...)`
+---
 
-## Signature Workflow
+## Design commitments
+
+These are the rules the library holds itself to. They are what make a GeoQA
+report citable.
+
+**Named conditions, not generic warnings.** Every finding carries a
+`problem_name` from a registry of 252 conditions, each with a description, a
+repair hint, a severity, a confidence and an issue class. A report can be
+diffed, counted and audited because the vocabulary is fixed.
+
+**Defects and evidence are different things.** `data_issue` means wrong.
+`evidence_condition` means "here is what we observed, you decide".
+`governance_gap` means nobody recorded a decision that had to be made. A
+validator that reports a value as a defect when it is really an unstated
+assumption trains people to ignore it.
+
+**No silent repair, and no silent assumptions.** Empirical coefficients must be
+declared with a meaning, a unit and a source. A number cannot enter a
+water-loss calculation unaccompanied. Bands in a raster are identified by
+wavelength, never by index. Axis order must be declared, never guessed.
+
+**Ambiguity is reported as ambiguity.** When a pair of coordinates is legal in
+both axis orders, GeoQA says so and asks for a declared extent. It does not
+pick one and move on.
+
+**Deterministic.** The same input produces the same output. Validation is
+measurement, not interpretation.
+
+---
+
+## Install
+
+```bash
+pip install -e .
+```
+
+Python 3.12+. Core dependencies are `geopandas`, `shapely`, `pyproj` and
+`psutil`. Optional readers are imported lazily, so a missing one degrades a
+single capability rather than breaking the package: `rasterio` for GeoTIFF,
+`h5py` for HDF5 hyperspectral, `openpyxl` for Excel.
+
+---
+
+## What it validates
+
+Full per-module detail is in [`docs/modules/`](docs/modules/). Summary:
+
+| Area | Module | What it does |
+|---|---|---|
+| Geometry | `validations/geometry.py` | Validity, self-intersection, duplicate vertices, minimum length, sharp cutbacks |
+| Topology | `validations/topology.py` | Dangles, overlaps, gaps, isolated segments, unsplit features, cross-name nesting |
+| Attributes | `validations/attributes.py` | Domains, nulls, uniqueness, field constraints |
+| Integrity | `validations/integrity.py` | Missing and stale spatial indexes, RFC 7946 conformance |
+| CRS | `validations/crs.py`, `crs_units.py` | Missing, invalid, datum mismatch, unit reasoning, guarded reprojection |
+| Dimension | `validations/dimension.py` | 2D/3D conformance and all-zero-Z evidence |
+| Endpoints | `validations/endpoint_triage.py` | Separates near-miss endpoints from genuine orphans and terminal roles |
+| Raster | `validations/raster.py` | Band roles, nodata, scale factor, windowed spectral indices |
+| Hyperspectral | `validations/hyperspectral.py` | HDF-EOS swath products, band selection by wavelength, product level, QA masks |
+| COG | `validations/cog.py` | Cloud-optimized layout, overviews, tile size, format standing |
+| Archive | `validations/archive.py` | Zip-slip, decompression bombs, content-versus-extension, shapefile sidecar sets |
+| Tabular | `validations/tabular.py` | Headers, ragged rows, leading-zero loss, ambiguous dates, sentinels, keys |
+| Workbook | `validations/workbook_media.py` | Embedded and referenced attachments, legibility, attribution |
+| Axis order | `validations/axis_order.py` | Latitude/longitude swaps, ambiguity, declaration conflicts, PostgreSQL SQL |
+| OSM | `validations/osm.py` | Licence and attribution, version metadata, emergent geometry |
+| Vertical | `validations/vertical_datum.py` | Reference surfaces, depth sign, compound CRS requirements |
+| Boundary | `validations/boundary_conformance.py` | Undeclared cuts, explained clips, continuity |
+| Clip | `validations/clip.py` | Assignable boundary straddles, halved features, truncation |
+| Recurrence | `validations/repeat_incident.py` | Same-asset versus same-place recurrence, period gaps |
+| Water | `water_balance.py`, `night_flow.py`, `water_loss.py`, `reference_cases.py` | IWA balance, MNF/FAVAD/FADD, UARL and ILI, published reference cases |
+| EPANET | `validations/epanet.py` | Structural, referential, unit and topological checks on `.inp` decks |
+| Governance | `validations/governance.py` | Licence, accountability, lineage, conformity, currency |
+| Provenance | `metric_constants.py`, `payload_columns.py` | Undeclared constants, structured payloads in text columns |
+| Security | `validations/credentials.py`, `ai_guard.py` | Hardcoded credentials; disclosure screening before sending data onward |
+| Hardware | `hardware.py` | Whether this machine can carry out the operation |
+
+---
+
+## Governance gates
+
+A validator produces findings. Something has to decide whether they permit the
+next step. GeoQA makes that an explicit, declared, recorded act.
 
 ```python
-import geoqa
+from geoqa import HITL
+from geoqa.hitl import GateSpec, any_of, at_least
 
-report = geoqa.validate("data.shp")
+gate = HITL("release", gates=[
+    GateSpec("no_licence_gap",
+             "no dataset ships without recorded terms",
+             any_of("governance_licence_not_declared")),
+    GateSpec("no_critical", "no critical finding", at_least("critical")),
+])
 
-print(report.summary)
-print(report.score(method="conservative"))
-
-if report.score() < 0.8:
-    fixed = report.clean()
-    fixed.export("cleaned.geojson")
+decision = gate.evaluate_and_record(issues, expected_outcome="halt")
+decision.hold(by="reviewer@example.org", note="licence confirmed offline")
+gate.recall().halt_recall_pct
 ```
 
-GeoQA is meant to feel like one concept:
-- validate a dataset
-- get back a report
-- inspect, score, export, or transform it
+Four properties, each covered by a test that fails if it stops being true:
 
-## Story-Driven Examples
+- **`llm_involved` is a class constant, not a setting.** A gate cannot be
+  constructed that claims not to consult a model while doing so. There is a test
+  that greps the decision path for HTTP clients.
+- **The gate proposes, a person disposes.** `hold()` records a human decision
+  and nothing resolves it automatically.
+- **Every decision carries its reasons**, which gates fired, which issues
+  triggered them, and who decided.
+- **Recall is computed, not remembered.** Scored against expected outcomes, so
+  "12 of 12 halts caught, 0 false halts on clean input" is a number the library
+  produces rather than a number someone recalled.
 
-The examples folder now focuses on workflow stories, not just syntax:
-- `examples/basic_usage.py`
-- `examples/story_geoai_prep.py`
-- `examples/before_after_cleaning.py`
+---
 
-These show GeoQA as:
-- a validator
-- a report object
-- a conservative cleaning/export loop
+## Evidence runs
 
-Additional docs:
-- `docs/before_after_showcase.md`
-- `docs/workflows/water_network_ml_prep.md`
+Reproducibility harnesses accumulate hardcoded paths and hardcoded headline
+numbers, which makes them valid for one submission and not the next.
+`scripts/run_evidence_suite.py` takes a manifest instead:
 
-## Example Output
-
-```text
-Loaded 1 features
-Detected 1 issues
-Execution status: full
-Report written to data/integration_results/demo.json
+```bash
+python scripts/run_evidence_suite.py --manifest cases.yaml --log-dir reports/
 ```
 
-## CLI Usage
+It runs each declared case, verifies it, logs the result, and can diff against a
+recorded baseline.
 
-Validate a dataset:
+---
 
-```powershell
-python -m geoqa validate data.shp --profile water_network --output-format json --report-path reports/pipes
+## Package layout
+
+```
+geoqa/                  the library
+  problem_registry.py   252 named conditions with severity, class and repair hints
+  validation_runtime.py dataset-type dispatch, profiles, limits, cost ordering
+  validations/          one module per concern
+  packs/                domain packs declaring which conditions apply where
+  qgis_integration.py   QML, GeoPackage bundles, run manifests
+  gpkg.py               GeoPackage structural conformance
+  hitl.py               governance gates
+  hardware.py           feasibility of an operation on this machine
+  proj_env.py           PROJ database resolution
+  ai_guard.py           disclosure screening
+geoai/                  the optional GeoAI layer
+tools/                  capability workbook generator
+scripts/                evidence suite runner
+tests/                  969 tests
 ```
 
-List profiles:
+---
 
-```powershell
-python -m geoqa profiles list
-python -m geoqa profiles show water_network
+## Tests
+
+```bash
+python -m pytest -q
 ```
 
-Convert a dataset:
+969 tests. Tests that need real multi-gigabyte imagery read their location from
+an environment variable and skip when it is absent:
 
-```powershell
-python -m geoqa convert input.geojson output.parquet --format geoparquet
+```bash
+GEOQA_EMIT_GRANULE=/path/to/granule.h5 python -m pytest tests/test_hyperspectral.py
 ```
 
-Summarize a report:
+---
 
-```powershell
-python -m geoqa report summarize reports/pipes.json
-```
+## Licence
 
-Run a benchmark:
-
-```powershell
-python -m geoqa benchmark data.shp --profile generic_quick
-```
-
-Use runtime controls when needed:
-
-```powershell
-python -m geoqa validate data.shp --profile water_network --max-workers 4 --chunk-size 3000 --sleep 2.0 --thermal-profile cool --cache .geoqa_cache --cache-tag run_a --progress --max-runtime-seconds 1800
-```
-
-Use explicit low-resource mode when the machine is the constraint:
-
-```powershell
-python -m geoqa validate data.shp --profile generic_quick --low-resource --max-runtime-seconds 180 --cache .geoqa_cache --cache-tag low_resource_demo --progress
-```
-
-## Core Concepts
-
-- Validation profiles select and tune deterministic checks for a dataset family.
-- Domain packs provide profile behavior for dataset families such as water networks, boundaries, and land use without duplicating validator logic.
-- Water-network pack variants currently include:
-  - `water_network_quick`
-  - `water_network`
-  - `water_network_strict`
-  - `water_network_audit`
-- The water-network pack is the current flagship domain pack and should be read as deterministic utility-network QA, not hydraulic modeling.
-- Runtime controls support chunking, bounded parallelism, cache reuse, and thermal safety.
-- Runtime feedback now includes validator-stage progress metadata and supports bounded wall-clock execution.
-- Low-resource mode now applies a conservative execution profile automatically for weak or heat-limited machines.
-- Reported issues now include a computed `priority_score` to help triage actionable findings first.
-- Profiles now support explicit downgrade and suppression rules in addition to per-problem policy overrides.
-- Agent/runtime chunking now supports geometry-weighted adaptive resizing under thermal or runtime pressure.
-- Reports are structured outputs that can be consumed by GIS, ML, or downstream QA workflows.
-- The Streamlit app is a local shell around the engine, not the primary product surface.
-
-## Architecture
-
-```text
-CLI / Scripts / App
-        |
-     Runtime
-        |
- Validators / Profiles / Reports
-        |
-   GeoPandas / Shapely / PyProj
-```
-
-## Feature Maturity
-
-| Feature | Status |
-| --- | --- |
-| Validation engine | Stable |
-| CSV / JSON reporting | Stable |
-| CLI surface | Stable |
-| Validation profiles and domain packs | Partial / strong first slice |
-| Runtime caching | Partial |
-| Chunking / thermal controls | Partial |
-| Adaptive runtime feedback and stop controls | Partial |
-| Issue prioritization and actionable reporting | Partial / stronger |
-| Signal calibration fields and profile policies | Partial / stronger |
-| Low-resource execution mode | Partial / strong operator slice |
-| Spatial-index acceleration | Partial |
-| Water-network domain pack | Partial / implemented first pack |
-| Streamlit app | Experimental |
-| Wider GIS format expansion | Planned / Partial by format |
-| ArcGIS integration | Planned |
-
-## When to Use GeoQA
-
-- QA before ML or GeoAI training
-- validating contractor or vendor-delivered GIS data
-- auditing administrative boundaries, utility networks, or land-use layers
-- sanity checking larger datasets before GIS analysis or publication
-
-## Current Priority Order
-
-GeoQA should advance in this order:
-1. stability and scale
-2. enterprise and standards hardening
-3. GeoAI maturity
-4. ecosystem integrations
-
-Practical implication:
-- thermal and large-run completion problems come before new AI-facing features
-- ArcGIS-facing work is later-stage and contributor-oriented unless it can be verified in a real ArcGIS environment
-
-## What GeoQA Is Not
-
-- not a GIS editor
-- not an LLM-driven geometry engine
-- not automatic truth-repair against a basemap
-- not a full ArcGIS/QGIS plugin suite yet
-
-## Current Product Identity
-
-GeoQA is primarily:
-- a deterministic geospatial QA engine
-- a runtime and reporting layer for repeatable validation
-
-GeoQA is secondarily:
-- a local app shell
-- a GeoAI preparation helper
-- a future integration surface for other GIS tools
-
-## Constrained Hardware
-
-GeoQA is built with the assumption that some operators are running on weak or heat-limited local machines.
-
-Current support includes:
-- `--low-resource` CLI mode
-- chunking and adaptive chunk resizing
-- thermal profiles
-- runtime budget limits
-- explicit partial-run reporting instead of silent aborts
-
-Current limitation:
-- the heaviest public workloads still do not always complete on the maintainer workstation within bounded runtime windows
-- GeoQA now reports that honestly instead of pretending those runs are clean full validations
-
-## Stable vs Partial vs Experimental
-
-See:
-- `docs/api_policy.md`
-- `docs/user_guide.md`
-
-Those documents distinguish:
-- stable public APIs
-- partial runtime features
-- experimental/UI surfaces
-
-## Testing
-
-Run the automated suite:
-
-```powershell
-python -m unittest discover -s tests -p 'test_*.py'
-```
-
-See:
-- `docs/tests.md`
-- `docs/local_data_tests.md`
-- `docs/benchmark_story.md`
-
-Current automated baseline:
-- `python -m unittest discover -s tests -p 'test_*.py'`
-- result: `OK` (`169` tests)
-
-## Security
-
-GeoQA-specific risks and mitigations are documented in:
-- `docs/security.md`
-
-## Streamlit
-
-The Streamlit app remains available as a local inspection shell:
-
-```powershell
-streamlit run streamlit_app.py
-```
-
-But the recommended order is:
-1. CLI
-2. library/runtime APIs
-3. app
-
-## Maintainer
-
-Built by **Nilofer Taher**.
-
-- GitHub: [GeoQA repository](https://github.com/NiloferTaher/GeoQA)
-- LinkedIn: [Nilofer Taher](https://ae.linkedin.com/in/nilofertaher)
-
-## License
-
-GeoQA is licensed under the Apache License, Version 2.0.
-See [LICENSE](LICENSE).
-
-Copyright 2026 Nilofer Taher.
-
-Third-party demo datasets retain their original source licenses and attribution requirements.
-See the Atlas demo data documentation for source-specific provenance.
+Apache-2.0. See `LICENSE` and `NOTICE`.
