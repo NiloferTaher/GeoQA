@@ -12,8 +12,7 @@ Why:
 - the library is the real engine
 - the app is a local shell, not the product center
 
-For constrained local workstations, also see:
-- `docs/solo_operator_guide.md`
+For a browser front end to the same engine, see `apps/atlas/`.
 
 ## Capability Status
 
