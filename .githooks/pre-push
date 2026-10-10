@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Pre-push guard: refuse to publish conference submission material.
+# Pre-push guard: refuse to publish conference submission material, and refuse
+# to publish code that does not build or does not pass its tests.
 #
 # Rationale
 # ---------
@@ -11,15 +12,23 @@
 # published: they carry no submission content. Code and paper are separable.
 # This hook enforces that separation.
 #
+# It also refuses to publish broken code. The privacy guard above only knows
+# about paths, so a commit that broke five modules passed straight through it
+# and reached the public repository. A path guard cannot tell you the code
+# still parses; this hook now can.
+#
 # Design notes
 # ------------
-# The check enumerates the full tree of each ref being pushed, because that is
-# exactly the set of paths the remote will end up holding. Checking only the
-# commit diff is not sufficient: a branch pushed as new would reveal its whole
-# tree, and an older push may already contain protected paths.
+# The privacy check enumerates the full tree of each ref being pushed, because
+# that is exactly the set of paths the remote will end up holding. Checking
+# only the commit diff is not sufficient: a branch pushed as new would reveal
+# its whole tree, and an older push may already contain protected paths.
 #
 # stdin is consumed once into an array, since two read-loops over stdin cannot
 # both see the input.
+#
+# Order matters: the privacy check is instant, so it runs first and blocks
+# before the test suite is asked for twenty-odd seconds it will not need.
 #
 # Fails closed on a broken guard? No - deliberately not. If this script itself
 # errors, we report loudly and allow, because a guard that silently stops
@@ -68,25 +77,86 @@ for entry in "${refs[@]}"; do
   done < <(git ls-tree -r --name-only "$lsha" 2>/dev/null)
 done
 
-if [ ${#violations[@]} -eq 0 ]; then
-  exit 0
+if [ ${#violations[@]} -ne 0 ]; then
+  {
+    echo "PUSH BLOCKED - conference submission material detected."
+    echo
+    echo "Protected paths that would become public:"
+    printf '  %s\n' "${violations[@]}" | sort -u | head -60
+    echo
+    echo "WUC-2027 is an active submission. Its abstract, evidence audit, run"
+    echo "manifests and plan document must stay local."
+    echo
+    echo "Publish the TOOL improvements only. The spectral validator, the"
+    echo "endpoint scalability fix and the CRS-aware geometry fixes carry no"
+    echo "submission content and are safe to release."
+    echo
+    echo "Override only after inspecting every path above:"
+    echo "  git push --no-verify"
+  } >&2
+  exit 1
 fi
 
-{
-  echo "PUSH BLOCKED - conference submission material detected."
-  echo
-  echo "Protected paths that would become public:"
-  printf '  %s\n' "${violations[@]}" | sort -u | head -60
-  echo
-  echo "WUC-2027 is an active submission. Its abstract, evidence audit, run"
-  echo "manifests and plan document must stay local."
-  echo
-  echo "Publish the TOOL improvements only. The spectral validator, the"
-  echo "endpoint scalability fix and the CRS-aware geometry fixes carry no"
-  echo "submission content and are safe to release."
-  echo
-  echo "Override only after inspecting every path above:"
-  echo "  git push --no-verify"
-} >&2
+# ---------------------------------------------------------------------------
+# Build and test gate
+# ---------------------------------------------------------------------------
+# What a reader of this repository will run, run before publishing it.
 
-exit 1
+PYTHON="${GEOQA_PYTHON:-python}"
+
+gate() {
+  local label="$1"; shift
+  echo "pre-push: ${label}"
+  if ! "$@"; then
+    {
+      echo
+      echo "PUSH BLOCKED - ${label} failed."
+      echo
+      echo "Nothing was pushed. Fix the failure and push again."
+      echo "If the failure is a false positive, verify the change by hand"
+      echo "first, then:"
+      echo "  git push --no-verify"
+    } >&2
+    exit 1
+  fi
+}
+
+echo "pre-push: compiling, testing, building"
+
+# A syntax error in any module fails here in about a second, which is cheaper
+# than discovering it twenty seconds later inside the suite.
+gate "python compileall" "$PYTHON" -m compileall -q geoqa geoai
+
+gate "python test suite" "$PYTHON" -m pytest -q --no-header -p no:cacheprovider
+
+# apps/atlas is what Vercel builds. Pushing a tree that does not build is how
+# the production deployment went red once already.
+atlas_published=0
+for entry in "${refs[@]}"; do
+  lsha="${entry##* }"
+  if git ls-tree -r --name-only "$lsha" 2>/dev/null |
+       grep -q '^apps/atlas/package.json$'; then
+    atlas_published=1
+    break
+  fi
+done
+
+if [ "$atlas_published" -eq 1 ] && [ -f apps/atlas/package.json ]; then
+  if command -v npm >/dev/null 2>&1; then
+    if [ ! -d apps/atlas/node_modules ]; then
+      echo "pre-push: installing apps/atlas dependencies"
+      (cd apps/atlas && npm install --no-audit --no-fund >/dev/null 2>&1) || true
+    fi
+    if [ -d apps/atlas/node_modules ]; then
+      gate "apps/atlas build" bash -c "cd apps/atlas && npm run build"
+      gate "apps/atlas tests" bash -c "cd apps/atlas && npm test"
+    else
+      echo "pre-push: skipping apps/atlas build (dependencies unavailable)"
+    fi
+  else
+    echo "pre-push: skipping apps/atlas build (npm not on PATH)"
+  fi
+fi
+
+echo "pre-push: ok"
+exit 0
