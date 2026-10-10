@@ -114,7 +114,7 @@ def _import_rasterio():
         import rasterio
     except ImportError as exc:  # pragma: no cover - environment dependent
         raise ImportError(
-            "rasterio is required for raster access. Install with: pip install rasterio"
+            "rasterio is required for raster access. Install with: pip install 'geoqa[raster]'"
         ) from exc
     return rasterio
 

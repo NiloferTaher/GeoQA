@@ -1,4 +1,4 @@
-"""Embedded and referenced media in a spreadsheet.
+﻿"""Embedded and referenced media in a spreadsheet.
 
 The general problem
 -------------------
@@ -101,7 +101,7 @@ def _import_openpyxl():
     except ImportError as exc:  # pragma: no cover - environment dependent
         raise ImportError(
             "openpyxl is required for workbook media validation. "
-            "Install with: pip install openpyxl"
+            "Install with: pip install 'geoqa[excel]'"
         ) from exc
     return openpyxl
 

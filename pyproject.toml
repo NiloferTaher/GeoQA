@@ -17,16 +17,45 @@ dependencies = [
     "shapely",
     "pyproj",
     "psutil",
-    "streamlit",
-    "folium",
-    "streamlit-folium",
-    "zstandard",
 ]
 
 [project.optional-dependencies]
+# Declared per data format rather than bundled, so validating a GeoPackage
+# does not drag in a hyperspectral reader. Each module already imports its
+# own dependency lazily and raises a message naming the extra to install.
+tabular = [
+    "pandas",
+    "numpy",
+]
+raster = [
+    "numpy",
+    "rasterio",
+]
+excel = [
+    "openpyxl",
+]
+hyperspectral = [
+    "numpy",
+    "h5py",
+]
+# The local Streamlit front end is not published with the library, so the
+# web stack is optional. Install this to run it from a local checkout.
+app = [
+    "streamlit",
+    "streamlit-folium",
+    "folium",
+]
+all = [
+    "pandas",
+    "numpy",
+    "rasterio",
+    "openpyxl",
+    "h5py",
+]
 dev = [
     "jupyter",
     "build",
+    "pytest",
 ]
 geoai-jax = [
     "jax",

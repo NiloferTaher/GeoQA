@@ -1,4 +1,4 @@
-"""HDF5 hyperspectral products: HDF-EOS swaths such as EMIT, and generic groups.
+﻿"""HDF5 hyperspectral products: HDF-EOS swaths such as EMIT, and generic groups.
 
 Why a separate reader
 ---------------------
@@ -91,7 +91,7 @@ def _import_h5py():
         import h5py
     except ImportError as exc:  # pragma: no cover - environment dependent
         raise ImportError(
-            "h5py is required for HDF5 access. Install with: pip install h5py"
+            "h5py is required for HDF5 access. Install with: pip install 'geoqa[hyperspectral]'"
         ) from exc
     return h5py
 

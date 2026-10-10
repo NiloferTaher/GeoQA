@@ -106,7 +106,7 @@ def _import_openpyxl():
         import openpyxl
     except ImportError as exc:  # pragma: no cover - environment dependent
         raise ImportError(
-            "openpyxl is required for Excel validation. Install with: pip install openpyxl"
+            "openpyxl is required for Excel validation. Install with: pip install 'geoqa[excel]'"
         ) from exc
     return openpyxl
 
