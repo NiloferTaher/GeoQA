@@ -1,0 +1,32 @@
+{
+  "name": "geoqa-atlas-frontend",
+  "private": true,
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "node scripts/test-public-demo-limits.mjs && node scripts/check-idle-safety.mjs",
+    "audit:bloat": "node scripts/audit-bloat.mjs"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "latest",
+    "leaflet": "latest",
+    "lucide-react": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-leaflet": "latest",
+    "react-router-dom": "latest",
+    "shpjs": "^6.2.0"
+  },
+  "devDependencies": {
+    "@types/geojson": "latest",
+    "@types/leaflet": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "typescript": "latest",
+    "vite": "latest"
+  }
+}

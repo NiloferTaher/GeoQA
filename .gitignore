@@ -1,4 +1,4 @@
-# Python
+﻿# Python
 __pycache__/
 *.py[cod]
 .pytest_cache/
@@ -55,12 +55,8 @@ plan_of_action.md
 codex_prompt.md
 SKILLS.md
 AGENTS.md
-streamlit_app.py
-apps/
-.vercelignore
 docs/strategy-*.md
 docs/landscape_and_roadmap.md
-docs/geoqa_atlas_product_brief.md
 docs/CHANGELOG.md
 docs/assets/
 data/integration_results/
