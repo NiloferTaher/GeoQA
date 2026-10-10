@@ -197,13 +197,23 @@ const thermalVisible = await loadPublicDemoModule({ showThermal: "true" })
 assert.equal(thermalVisible.showThermalCard, true)
 
 const basemaps = await loadBasemapModule()
-const defaultBasemap = basemaps.getAtlasBasemap()
-assert.equal(defaultBasemap.name, "Atlas dark")
-assert.ok(defaultBasemap.tileUrl.includes("cartocdn.com"))
-assert.ok(defaultBasemap.labelTileUrl.includes("cartocdn.com"))
-assert.ok(defaultBasemap.attribution.includes("OpenStreetMap"))
-assert.equal(basemaps.getAtlasBasemaps().light.name, "Atlas light")
-assert.equal(basemaps.getAtlasBasemaps().satellite.configured, false)
+  const defaultBasemap = basemaps.getAtlasBasemap()
+  assert.equal(defaultBasemap.name, "Atlas dark")
+
+  // The default basemap must not depend on a provider that watermarks keyless
+  // requests. CARTO's basemaps.cartocdn.com returns an "API KEY REQUIRED"
+  // tile for every unauthenticated call, which silently destroys the map, so
+  // this assertion is a regression guard rather than a cosmetic check.
+  assert.ok(
+    !defaultBasemap.tileUrl.includes("cartocdn.com"),
+    "default basemap must not use CARTO, which watermarks keyless requests",
+  )
+  assert.ok(defaultBasemap.tileUrl.includes("arcgisonline.com"))
+  assert.ok(defaultBasemap.labelTileUrl.includes("arcgisonline.com"))
+  assert.ok(defaultBasemap.attribution.includes("OpenStreetMap"))
+
+  assert.equal(basemaps.getAtlasBasemaps().light.name, "Atlas light")
+  assert.equal(basemaps.getAtlasBasemaps().satellite.configured, true)
 
 const overriddenBasemap = await loadBasemapModule({
   tileUrl: "https://tiles.example.test/{z}/{x}/{y}.png",

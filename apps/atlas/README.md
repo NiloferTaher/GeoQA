@@ -1,4 +1,4 @@
-# GeoQA Atlas
+﻿# GeoQA Atlas
 
 GeoQA Atlas is the public WebGIS demo layer for GeoQA.
 It presents precomputed GeoQA reports through a polished dark interface with a landing page, dataset gallery, map workspace, issue drawer, report download, and Run QA workflow preview.
@@ -100,7 +100,7 @@ Layer-level findings focus the analyzed layer context and show the status in the
 Duplicate geometry findings show a row comparison table so matching coordinates can be reviewed against source attributes before edits.
 Run notes include selected layer context and practical suggestions for multi-layer ZIPs and utility layer context.
 Malformed or empty coordinates are guarded before sampled validation so the public UI does not expose raw Python type errors.
-Atlas uses one default readable dark CARTO basemap with a separate label layer.
+Atlas uses one default readable dark Esri basemap with a separate label layer. Esri ArcGIS Online serves these keylessly, which matters because CARTO returns a watermarked "API KEY REQUIRED" tile to unauthenticated requests and silently destroys the map.
 Deployments can override the dark tile URLs with the `VITE_ATLAS_DARK_*` environment variables.
 The legacy `VITE_ATLAS_TILE_URL`, `VITE_ATLAS_LABEL_TILE_URL`, and `VITE_ATLAS_TILE_ATTRIBUTION` settings still override the default basemap.
 Labels are rendered without CSS blur and GeoQA issue overlays render above labels.
