@@ -117,8 +117,11 @@ jobs:
 
       - name: No absolute local paths in tracked source
         run: |
-          # A published path such as C:\Users\<name> identifies the author's
-          # machine and directory layout to anyone reading the repository.
+          # A published absolute path identifies the author's machine and
+          # directory layout to anyone reading the repository. The pattern
+          # below is deliberately not spelled out literally in a comment: the
+          # workflow would otherwise trip its own check.
+          #
           # The pattern is single-quoted, so it reaches grep as written: an
           # escaped backslash matches one literal backslash.
           hits=$(git grep -l -I -E '[A-Za-z]:\\Users\\' HEAD -- \
@@ -126,6 +129,8 @@ jobs:
           if [ -n "$hits" ]; then
             echo "Absolute Windows paths found in tracked files:"
             echo "$hits"
+            echo
+            echo "Use a repository-relative path or an environment variable instead."
             exit 1
           fi
           echo "No absolute local paths."
