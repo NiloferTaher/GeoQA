@@ -1,0 +1,158 @@
+name: CI
+
+# The pre-push hook protects the maintainer's machine. This protects everyone
+# else's: a reviewer who clones the repository gets the same gate, without
+# having to trust the contributor's account of what they ran.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# A new push supersedes an in-flight run for the same ref rather than queueing
+# behind it. Nobody reads the result of a run against a commit that no longer
+# exists on the branch.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    name: Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          # The optional readers are installed so the raster, Excel and
+          # hyperspectral tests actually execute here rather than skipping in
+          # CI and passing vacuously.
+          python -m pip install -e ".[all,dev]"
+
+      # A syntax error is the cheapest defect to catch and the fastest, so it
+      # is checked before the suite is allowed to cost anything.
+      - name: Compile
+        run: python -m compileall -q geoqa geoai
+
+      - name: Test
+        run: python -m pytest -q --no-header
+
+      # The module pages are generated from the registry. If a condition
+      # changed and the pages were not regenerated, the documentation a reader
+      # sees no longer matches the code, and that is not something a reviewer
+      # would otherwise catch.
+      - name: Module documentation is current
+        run: python tools/generate_module_docs.py --check
+
+  atlas:
+    name: Atlas front end
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: apps/atlas
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      # Vercel builds this directory, so a failure here is a failure there.
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm test
+
+  privacy:
+    name: No private material
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # WUC-2027 is an active submission. Its material must never reach this
+      # repository. The pre-push hook enforces the same rule locally; this
+      # makes it enforceable for anyone who pushes.
+      - name: Protected paths are absent from the tree
+        run: |
+          found=0
+          for path in docs/wuc-2027 reports/wuc-2027 apps/wuc-atlas reruns api_key.txt; do
+            if git ls-tree -r --name-only HEAD | grep -q "^$path"; then
+              echo "PROTECTED PATH COMMITTED: $path"
+              found=1
+            fi
+          done
+          if [ "$found" -ne 0 ]; then
+            echo "Conference submission material must not be published."
+            exit 1
+          fi
+          echo "No protected paths in the tree."
+
+      - name: No absolute local paths in tracked source
+        run: |
+          # A published path such as C:\Users\<name> identifies the author's
+          # machine and directory layout to anyone reading the repository.
+          # The pattern is single-quoted, so it reaches grep as written: an
+          # escaped backslash matches one literal backslash.
+          hits=$(git grep -l -I -E '[A-Za-z]:\\Users\\' HEAD -- \
+            '*.py' '*.md' '*.ts' '*.tsx' '*.json' '*.yml' '*.yaml' || true)
+          if [ -n "$hits" ]; then
+            echo "Absolute Windows paths found in tracked files:"
+            echo "$hits"
+            exit 1
+          fi
+          echo "No absolute local paths."
+
+      - name: No credential patterns in tracked source
+        run: |
+          # Files that exist to test the credential detector must contain
+          # credential-shaped strings. They are listed here with the reason
+          # rather than excluded by pattern, so adding a new fixture file is a
+          # deliberate act someone has to notice.
+          #
+          #   tests/test_credentials.py       detector unit tests
+          #   tests/test_ai_guard.py          disclosure screening tests
+          #   tests/test_runtime_packages.py  end-to-end scan through a package
+          #
+          # The fixtures use AKIAIOSFODNN7EXAMPLE, which is AWS's own published
+          # example key and is not a credential.
+          allow="^(tests/test_credentials\.py|tests/test_ai_guard\.py|tests/test_runtime_packages\.py)$"
+          hits=$(git grep -l -I -E '(sk-[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{12,}|-----BEGIN [A-Z ]*PRIVATE KEY-----)' HEAD -- \
+            '*.py' '*.md' '*.ts' '*.tsx' '*.json' '*.yml' '*.yaml' '*.sh' \
+            | sed 's|^HEAD:||' | grep -vE "$allow" || true)
+          if [ -n "$hits" ]; then
+            echo "Possible credentials found in tracked files:"
+            echo "$hits" | sed 's/^/  /'
+            echo
+            echo "If a file genuinely needs a credential-shaped fixture, add it to the"
+            echo "allowlist above with the reason, so the exception is reviewable."
+            exit 1
+          fi
+          echo "No credential patterns outside the declared fixtures."
