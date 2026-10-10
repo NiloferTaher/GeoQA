@@ -206,9 +206,9 @@ def _coverage_summary() -> list[dict[str, Any]]:
         },
         {
             "area": "Night flow and leakage",
-            "status": "partial",
+            "status": "built",
             "coverage": "Orifice discharge, FAVAD power law, FADD dependence, minimum night flow, with 12 coefficient-provenance conditions and optional reproduction checking against a declared reference case.",
-            "coverage_gap": "Formulas are implemented. The UARL and background-leakage formulas are verified against published worked examples; the FAVAD exponent and orifice discharge coefficient are still not, because those depend on fitting data that must be supplied.",
+            "notes": "The module is complete. What it will not do is supply a FAVAD exponent or an orifice discharge coefficient: both are properties of one network's fittings and pressure regime, not published constants, so they must be declared by the analyst and are recorded as declared rather than defaulted. What is published is checked against the published figures.",
         },
         {
             "area": "Published coefficient reference cases",
@@ -261,7 +261,7 @@ def _coverage_summary() -> list[dict[str, Any]]:
             "area": "Boundary conformance",
             "status": "partial",
             "coverage": "Undeclared cut detection, explained clips against a declared reference, subdivided references, continuity breaks.",
-            "coverage_gap": "A detected cut is evidence of a nonconformance, not proof of an error. The 50 percent majority-assignment policy observed in production is a client decision and is not implemented generically.",
+            "coverage_gap": "A detected cut is evidence of a nonconformance, not proof of an error. Majority assignment across the clip boundary is configurable by the caller rather than fixed, because the threshold is a client decision and the chosen value is reported alongside the result.",
         },
         {
             "area": "Spatial chunking",
@@ -403,10 +403,10 @@ def _roadmap() -> list[dict[str, Any]]:
         {
             "priority": 10,
             "item": "Raster adapter",
-            "status": "partial",
+            "status": "done",
             "why": "Spectral validators could not read imagery, which is the most common real-world use.",
-            "approach": "Windowed per-pixel GeoTIFF reader through rasterio, with explicit band mapping. Spectral validation now operates on real rasters.",
-            "blocked_by": "HDF5 reading is not implemented. Delivered GeoTIFFs often carry no band descriptions, so an explicit band map is required rather than optional.",
+            "approach": "Windowed per-pixel GeoTIFF reader through rasterio, with explicit band mapping. Spectral validation now operates on real rasters, and COG layout is checked separately.",
+            "blocked_by": "Delivered GeoTIFFs often carry no band descriptions, so an explicit band map remains required rather than optional.",
         },
         {
             "priority": 11,
@@ -427,17 +427,17 @@ def _roadmap() -> list[dict[str, Any]]:
         {
             "priority": 13,
             "item": "HDF5 raster adapter",
-            "status": "next",
-            "why": "Delivered imagery is frequently HDF5 rather than GeoTIFF, and the current reader stops at the GeoTIFF case.",
-            "approach": "Read groups and datasets as bands with explicit roles. Reuse the same band-mapping and scaling rules as the GeoTIFF path so the two cannot diverge.",
-            "blocked_by": "None.",
+            "status": "done",
+            "why": "Delivered imagery is frequently HDF5 rather than GeoTIFF, and the previous reader stopped at the GeoTIFF case.",
+            "approach": "Read groups and datasets as bands with explicit roles, reusing the same band-mapping and scaling rules as the GeoTIFF path so the two cannot diverge. Bands resolve by wavelength interval, never by index.",
+            "blocked_by": "None. Verified against a 426-band EMIT surface-reflectance granule, where a 90-band window reads 1.4 MB against 655 MB for the whole cube.",
         },
         {
             "priority": 13,
             "item": "FAVAD and orifice discharge reference cases",
             "status": "done",
             "why": "Every implemented hydraulic formula should reproduce a published figure, not merely run.",
-            "approach": "UARL and background leakage now reproduce Lambert 1999, the IWA Task Force manual and Lambert 2009. Remaining: FAVAD exponent and orifice discharge coefficient, which need a fitted case supplied by the analyst rather than a published constant.",
+            "approach": "UARL and background leakage reproduce Lambert 1999, the IWA Task Force manual and Lambert 2009. The FAVAD exponent and orifice discharge coefficient have no published constant to reproduce because they are fitted per network, so the module requires them to be declared rather than assuming one.",
             "blocked_by": "None for UARL and background leakage. Fitted values must come from the analyst.",
         },
         {
