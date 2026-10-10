@@ -137,10 +137,13 @@ jobs:
 
       - name: No credential patterns in tracked source
         run: |
-          # Files that exist to test the credential detector must contain
-          # credential-shaped strings. They are listed here with the reason
-          # rather than excluded by pattern, so adding a new fixture file is a
-          # deliberate act someone has to notice.
+          # This workflow is excluded because it contains the patterns
+          # themselves. A guard cannot be subject to its own source: it would
+          # always fail, and a check that always fails is a check nobody runs.
+          #
+          # Files that exist to test the credential detector are listed by name
+          # with the reason, so adding a fourth fixture is a deliberate act
+          # rather than a silent pass.
           #
           #   tests/test_credentials.py       detector unit tests
           #   tests/test_ai_guard.py          disclosure screening tests
@@ -148,7 +151,7 @@ jobs:
           #
           # The fixtures use AKIAIOSFODNN7EXAMPLE, which is AWS's own published
           # example key and is not a credential.
-          allow="^(tests/test_credentials\.py|tests/test_ai_guard\.py|tests/test_runtime_packages\.py)$"
+          allow="^(\.github/|tests/test_credentials\.py|tests/test_ai_guard\.py|tests/test_runtime_packages\.py)"
           hits=$(git grep -l -I -E '(sk-[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{12,}|-----BEGIN [A-Z ]*PRIVATE KEY-----)' HEAD -- \
             '*.py' '*.md' '*.ts' '*.tsx' '*.json' '*.yml' '*.yaml' '*.sh' \
             | sed 's|^HEAD:||' | grep -vE "$allow" || true)
