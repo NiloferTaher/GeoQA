@@ -29,7 +29,7 @@ export default function App() {
             <ExternalLink size={16} />
             GitHub
           </a>
-          <a href="https://ae.linkedin.com/in/nilofertaher" target="_blank" rel="noreferrer">
+          <a href="https://www.linkedin.com/in/nilofertaher" target="_blank" rel="noreferrer">
             <ExternalLink size={16} />
             LinkedIn
           </a>

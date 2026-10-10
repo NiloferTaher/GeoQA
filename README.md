@@ -159,7 +159,7 @@ The library is the product. **Atlas** is the interface to it: a browser front
 end for running a validation, reading the findings against the geometry that
 produced them, and exporting the result.
 
-Live: **[geo.vercel.app](https://geo.vercel.app)**
+Live: **[geo-qa-pi.vercel.app](https://geo-qa-pi.vercel.app)**
 
 Source lives in [`apps/atlas/`](apps/atlas/) and is a Vite + React + MapLibre
 front end. It talks to the same `geoqa` package the CLI does; there is no second
