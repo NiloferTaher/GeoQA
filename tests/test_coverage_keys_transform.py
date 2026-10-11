@@ -170,60 +170,60 @@ class TestCompoundKeyDuplicates:
 
     def test_same_asset_same_owner_same_hour_is_duplicate(self):
         frame = self._frame_with([
-            {"wvt_id": 1, "owner": "a", "ts": "2026-03-21T10:15:00"},
-            {"wvt_id": 1, "owner": "a", "ts": "2026-03-21T10:45:00"},
+            {"asset_id": 1, "owner": "a", "ts": "2026-03-21T10:15:00"},
+            {"asset_id": 1, "owner": "a", "ts": "2026-03-21T10:45:00"},
         ])
         names = [i.problem_name for i in compound_key_duplicates(
-            frame, key_fields=["wvt_id", "owner"], timestamp_field="ts")]
+            frame, key_fields=["asset_id", "owner"], timestamp_field="ts")]
         assert set(names) == {"compound_key_duplicate"}
         assert len(names) == 2, "every member of the group must be reported"
 
     def test_different_owner_is_not_duplicate(self):
         frame = self._frame_with([
-            {"wvt_id": 1, "owner": "a", "ts": "2026-03-21T10:15:00"},
-            {"wvt_id": 1, "owner": "b", "ts": "2026-03-21T10:15:00"},
+            {"asset_id": 1, "owner": "a", "ts": "2026-03-21T10:15:00"},
+            {"asset_id": 1, "owner": "b", "ts": "2026-03-21T10:15:00"},
         ])
         assert compound_key_duplicates(
-            frame, key_fields=["wvt_id", "owner"], timestamp_field="ts") == []
+            frame, key_fields=["asset_id", "owner"], timestamp_field="ts") == []
 
     def test_different_hour_is_not_duplicate(self):
         frame = self._frame_with([
-            {"wvt_id": 1, "owner": "a", "ts": "2026-03-21T10:15:00"},
-            {"wvt_id": 1, "owner": "a", "ts": "2026-03-21T11:15:00"},
+            {"asset_id": 1, "owner": "a", "ts": "2026-03-21T10:15:00"},
+            {"asset_id": 1, "owner": "a", "ts": "2026-03-21T11:15:00"},
         ])
         assert compound_key_duplicates(
-            frame, key_fields=["wvt_id", "owner"], timestamp_field="ts") == []
+            frame, key_fields=["asset_id", "owner"], timestamp_field="ts") == []
 
     def test_missing_field_is_silent_not_a_crash(self):
-        frame = self._frame_with([{"wvt_id": 1}])
-        assert compound_key_duplicates(frame, key_fields=["wvt_id", "owner"]) == []
+        frame = self._frame_with([{"asset_id": 1}])
+        assert compound_key_duplicates(frame, key_fields=["asset_id", "owner"]) == []
 
 
 class TestFieldResolution:
     def test_single_alias_resolves(self):
-        assert resolve_field(["utilis_id"], ["wvt_id", "utilis_id"])["status"] == "resolved"
+        assert resolve_field(["utilis_id"], ["asset_id", "utilis_id"])["status"] == "resolved"
 
     def test_two_aliases_present_is_ambiguous(self):
         """First-match wins here is what hid the problem."""
-        result = resolve_field(["wvt_id", "utilis_id"], ["wvt_id", "utilis_id"])
+        result = resolve_field(["asset_id", "utilis_id"], ["asset_id", "utilis_id"])
         assert result["status"] == "ambiguous"
         assert result["column"] is None
-        assert set(result["candidates"]) == {"wvt_id", "utilis_id"}
+        assert set(result["candidates"]) == {"asset_id", "utilis_id"}
 
     def test_no_alias_is_missing(self):
-        assert resolve_field(["other"], ["wvt_id", "utilis_id"])["status"] == "missing"
+        assert resolve_field(["other"], ["asset_id", "utilis_id"])["status"] == "missing"
 
     def test_schema_reports_both_failure_modes(self):
         issues = resolve_schema(
-            ["wvt_id", "utilis_id", "unrelated"],
-            {"asset": ["wvt_id", "utilis_id"], "length": ["pipe_len", "shape_len"]},
+            ["asset_id", "utilis_id", "unrelated"],
+            {"asset": ["asset_id", "utilis_id"], "length": ["pipe_len", "shape_len"]},
         )
         names = sorted(i.problem_name for i in issues)
         assert names == ["schema_field_ambiguous", "schema_field_missing"]
 
 
 class TestVocabularyBinding:
-    VOCAB = ["Ad Dakhliyah", "Seeb", "Batinah North", "Bawshar"]
+    VOCAB = ["Northern Area", "Seabrook", "Bastion North", "Bayside"]
 
     def test_clear_match_binds(self):
         binding = bind_to_vocabulary(["Seeb"], self.VOCAB)[0]

@@ -11,7 +11,7 @@ declared granularity first, or two records two minutes apart read as two
 different hours.
 
 **Field aliases.** The same quantity arrives under several names. Resolving
-``wvt_id`` to whichever of ``wvt_id``/``utilis_id`` is present is necessary.
+an asset identifier to whichever of its two historical names is present is necessary.
 Resolving to the *first* match is not, because a layer carrying both names is
 ambiguous and first-match hides it. Ambiguity is reported rather than
 resolved.
