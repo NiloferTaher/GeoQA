@@ -226,9 +226,9 @@ class TestVocabularyBinding:
     VOCAB = ["Northern Area", "Seabrook", "Bastion North", "Bayside"]
 
     def test_clear_match_binds(self):
-        binding = bind_to_vocabulary(["Seeb"], self.VOCAB)[0]
+        binding = bind_to_vocabulary(["Bayside"], self.VOCAB)[0]
         assert binding.status == "bound"
-        assert binding.match == "Seeb"
+        assert binding.match == "Bayside"
 
     def test_unknown_name_is_unbound(self):
         binding = bind_to_vocabulary(["Nowhere"], self.VOCAB)[0]
@@ -236,12 +236,12 @@ class TestVocabularyBinding:
 
     def test_two_terms_matching_is_ambiguous(self):
         """The case a convenience implementation hides by taking n=1."""
-        bindings = bind_to_vocabulary(["Bawshar North"], ["Bawshar", "Bawshar North"])
+        bindings = bind_to_vocabulary(["Bayside North"], ["Bayside", "Bayside North"])
         assert bindings[0].status == "ambiguous"
         assert bindings[0].ambiguous_with
 
     def test_ambiguity_is_reported_as_an_issue(self):
-        bindings = bind_to_vocabulary(["Bawshar North"], ["Bawshar", "Bawshar North"])
+        bindings = bind_to_vocabulary(["Bayside North"], ["Bayside", "Bayside North"])
         names = [i.problem_name for i in validate_vocabulary_binding(bindings)]
         assert names == ["vocabulary_binding_ambiguous"]
 
