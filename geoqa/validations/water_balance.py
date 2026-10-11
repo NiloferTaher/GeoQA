@@ -214,7 +214,7 @@ def compute_water_balance(
     if uarl is not None:
         resolved_carl = cawl
         if resolved_carl is None and days_in_period:
-            resolved_carl = 1_000_000.0 * real_losses / days_in_period
+            resolved_carl = 1_000.0 * real_losses / days_in_period
         if resolved_carl is not None and uarl:
             ili = resolved_carl / uarl
             notes.append(

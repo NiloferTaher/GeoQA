@@ -137,7 +137,7 @@ def test_ili_computed_when_uarl_supplied():
     )
     assert result.ili is not None
     # 16000 m3 over 365 days -> CARL in L/day
-    assert result.cawl == pytest.approx(1_000_000.0 * 16_000 / 365)
+    assert result.cawl == pytest.approx(1_000.0 * 16_000 / 365)
 
 
 def test_ili_not_computed_without_uarl():

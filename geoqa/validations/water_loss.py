@@ -222,7 +222,7 @@ def ili_assessment(
     if accounting_days <= 0:
         raise ValueError("accounting period must be positive")
 
-    carl = 1_000_000.0 * annual_real_loss_m3 / accounting_days
+    carl = 1_000.0 * annual_real_loss_m3 / accounting_days
     nrw_percent = 100.0 * annual_real_loss_m3 / input_volume_m3_per_year
 
     ili = None

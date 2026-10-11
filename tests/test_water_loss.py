@@ -138,7 +138,7 @@ def test_ili_refuses_zero_uarl():
 
 def test_assessment_computes_carl_and_ili():
     result = ili_assessment(
-        annual_real_loss_m3=730.0, input_volume_m3_per_year=3_650.0,
+        annual_real_loss_m3=730_000.0, input_volume_m3_per_year=3_650_000.0,
         uarl_l_per_day=2_000_000.0,
     )
     assert result.carl_l_per_day == pytest.approx(2_000_000.0)
@@ -264,7 +264,7 @@ def test_full_chain_from_network_to_index():
         connections_coefficient=CONN, private_length_coefficient=PRIV,
     )
     result = ili_assessment(
-        annual_real_loss_m3=uarl * _days / 1_000_000.0,
+        annual_real_loss_m3=uarl * _days / 1_000.0,
         input_volume_m3_per_year=3_650_000.0,
         uarl_l_per_day=uarl,
         pressure_factor=inputs.pressure_factor,
