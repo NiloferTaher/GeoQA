@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import json
 from pathlib import Path
 from typing import Any
 
@@ -105,6 +106,16 @@ class GeoQAReport:
             raise ValueError(f"Unsupported score method: {method!r}")
         return quality_score_from_issues(len(issues), _max_severity(self._result) if issues else None)
 
+    def to_geojson(self, *, keep_non_actionable: bool = True) -> dict[str, Any]:
+        """Return errors-only GeoJSON for direct use in a web map.
+
+        Only issues that carry usable geometry become features, so the result
+        can be loaded straight into MapLibre/Leaflet without a QGIS step.
+        """
+        from .reports.geojson import issues_to_geojson
+
+        return issues_to_geojson(self.issues, keep_non_actionable=keep_non_actionable)
+
     def to_ml(self) -> list[dict[str, Any]]:
         """Return issue rows in a simple ML-friendly feature format."""
         return build_issue_feature_rows(self.issues)
@@ -117,9 +128,28 @@ class GeoQAReport:
             raise RuntimeError("pandas is required for GeoQAReport.to_dataframe().") from exc
         return pd.DataFrame([issue.to_dict() for issue in self._result.issues])
 
+    def to_table(self, file_path: str | Path) -> Path:
+        """Write findings to a ``.csv`` or ``.xlsx`` table for analysis.
+
+        Attributes arrive flattened into spreadsheet columns, with WKT and
+        centroid longitude/latitude added so the table stays mappable.
+        """
+        from .reports.tables import geojson_to_table
+
+        return geojson_to_table(self.issues, file_path)
+
     def export(self, file_path: str | Path, *, output_format: str = "json") -> Path:
         """Export the report issues using the standard GeoQA report writer."""
         resolved_format = output_format or _infer_export_format(file_path)
+        if resolved_format == "json" and Path(file_path).suffix.lower() == ".geojson":
+            resolved_format = "geojson"
+        if resolved_format == "geojson":
+            from .reports.geojson import issues_to_geojson
+            target = Path(file_path)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            payload = issues_to_geojson(self.issues)
+            target.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+            return target
         return generate_report(
             self.issues,
             output_format=resolved_format,

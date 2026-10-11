@@ -9,6 +9,7 @@ __version__ = "0.3.0"
 
 from . import expect, hitl, thermal
 from .api import GeoQAReport, score, validate
+from .reports.geojson import errors_summary, issues_to_geojson
 from .expect import *  # noqa: F401,F403
 from .hitl import Gate as HITL
 from .proj_env import ensure_proj as _ensure_proj
@@ -37,8 +38,10 @@ __all__ = [
     "__version__",
     "GeoQAReport",
     "check",
+    "errors_summary",
     "expect",
     "hitl",
+    "issues_to_geojson",
     "no_null_geometry",
     "no_self_intersections",
     "score",
