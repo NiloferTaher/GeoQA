@@ -36,12 +36,16 @@ class TestMarginMatters:
         """The most important property. A gap of one percent over tolerance is
         usually digitising noise, and a tool presenting it as a defect with the
         same confidence as a gap of five tolerances is misleading."""
-        result = assess_finding(_gap(1.02))
+        result = assess_finding(
+            _gap(1.02), base_rates={"geometry_topology": DEFAULT_BASE_RATES["geometry_topology"]}
+        )
         assert 0.35 < result.posterior < 0.75
         assert result.band in {"uncertain", "weak"}
 
     def test_a_finding_far_past_the_threshold_is_near_certain(self):
-        result = assess_finding(_gap(8.0))
+        result = assess_finding(
+            _gap(8.0), base_rates={"geometry_topology": DEFAULT_BASE_RATES["geometry_topology"]}
+        )
         assert result.posterior > 0.9
         assert result.band == "near_certain"
 
@@ -138,7 +142,9 @@ class TestCalibration:
         """The number that matters: if predictions average 0.8 and outcomes
         average 0.4, the confidence figures are wrong and must say so."""
         issues = [_gap(3.0), _gap(4.0), _gap(2.5), _gap(6.0)]
-        results = assess_findings(issues)
+        results = assess_findings(
+            issues, base_rates={"geometry_topology": DEFAULT_BASE_RATES["geometry_topology"]}
+        )
         outcomes = {}
         for index, issue in enumerate(issues):
             # Only half are genuine, which is far below the predictions.
@@ -149,7 +155,9 @@ class TestCalibration:
 
     def test_bins_are_reported(self):
         issues = [_gap(1.2), _gap(5.0)]
-        results = assess_findings(issues)
+        results = assess_findings(
+            issues, base_rates={"geometry_topology": DEFAULT_BASE_RATES["geometry_topology"]}
+        )
         outcomes = {(i.problem_name, i.feature_id): True for i in issues}
         assert calibration_report(results, outcomes)["bins"]
 

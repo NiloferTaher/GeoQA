@@ -347,13 +347,17 @@ def assess_finding(
         calibrated = True
         rate_source = "supplied for this finding"
     else:
-        rates = dict(DEFAULT_BASE_RATES)
-        if base_rates:
-            rates.update(base_rates)
         key = _prior_key(issue.problem_name)
-        resolved_prior = rates.get(key) if key else None
-        calibrated = resolved_prior is not None
-        rate_source = f"default base rate for {key}" if resolved_prior is not None else "no base rate"
+        if key is not None and base_rates is not None and key in base_rates:
+            resolved_prior = base_rates[key]
+            calibrated = True
+            rate_source = f"supplied base rate for {key}"
+        else:
+            resolved_prior = DEFAULT_BASE_RATES.get(key) if key else None
+            calibrated = False
+            rate_source = (
+                f"default base rate for {key}" if resolved_prior is not None else "no base rate"
+            )
 
     if resolved_prior is None:
         return ConfidenceResult(
@@ -412,8 +416,8 @@ def assess_finding(
         feature_id=issue.feature_id,
         prior=resolved_prior,
         posterior=float(posterior),
-        calibrated=True,
-        band=confidence_band(float(posterior), calibrated=True),
+        calibrated=calibrated,
+        band=confidence_band(float(posterior), calibrated=calibrated),
         evidence=evidence,
         caveats=caveats,
         would_change_it=would_change,
