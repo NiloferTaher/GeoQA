@@ -33,9 +33,12 @@ One page per module, generated from the registry.
 - [`credentials`](credentials.md) — `credentials`
 - [`accuracy`](accuracy.md) — `accuracy`
 - [`containment`](containment.md) — `containment`
+- [`coverage`](coverage.md) — `coverage`
 - [`cross_layer`](cross_layer.md) — `cross_layer`
 - [`datatypes`](datatypes.md) — `datatypes`
 - [`encoding`](encoding.md) — `encoding`
+- [`keys`](keys.md) — `keys`
 - [`metadata`](metadata.md) — `metadata`
 - [`sentinels`](sentinels.md) — `sentinels`
 - [`spectral`](spectral.md) — `spectral`
+- [`transform_audit`](transform_audit.md) — `transform_audit`
