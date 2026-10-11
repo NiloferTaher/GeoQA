@@ -54,27 +54,37 @@ __all__ = [
 #: A condition that is absent from this mapping is not family-gated, which
 #: is the correct default: a metadata or governance condition applies to a
 #: layer whatever it contains.
+#:
+#: Every key here must be a registered condition name. A key that names
+#: something unregistered silently gates nothing, which looks identical to
+#: working and is worse, so tests/test_shape_and_dispatch.py asserts the two
+#: sets agree.
 CONDITION_FAMILIES: dict[str, str] = {
     # polygon-only
     "polygon_overlap_same_layer": "polygon",
-    "polygon_gap_same_layer": "polygon",
+    "polygon_overlap_other_layer": "polygon",
+    "small_polygon_overlap": "polygon",
     "small_polygon_gap": "polygon",
+    "polygon_gap_same_layer": "polygon",
     "feature_within_feature": "polygon",
+    "polygon_boundary_mismatch": "polygon",
+    "polygon_boundary_not_covered_by_lines": "polygon",
     "below_minimum_feature_area": "polygon",
     "geometry_thin_sliver": "polygon",
     "geometry_elongated": "polygon",
     # line-only
     "line_dangle": "line",
+    "epanet_dangling_endpoint": "line",
     "line_intersection_same_layer": "line",
-    "continuity_breaks": "line",
-    "feature_not_split_at_intersection": "line",
+    "continuity_break": "line",
     "isolated_network_segment": "line",
     "below_minimum_feature_length": "line",
     "sharp_angle_cutback": "line",
     "unsnapped_endpoints_within_tolerance": "line",
-    # point-only
-    "point_in_polygon_unexpected": "point",
-    "boundary_mismatch_against_reference": "any",
+    "unsnapped_vertices_within_tolerance": "line",
+    # Any: the condition needs more than one layer, and the layers supply the
+    # families themselves.
+    "clip_straddles_boundary": "any",
 }
 
 

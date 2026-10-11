@@ -311,3 +311,17 @@ class TestRegistry:
 
     def test_family_map_only_names_real_families(self):
         assert set(CONDITION_FAMILIES.values()) <= {"polygon", "line", "point", "any"}
+
+    def test_every_family_map_key_is_a_registered_condition(self):
+        """A key naming something unregistered gates nothing and looks like working."""
+        registered = {item.problem_name for item in list_problem_definitions()}
+        unknown = sorted(set(CONDITION_FAMILIES) - registered)
+        assert unknown == [], (
+            "CONDITION_FAMILIES names conditions that do not exist: "
+            + ", ".join(unknown)
+        )
+
+    def test_the_line_and_polygon_gates_actually_gate_something(self):
+        for family in ("line", "polygon"):
+            gated = [n for n, f in CONDITION_FAMILIES.items() if f == family]
+            assert len(gated) >= 5, f"the {family} gate covers too little to be useful"

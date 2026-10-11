@@ -189,8 +189,25 @@ def plan_tiles(
     should not arrive by accident.
     """
     notes: list[str] = []
-    bounds_obj = layer.total_bounds
-    bounds = (float(bounds_obj[0]), float(bounds_obj[1]), float(bounds_obj[2]), float(bounds_obj[3]))
+    try:
+        bounds_obj = layer.total_bounds
+        bounds = (
+            float(bounds_obj[0]),
+            float(bounds_obj[1]),
+            float(bounds_obj[2]),
+            float(bounds_obj[3]),
+        )
+    except Exception:
+        # No geometry column, or an empty frame. Tiling has nothing to work
+        # from, and saying so is more useful than the AttributeError that
+        # reading total_bounds raises on a non-spatial frame.
+        notes.append(
+            "The layer has no readable geometry bounds, so no tiling was "
+            "attempted and the layer is validated whole."
+        )
+        empty = ChunkPlan([Tile(index=(0, 0), bounds=(0.0, 0.0, 0.0, 0.0))], 0.0,
+                          False, target_vertices_per_tile, (0.0, 0.0, 0.0, 0.0), 0, notes)
+        return empty
     vertices = _vertex_count(layer)
 
     minx, miny, maxx, maxy = bounds

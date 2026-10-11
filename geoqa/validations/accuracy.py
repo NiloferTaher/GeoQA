@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
+import math
 from decimal import Decimal
 from typing import Any
 
@@ -32,8 +33,19 @@ def _iter_coordinate_sequences(geometry: Any) -> Iterable[list[tuple[float, ...]
 
 
 def _decimal_places(value: float) -> int:
+    # A non-finite coordinate has no decimal places to count. It is a missing
+    # value rather than an imprecise one, and Decimal("nan") has an exponent of
+    # the string 'n', which is not a number at all. Null and infinite
+    # coordinates are reported by the validators that own those problems.
+    try:
+        if not math.isfinite(value):
+            return 0
+    except (TypeError, ValueError):
+        return 0
     normalized = Decimal(str(value)).normalize()
     exponent = normalized.as_tuple().exponent
+    if not isinstance(exponent, int):
+        return 0
     return max(0, -exponent)
 
 

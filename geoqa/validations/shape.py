@@ -133,29 +133,36 @@ def _measure(geometry: Any) -> ShapeProfile:
 
 
 def _iter_coords(geometry: Any):
-    """Yield every coordinate of any geometry, whatever its type.
+    """Yield the XY of every coordinate of any geometry, whatever its type.
 
     A polygon exposes no ``.coords`` and no ``.geoms``; its vertices live on
     the exterior ring and any interior rings. An iterator that forgets this
     silently reports a polygon as having no coordinates, which turns every
     measurement derived from them into zero.
+
+    Coordinates are reduced to their first two ordinates rather than
+    unpacked, because a three-dimensional geometry yields triples and
+    unpacking them into two names raises.
     """
     if geometry is None:
         return
     try:
-        yield from geometry.coords
+        for coord in geometry.coords:
+            yield coord[0], coord[1]
         return
     except Exception:
         pass
     exterior = getattr(geometry, "exterior", None)
     if exterior is not None:
         try:
-            yield from exterior.coords
+            for coord in exterior.coords:
+                yield coord[0], coord[1]
         except Exception:
             pass
         try:
             for interior in geometry.interiors:
-                yield from interior.coords
+                for coord in interior.coords:
+                    yield coord[0], coord[1]
         except Exception:
             pass
         return
