@@ -64,7 +64,7 @@ class UarlInputs:
     mains_length_km: float
     service_connections: int
     private_pipe_length_km: float
-    pressure_factor: PressureFactor
+    pressure_factor: PressureFactor | None = None
 
     def __post_init__(self) -> None:
         for name, value in (
@@ -77,13 +77,26 @@ class UarlInputs:
             raise ValueError(
                 f"service_connections cannot be negative: {self.service_connections}"
             )
+        # pressure_factor is optional and the IWA guidance is to use a factor
+        # of one when the pressure regime is not known. Defaulting to the
+        # neutral factor here rather than dereferencing None is what makes the
+        # documented default usable at all.
         if self.average_pressure <= 0:
             raise ValueError(
-                f"average_pressure_m must be positive: {self.pressure_factor.average_pressure_m}"
+                "average_pressure_m must be positive: "
+                f"{getattr(self.pressure_factor, 'average_pressure_m', self.pressure_factor)}"
             )
 
     @property
     def average_pressure(self) -> float:
+        """Mean pressure in metres, or the neutral factor of one when unknown.
+
+        Applying a UARL under an unknown pressure regime is itself a
+        governance gap, and the caller is expected to report it, but it is not
+        a reason to refuse to compute anything.
+        """
+        if self.pressure_factor is None:
+            return 1.0
         return self.pressure_factor.average_pressure_m
 
     def as_dict(self) -> dict[str, Any]:
