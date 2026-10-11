@@ -82,7 +82,24 @@ jobs:
       - name: Test
         run: |
           set -x
-          python -m pytest -q --no-header
+          python -m pytest -q --no-header 2>&1 | tee test.log
+          status=${PIPESTATUS[0]}
+          if [ "$status" -ne 0 ]; then
+            {
+              echo "### Tests failed (exit $status)"
+              echo '```'
+              grep -E '^(FAILED|ERROR)' test.log | head -40
+              echo '```'
+              echo ""
+              echo "<details><summary>Last 80 lines</summary>"
+              echo ""
+              echo '```'
+              tail -n 80 test.log
+              echo '```'
+              echo "</details>"
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit "$status"
+          fi
 
       - name: Module documentation is current
         run: |
