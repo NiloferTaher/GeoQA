@@ -32,5 +32,10 @@ One page per module, generated from the registry.
 - [`payload_columns`](payload_columns.md) — `payload_columns`
 - [`credentials`](credentials.md) — `credentials`
 - [`accuracy`](accuracy.md) — `accuracy`
+- [`containment`](containment.md) — `containment`
+- [`cross_layer`](cross_layer.md) — `cross_layer`
+- [`datatypes`](datatypes.md) — `datatypes`
+- [`encoding`](encoding.md) — `encoding`
 - [`metadata`](metadata.md) — `metadata`
+- [`sentinels`](sentinels.md) — `sentinels`
 - [`spectral`](spectral.md) — `spectral`

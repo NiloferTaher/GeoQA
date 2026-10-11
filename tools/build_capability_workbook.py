@@ -293,6 +293,48 @@ def _coverage_summary() -> list[dict[str, Any]]:
             "notes": "Recall is scored against expected outcomes rather than remembered, so the hit rate is a number the library produces. Each property is covered by a test that fails if it stops being true.",
         },
         {
+            "area": "Cross-layer referential integrity",
+            "status": "built",
+            "coverage": "5 conditions: child row referencing an absent parent, unmatched rows in each direction, rows with no usable join key, and geometric orphans where an asset's identifier resolves but its geometry meets nothing in the network layer.",
+            "notes": "The two directions are reported separately because an orphan-only check reports half the problem and looks complete while doing so. Keys are compared as trimmed text, so a numeric identifier read as 70677, as \"70677\" and as \" 70677\" joins correctly rather than failing on the join key.",
+        },
+        {
+            "area": "Geometry part structure",
+            "status": "built",
+            "coverage": "3 conditions: mixed geometry families in one layer, mixed part types, and a declared column type that will not accept what the layer contains.",
+            "notes": "Answers the single-versus-multi question explicitly, with single and multi counts, the dominant type, and the family breakdown. The declared-versus-observed check exists because a column declared Polygon will not take a MultiPolygon at insert and PostGIS will not coerce it.",
+        },
+        {
+            "area": "Declared datatypes",
+            "status": "built",
+            "coverage": "3 conditions: identifier declared as float, identifier declared as text, and a coordinate or measure column declared as text.",
+            "notes": "Coordinates declared as text admit a comma decimal separator and stray whitespace as though they were valid numbers. An integer identifier is accepted; only a float or text identifier is reported, because those are the ones that stop matching themselves.",
+        },
+        {
+            "area": "PostGIS load expectations",
+            "status": "built",
+            "coverage": "3 conditions plus the part and datatype checks: absent CRS, CRS that does not resolve to an EPSG code, and SRID differing from the target.",
+            "notes": "Not a substitute for asking the database. These catch the mismatches visible from the layer alone so the failure arrives before the insert rather than during it.",
+        },
+        {
+            "area": "Placeholder and sentinel values",
+            "status": "built",
+            "coverage": "1 condition covering zero dates, N/A and similar text, negative numeric sentinels, Excel error values, and empty strings, reported per column and per kind.",
+            "notes": "These pass a null check and are read back as real answers. A zero date is distinguished from an Excel error because the fix is different in each case.",
+        },
+        {
+            "area": "Encoding integrity",
+            "status": "built",
+            "coverage": "2 conditions: a shapefile with no .cpg sidecar, and attribute values that do not survive the declared encoding.",
+            "notes": "Detects and reports rather than repairs. Rewriting encodings on load destroys the evidence of what the original bytes were, and the repair belongs to whoever holds the source of truth.",
+        },
+        {
+            "area": "Output durability",
+            "status": "built",
+            "coverage": "6 conditions covering buffer containment, round-trip write and read-back, row count changes, lost geometry, and degraded geometry after serialisation.",
+            "notes": "Round-trip validation writes the layer and reopens it, because a layer that is non-empty in memory may not be loadable from disk. Scale-dependent tolerance derives a tolerance from the data's own extent and reports the distance that resulted, rather than applying an unstated metre value.",
+        },
+        {
             "area": "Spatial chunking",
             "status": "partial",
             "coverage": "Halo-buffered tiling in geoqa/chunking.py. A tile selects every feature intersecting its bounds plus a declared halo, geometries whole and never clipped, so a feature crossing a boundary is validated identically on both sides. Findings are deduplicated on problem name and feature id.",
