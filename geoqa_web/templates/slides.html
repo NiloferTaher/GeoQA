@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>__TITLE__</title>
+<style>
+  :root { --bg:#0b0f19; --panel:#121826; --line:#1f2a3d; --text:#e6ecf7; --muted:#8b9bb4; --accent:#60a5fa;
+    --critical:#ef4444; --high:#f97316; --medium:#eab308; --low:#38bdf8; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:var(--bg); color:var(--text); overflow:hidden;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  #deck { position:absolute; inset:0; }
+  .slide { position:absolute; inset:0; display:none; grid-template-rows:auto 1fr auto; gap:18px;
+    padding:6vh 7vw; opacity:0; transform:translateY(18px); transition:opacity .5s, transform .5s; }
+  .slide.active { display:grid; opacity:1; transform:none; }
+  .kicker { color:var(--accent); font-size:12px; letter-spacing:.18em; text-transform:uppercase; font-weight:600; }
+  h1 { margin:.15em 0 0; font-size:clamp(30px,4.6vw,58px); line-height:1.06; letter-spacing:-.02em; }
+  h2 { margin:.1em 0 0; font-size:clamp(24px,3.4vw,40px); line-height:1.1; letter-spacing:-.015em; }
+  .lede { color:var(--muted); font-size:clamp(15px,1.5vw,19px); margin-top:1em; max-width:64ch; }
+  ul.big { list-style:none; padding:0; margin:1em 0 0; display:grid; gap:.7em; }
+  ul.big li { display:flex; gap:14px; align-items:flex-start; font-size:clamp(15px,1.6vw,20px); }
+  ul.big .k { flex:none; width:30px; height:30px; border-radius:8px; display:grid; place-items:center;
+    background:var(--panel); border:1px solid var(--line); font-size:13px; color:var(--accent);
+    font-variant-numeric:tabular-nums; }
+  .tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px; margin-top:1.4em; }
+  .tile { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px; }
+  .tile .v { font-size:clamp(24px,3.2vw,40px); font-weight:700; font-variant-numeric:tabular-nums; line-height:1; }
+  .tile .l { color:var(--muted); font-size:12px; margin-top:8px; letter-spacing:.04em; }
+  .bars { margin-top:1.2em; display:grid; gap:10px; max-width:900px; }
+  .bar { display:flex; align-items:center; gap:12px; }
+  .bar .nm { flex:0 0 34%; font-size:13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--muted); }
+  .bar .tr { flex:1; height:12px; background:var(--panel); border:1px solid var(--line); border-radius:6px; overflow:hidden; }
+  .bar .fi { height:100%; border-radius:6px; transition:width .6s cubic-bezier(.2,.8,.2,1); }
+  .bar .v2 { flex:0 0 42px; text-align:right; color:var(--muted); font-variant-numeric:tabular-nums; font-size:13px; }
+  footer { display:flex; align-items:center; gap:14px; color:var(--muted); font-size:12px; }
+  .dots { display:flex; gap:7px; }
+  .dot { width:7px; height:7px; border-radius:50%; background:var(--line); cursor:pointer; }
+  .dot.on { background:var(--accent); }
+  .nav { margin-left:auto; display:flex; gap:8px; }
+  .nav button { background:var(--panel); border:1px solid var(--line); color:var(--text); border-radius:9px;
+    padding:8px 15px; cursor:pointer; font:inherit; font-size:13px; }
+  .nav button:hover { border-color:var(--accent); }
+  .note { margin-top:1.2em; padding:14px 16px; border-left:3px solid var(--accent); background:var(--panel);
+    border-radius:0 10px 10px 0; font-size:14px; color:var(--muted); max-width:80ch; }
+  .cols { display:grid; grid-template-columns:1fr 1fr; gap:34px; margin-top:1.2em; }
+  @media (max-width:800px){ .cols{grid-template-columns:1fr} .bar .nm{flex-basis:50%} }
+</style>
+</head>
+<body>
+<div id="deck"></div>
+
+<script>
+(function () {
+  "use strict";
+  var DECK = __DECK__;
+  var COLORS = { critical:"#ef4444", high:"#f97316", medium:"#eab308", low:"#38bdf8", info:"#64748b" };
+  var esc = function (s) { return String(s==null?"":s).replace(/[&<>"']/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); };
+
+  function bars(items, color) {
+    var max = Math.max.apply(null, [1].concat(items.map(function (i) { return i.value; })));
+    return '<div class="bars">' + items.map(function (i) {
+      return '<div class="bar"><div class="nm" title="' + esc(i.label) + '">' + esc(i.label) + "</div>" +
+        '<div class="tr"><div class="fi" style="width:' + (i.value / max * 100) + "%;background:" +
+        (i.color || color || "#60a5fa") + '"></div></div>' +
+        '<div class="v2">' + i.value + "</div></div>";
+    }).join("") + "</div>";
+  }
+
+  var host = document.getElementById("deck");
+  host.innerHTML = DECK.slides.map(function (s, i) {
+    var body = "";
+    if (s.tiles) {
+      body += '<div class="tiles">' + s.tiles.map(function (t) {
+        return '<div class="tile"><div class="v" style="color:' + (t.color || "#e6ecf7") + '">' +
+          esc(t.value) + '</div><div class="l">' + esc(t.label) + "</div></div>";
+      }).join("") + "</div>";
+    }
+    if (s.bullets) {
+      body += '<ul class="big">' + s.bullets.map(function (b, j) {
+        return "<li><span class='k'>" + (j + 1) + "</span><span>" + esc(b) + "</span></li>";
+      }).join("") + "</ul>";
+    }
+    if (s.bars) body += bars(s.bars, s.bar_color);
+    if (s.two_column) {
+      body += '<div class="cols"><div>' + (s.left || "") + "</div><div>" + (s.right || "") + "</div></div>";
+    }
+    if (s.note) body += '<div class="note">' + esc(s.note) + "</div>";
+
+    return '<section class="slide' + (i === 0 ? " active" : "") + '" data-i="' + i + '">' +
+      "<header>" + (s.kicker ? '<div class="kicker">' + esc(s.kicker) + "</div>" : "") +
+      (s.title ? "<h" + (s.title_level === 2 ? "2" : "1") + ">" + esc(s.title) + "</" + (s.title_level === 2 ? "2" : "1") + ">" : "") +
+      (s.lede ? '<div class="lede">' + esc(s.lede) + "</div>" : "") + "</header>" +
+      "<div>" + body + "</div>" +
+      '<footer><div class="dots">' + DECK.slides.map(function (_, j) {
+        return '<div class="dot' + (j === i ? " on" : "") + '" data-jump="' + j + '"></div>';
+      }).join("") + '</div><span>' + esc(DECK.footer || "") + '</span>' +
+      '<div class="nav"><button data-step="-1">Prev</button><button data-step="1">Next</button></div>' +
+      "</footer></section>";
+  }).join("");
+
+  var slides = Array.prototype.slice.call(host.querySelectorAll(".slide"));
+  var cur = 0;
+  function go(n) {
+    cur = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function (s, i) { s.classList.toggle("active", i === cur); });
+    host.querySelectorAll(".dot").forEach(function (d, i) { d.classList.toggle("on", i === cur); });
+    if (history.replaceState) history.replaceState(null, "", "#" + (cur + 1));
+  }
+  host.addEventListener("click", function (e) {
+    var step = e.target.getAttribute && e.target.getAttribute("data-step");
+    if (step) { go(cur + Number(step)); return; }
+    var jump = e.target.getAttribute && e.target.getAttribute("data-jump");
+    if (jump !== null && jump !== undefined) go(Number(jump));
+  });
+  document.addEventListener("keydown", function (e) {
+    if (["ArrowRight", "PageDown", " "].indexOf(e.key) !== -1) { e.preventDefault(); go(cur + 1); }
+    if (["ArrowLeft", "PageUp"].indexOf(e.key) !== -1) { e.preventDefault(); go(cur - 1); }
+    if (e.key === "Home") go(0);
+    if (e.key === "End") go(slides.length - 1);
+  });
+  var start = (location.hash || "").replace("#", "");
+  if (start) go(Number(start) - 1);
+  window.deck = { go: go, count: slides.length };
+})();
+</script>
+</body>
+</html>

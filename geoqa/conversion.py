@@ -120,6 +120,10 @@ def _resolve_extracted_dataset(root_dir: Path) -> Path:
     if geojson_files:
         return geojson_files[0]
 
+    osm_files = sorted(root_dir.rglob("*.osm.pbf")) + sorted(root_dir.rglob("*.pbf")) + sorted(root_dir.rglob("*.osm"))
+    if osm_files:
+        return osm_files[0]
+
     json_files = sorted(root_dir.rglob("*.json"))
     if json_files:
         return json_files[0]
@@ -183,13 +187,118 @@ def list_vector_layers(path: str | Path) -> list[str]:
             return []
 
 
-def default_vector_layer_name(layers: list[str]) -> str | None:
-    preferred = ["multipolygons", "lines", "multilinestrings", "points", "other_relations"]
+def vector_layer_feature_counts(path: str | Path, layers: list[str] | None = None) -> dict[str, int]:
+    """Return the feature count for every readable layer.
+
+    Some drivers (notably OSM) report ``-1`` because they cannot know the count
+    without a full scan. Such layers are reported as ``-1`` (unknown) so callers
+    can fall back to a cheap probe instead of treating them as empty.
+    """
+    dataset_path = Path(path)
+    names = list(layers) if layers else list_vector_layers(dataset_path)
+    counts: dict[str, int] = {}
+    for name in names:
+        try:
+            import pyogrio
+
+            info = pyogrio.read_info(dataset_path, layer=name)
+            counts[name] = int(info.get("features", -1))
+        except Exception:
+            counts[name] = -1
+    return counts
+
+
+def _layer_has_features(path: str | Path, layer: str) -> bool:
+    """Cheaply check whether a layer holds any feature (reads a single row)."""
+    try:
+        gpd = _load_geopandas()
+        frame = gpd.read_file(path, layer=layer, rows=1)
+    except Exception:
+        return False
+    return len(frame) > 0
+
+
+def default_vector_layer_name(
+    layers: list[str],
+    *,
+    path: str | Path | None = None,
+) -> str | None:
+    """Pick the most useful default layer.
+
+    A fixed preference order silently chose an *empty* layer for many OSM
+    extracts (multipolygons first, even when the extract had only roads), which
+    made validation appear to succeed while reading nothing. An empty default
+    is worse than no default, so candidates are probed before committing.
+    """
+    if not layers:
+        return None
+
     lowered = {layer.lower(): layer for layer in layers}
-    for candidate in preferred:
-        if candidate in lowered:
-            return lowered[candidate]
-    return layers[0] if layers else None
+    preferred = [
+        lowered[name]
+        for name in ("multipolygons", "lines", "multilinestrings", "points", "other_relations")
+        if name in lowered
+    ]
+    ordered = preferred or list(layers)
+
+    if path is None:
+        return ordered[0]
+
+    counts = vector_layer_feature_counts(path, layers)
+    known_populated = [
+        (counts.get(name, -1), index, name)
+        for index, name in enumerate(ordered)
+        if counts.get(name, -1) > 0
+    ]
+    if known_populated:
+        known_populated.sort(key=lambda item: (-item[0], item[1]))
+        return known_populated[0][2]
+
+    # Counts are unknown (-1) for drivers such as OSM: probe for a real feature.
+    for name in ordered:
+        if _layer_has_features(path, name):
+            return name
+    return ordered[0]
+
+
+def load_all_vector_layers(
+    path: str | Path,
+    *,
+    skip_empty: bool = True,
+) -> dict[str, Any]:
+    """Load every layer of a multi-layer source as ``{layer_name: GeoDataFrame}``.
+
+    OSM extracts expose separate points/lines/multipolygons layers, so loading
+    only the first one leaves most of the extract unvalidated.
+    """
+    dataset_path = Path(path)
+    suffix = dataset_path.suffix.lower()
+    names = list_vector_layers(dataset_path)
+
+    if suffix in {".pbf", ".osm"} and len(names) > 1:
+        layers: dict[str, Any] = {}
+        for name in names:
+            try:
+                frame = gpd_read(dataset_path, layer=name)
+            except Exception:
+                continue
+            if skip_empty and len(frame) == 0:
+                continue
+            layers[name] = frame
+        if layers:
+            return layers
+        return {name: gpd_read(dataset_path, layer=name) for name in names}
+
+    chosen = default_vector_layer_name(names, path=dataset_path)
+    return {chosen or "layer": gpd_read(dataset_path, layer=chosen)} if chosen else {}
+
+
+def gpd_read(dataset_path: Path, *, layer: str | None = None) -> Any:
+    """Thin geopandas.read_file wrapper so multi-layer reads stay in one place."""
+    gpd = _load_geopandas()
+    if layer is None:
+        return gpd.read_file(dataset_path)
+    return gpd.read_file(dataset_path, layer=layer)
 
 
 def load_vector_dataset(
@@ -283,9 +392,17 @@ def load_vector_dataset(
         return _load_las_like_dataset(dataset_path, csv_crs=csv_crs)
 
     if suffix in {".pbf", ".osm"}:
+        if ogr_layer == "all":
+            raise ValueError(
+                "Use load_all_vector_layers() to read every OSM layer; "
+                "load_vector_dataset() returns a single layer."
+            )
         layer_name = ogr_layer
         if layer_name is None:
-            layer_name = default_vector_layer_name(list_vector_layers(dataset_path))
+            layer_name = default_vector_layer_name(
+                list_vector_layers(dataset_path),
+                path=dataset_path,
+            )
         if layer_name is not None:
             return gpd.read_file(dataset_path, layer=layer_name)
         return gpd.read_file(dataset_path)

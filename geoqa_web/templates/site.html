@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>__TITLE__</title>
+<meta name="description" content="__DESCRIPTION__" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%2360a5fa' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%2360a5fa'/%3E%3C/svg%3E" />
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@6/dist/maplibre-gl.css" />
+<style>
+  :root {
+    --bg: #0b0f19;
+    --panel: #121826;
+    --panel-2: #0e1420;
+    --line: #1f2a3d;
+    --text: #e6ecf7;
+    --muted: #8b9bb4;
+    --accent: #60a5fa;
+    --critical: #ef4444;
+    --high: #f97316;
+    --medium: #eab308;
+    --low: #38bdf8;
+    --ok: #22c55e;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
+    font: 14px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  a { color: var(--accent); }
+  #map { position: absolute; inset: 0; }
+  .panel { position: absolute; background: color-mix(in srgb, var(--panel) 92%, transparent);
+    backdrop-filter: blur(10px); border: 1px solid var(--line); border-radius: 12px; }
+
+  #header { top: 16px; left: 16px; padding: 14px 18px; min-width: 260px; z-index: 5; }
+  #header h1 { margin: 0; font-size: 16px; letter-spacing: .3px; }
+  #header .sub { color: var(--muted); font-size: 12px; margin-top: 4px; }
+  #header .meta { display: flex; gap: 14px; margin-top: 10px; font-size: 12px; color: var(--muted); }
+  #header .meta b { color: var(--text); font-variant-numeric: tabular-nums; }
+
+  #legend { top: 16px; right: 16px; padding: 12px 14px; z-index: 5; min-width: 190px; }
+  #legend h2 { margin: 0 0 8px; font-size: 11px; text-transform: uppercase; letter-spacing: .12em;
+    color: var(--muted); font-weight: 600; }
+  .legend-row { display: flex; align-items: center; gap: 8px; padding: 3px 0; cursor: pointer; user-select: none; }
+  .legend-row.off { opacity: .35; }
+  .swatch { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+  .legend-row .n { margin-left: auto; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+  #summary { bottom: 16px; left: 16px; padding: 12px 14px; z-index: 5; max-width: 340px; max-height: 42vh;
+    overflow: auto; }
+  #summary h2 { margin: 0 0 8px; font-size: 11px; text-transform: uppercase; letter-spacing: .12em;
+    color: var(--muted); font-weight: 600; }
+  .bar { display: flex; align-items: center; gap: 8px; margin: 4px 0; font-size: 12px; }
+  .bar .track { flex: 1; height: 6px; background: var(--panel-2); border-radius: 3px; overflow: hidden; }
+  .bar .fill { height: 100%; border-radius: 3px; }
+  .bar .val { color: var(--muted); font-variant-numeric: tabular-nums; min-width: 26px; text-align: right; }
+
+  #search { top: 96px; left: 16px; padding: 8px 10px; z-index: 5; display: flex; gap: 8px; }
+  #search input { background: var(--panel-2); border: 1px solid var(--line); color: var(--text);
+    padding: 7px 10px; border-radius: 8px; width: 210px; font: inherit; }
+  #search input:focus { outline: none; border-color: var(--accent); }
+  #search .btn { background: var(--panel-2); border: 1px solid var(--line); color: var(--text);
+    padding: 7px 10px; border-radius: 8px; cursor: pointer; font: inherit; }
+  #search .btn:hover { border-color: var(--accent); }
+  #search .btn.on { background: var(--accent); color: #06121f; border-color: var(--accent); }
+
+  /* Popup + drawer share the finding-detail layout */
+  .finding h4 { margin: 0 0 6px; font-size: 13px; }
+  .finding .chip { display: inline-block; padding: 1px 7px; border-radius: 999px; font-size: 10px;
+    text-transform: uppercase; letter-spacing: .08em; margin-right: 6px; color: #06121f; font-weight: 700; }
+  .finding dl { margin: 8px 0 0; display: grid; grid-template-columns: 96px 1fr; gap: 4px 10px; font-size: 12px; }
+  .finding dt { color: var(--muted); }
+  .finding dd { margin: 0; }
+  .maplibregl-popup-content { background: var(--panel); color: var(--text); border: 1px solid var(--line);
+    border-radius: 10px; padding: 12px 14px; box-shadow: 0 12px 32px rgba(0,0,0,.55); }
+  .maplibregl-popup-tip { border-top-color: var(--panel) !important; border-bottom-color: var(--panel) !important; }
+  .maplibregl-popup-close-button { color: var(--muted); font-size: 18px; padding: 4px 8px; }
+
+  #hint { bottom: 16px; right: 16px; padding: 8px 12px; z-index: 5; color: var(--muted); font-size: 11px; }
+  #empty { position: absolute; inset: 0; display: none; place-items: center; z-index: 4; pointer-events: none; }
+  #empty .box { padding: 18px 24px; text-align: center; color: var(--muted); }
+  @media (max-width: 720px) {
+    #summary, #hint { display: none; }
+    #search input { width: 130px; }
+  }
+</style>
+</head>
+<body>
+<div id="map" role="application" aria-label="Interactive map of validation findings"></div>
+
+<div id="empty"><div class="box panel">No findings were supplied for this dataset.</div></div>
+
+<header id="header" class="panel">
+  <h1>__TITLE__</h1>
+  <div class="sub">__SUBTITLE__</div>
+  <div class="meta">
+    <div>Findings <b id="m-total">0</b></div>
+    <div>Layers <b id="m-layers">0</b></div>
+    <div>Generated <b>__GENERATED__</b></div>
+  </div>
+</header>
+
+<div id="search" class="panel">
+  <input id="q" type="search" placeholder="Filter by rule, feature or text" aria-label="Filter findings" />
+  <button class="btn" id="fit" title="Zoom to all visible findings">Fit</button>
+</div>
+
+<aside id="legend" class="panel">
+  <h2>Severity</h2>
+  <div id="legend-rows"></div>
+  <h2 style="margin-top:12px">Base layers</h2>
+  <div id="layer-rows"></div>
+</aside>
+
+<aside id="summary" class="panel">
+  <h2>Findings by rule</h2>
+  <div id="bars"></div>
+</aside>
+
+<div id="hint" class="panel">Click a finding for detail. Scroll to zoom, drag to pan.</div>
+
+<script src="https://unpkg.com/maplibre-gl@6/dist/maplibre-gl.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  var DATA = __DATA__;
+  var findings = DATA.findings || [];
+  var baseLayers = DATA.base_layers || [];
+  var severityOrder = ["critical", "high", "medium", "low", "info"];
+  var COLORS = {
+    critical: "#ef4444", high: "#f97316", medium: "#eab308",
+    low: "#38bdf8", info: "#64748b"
+  };
+
+  var esc = function (s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  };
+
+  function centroid(coords) {
+    var xs = [], ys = [];
+    (function walk(v) {
+      if (typeof v[0] === "number") { xs.push(v[0]); ys.push(v[1]); }
+      else v.forEach(walk);
+    })(coords || []);
+    if (!xs.length) return null;
+    return [xs.reduce(function (a, b) { return a + b; }, 0) / xs.length,
+            ys.reduce(function (a, b) { return a + b; }, 0) / ys.length];
+  }
+
+  var map = new maplibregl.Map({
+    container: "map",
+    style: {
+      version: 8,
+      glyphs: "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
+      sources: {},
+      layers: [
+        { id: "bg", type: "background", paint: { "background-color": "#0b0f19" } },
+        { id: "graticule", type: "line", source: "graticule", paint: { "line-color": "#1b2434", "line-width": 1 } }
+      ]
+    },
+    center: [0, 20], zoom: 1.6, attributionControl: false
+  });
+  map.addControl(new maplibregl.NavigationControl({ showCompass: true }), "top-right");
+  map.addControl(new maplibregl.ScaleControl({ unit: "metric" }), "bottom-right");
+  map.addControl(new maplibregl.AttributionControl({
+    customAttribution: "Findings generated by GeoQA. Basemap © Esri or the configured OSM source."
+  }));
+
+  // A graticule gives geographic context even where no basemap tiles exist.
+  (function () {
+    var feats = [];
+    for (var lon = -180; lon <= 180; lon += 30) {
+      feats.push({ type: "Feature", geometry: { type: "LineString",
+        coordinates: Array.from({ length: 73 }, function (_, i) { return [lon, -85 + i * 2.5]; }) } });
+    }
+    for (var lat = -80; lat <= 80; lat += 20) {
+      feats.push({ type: "Feature", geometry: { type: "LineString",
+        coordinates: Array.from({ length: 73 }, function (_, i) { return [-180 + i * 5, lat]; }) } });
+    }
+    map.on("load", function () {
+      map.addSource("graticule", { type: "geojson", data: { type: "FeatureCollection", features: feats } });
+    });
+  })();
+
+  var active = {}; severityOrder.forEach(function (s) { active[s] = true; });
+  var layerOn = {}; baseLayers.forEach(function (l) { layerOn[l.id] = true; });
+  var query = "";
+
+  function visible() {
+    return findings.filter(function (f) {
+      if (!active[f.properties.severity]) return false;
+      if (!query) return true;
+      var p = f.properties;
+      var hay = [p.problem_name, p.description, p.solution_hint, p.what_geoqa_found,
+                 p.feature_id, p.why_it_matters].join(" ").toLowerCase();
+      return hay.indexOf(query) !== -1;
+    });
+  }
+
+  function popupHTML(p) {
+    var sev = p.severity || "info";
+    var rows = [];
+    if (p.feature_id != null) rows.push(["Feature", esc(p.feature_id)]);
+    if (p.geometry_type) rows.push(["Geometry", esc(p.geometry_type)]);
+    if (p.confidence) rows.push(["Confidence", esc(p.confidence)]);
+    if (p.priority_score != null) rows.push(["Priority", esc(p.priority_score)]);
+    if (p.distance != null) rows.push(["Distance", esc(p.distance)]);
+    if (p.tolerance != null) rows.push(["Tolerance", esc(p.tolerance)]);
+    if (p.validator_name) rows.push(["Rule", esc(p.validator_name)]);
+    return '<div class="finding">' +
+      '<h4><span class="chip" style="background:' + (COLORS[sev] || COLORS.info) + '">' + esc(sev) + "</span>" +
+      esc(p.problem_name || "finding") + "</h4>" +
+      "<p style='margin:6px 0'>" + esc(p.what_geoqa_found || p.description) + "</p>" +
+      (p.why_it_matters ? "<p style='margin:6px 0;color:#8b9bb4'>" + esc(p.why_it_matters) + "</p>" : "") +
+      "<dl>" + rows.map(function (r) { return "<dt>" + r[0] + "</dt><dd>" + r[1] + "</dd>"; }).join("") + "</dl>" +
+      (p.recommended_action || p.solution_hint
+        ? "<p style='margin:10px 0 0;padding-top:8px;border-top:1px solid #1f2a3d'><b>Fix:</b> " +
+          esc(p.recommended_action || p.solution_hint) + "</p>" : "") +
+      "</div>";
+  }
+
+  function paintFindings() {
+    var shown = visible();
+    var byId = {};
+    shown.forEach(function (f) { byId[f.properties.issue_id || String(f.properties.feature_index)] = f; });
+
+    var data = { type: "FeatureCollection", features: shown };
+    if (map.getSource("findings")) map.getSource("findings").setData(data);
+    else map.addSource("findings", { type: "geojson", data: data });
+
+    var paint = {
+      "circle-radius": ["interpolate", ["linear"], ["zoom"], 2, 5, 10, 9, 16, 14],
+      "circle-color": ["match", ["get", "severity"],
+        "critical", COLORS.critical, "high", COLORS.high,
+        "medium", COLORS.medium, "low", COLORS.low, COLORS.info],
+      "circle-stroke-color": "#0b0f19",
+      "circle-stroke-width": 1.5,
+      "circle-opacity": 0.9
+    };
+
+    ["circle", "halo"].forEach(function (id) {
+      if (!map.getLayer(id)) {
+        map.addLayer({ id: "circle", type: "circle", source: "findings", paint: paint });
+        map.addLayer({ id: "halo", type: "circle", source: "findings",
+          paint: { "circle-radius": ["interpolate", ["linear"], ["zoom"], 2, 11, 10, 18, 16, 27],
+                   "circle-color": ["match", ["get", "severity"],
+                     "critical", COLORS.critical, "high", COLORS.high,
+                     "medium", COLORS.medium, "low", COLORS.low, COLORS.info],
+                   "circle-opacity": 0.16, "circle-blur": 0.6 } });
+        map.addLayer({ id: "lines", type: "line", source: "findings",
+          filter: ["!=", ["geometry-type"], "Point"],
+          paint: { "line-color": ["match", ["get", "severity"],
+                     "critical", COLORS.critical, "high", COLORS.high,
+                     "medium", COLORS.medium, "low", COLORS.low, COLORS.info],
+                   "line-width": ["interpolate", ["linear"], ["zoom"], 4, 1.5, 14, 5],
+                   "line-opacity": 0.75 } });
+      }
+    });
+
+    document.getElementById("m-total").textContent = findings.length;
+    renderLegend();
+    renderBars(shown);
+  }
+
+  function renderLegend() {
+    var counts = {};
+    findings.forEach(function (f) {
+      var s = f.properties.severity || "info";
+      counts[s] = (counts[s] || 0) + 1;
+    });
+    var host = document.getElementById("legend-rows");
+    host.innerHTML = severityOrder.filter(function (s) { return counts[s]; }).map(function (s) {
+      return '<div class="legend-row' + (active[s] ? "" : " off") + '" data-sev="' + s + '">' +
+        '<span class="swatch" style="background:' + COLORS[s] + '"></span>' + s +
+        '<span class="n">' + counts[s] + "</span></div>";
+    }).join("") || '<div class="legend-row"><span class="muted">none</span></div>';
+
+    host.querySelectorAll("[data-sev]").forEach(function (row) {
+      row.onclick = function () {
+        var s = row.dataset.sev;
+        active[s] = !active[s];
+        paintFindings();
+      };
+    });
+
+    var lhost = document.getElementById("layer-rows");
+    lhost.innerHTML = baseLayers.map(function (l) {
+      return '<div class="legend-row' + (layerOn[l.id] ? "" : " off") + '" data-layer="' + esc(l.id) + '">' +
+        '<span class="swatch" style="background:#3b82f6;border-radius:2px"></span>' + esc(l.name || l.id) + "</div>";
+    }).join("") || '<div class="legend-row"><span class="muted">none</span></div>';
+
+    lhost.querySelectorAll("[data-layer]").forEach(function (row) {
+      row.onclick = function () {
+        var id = row.dataset.layer;
+        layerOn[id] = !layerOn[id];
+        var vis = layerOn[id] ? "visible" : "none";
+        ["line", "fill", "circle"].forEach(function (t) {
+          var lid = "lyr-" + id + "-" + t;
+          if (map.getLayer(lid)) map.setLayoutProperty(lid, "visibility", vis);
+        });
+        renderLegend();
+      };
+    });
+  }
+
+  function renderBars(shown) {
+    var counts = {};
+    shown.forEach(function (f) {
+      var n = f.properties.problem_name || "unknown";
+      counts[n] = (counts[n] || 0) + 1;
+    });
+    var max = Math.max.apply(null, [1].concat(Object.keys(counts).map(function (k) { return counts[k]; })));
+    document.getElementById("bars").innerHTML = Object.keys(counts)
+      .sort(function (a, b) { return counts[b] - counts[a]; }).slice(0, 12)
+      .map(function (k) {
+        var sev = (shown.find(function (f) { return f.properties.problem_name === k; }) || {}).properties;
+        var color = COLORS[(sev && sev.severity) || "info"];
+        return '<div class="bar"><span title="' + esc(k) + '" style="flex:1;overflow:hidden;' +
+          'text-overflow:ellipsis;white-space:nowrap">' + esc(k.replace(/_/g, " ")) + "</span>" +
+          '<span class="track"><span class="fill" style="width:' + (counts[k] / max * 100) + '%;background:' +
+          color + '"></span></span><span class="val">' + counts[k] + "</span></div>";
+      }).join("") || '<div class="muted">No findings match the current filter.</div>';
+  }
+
+  function fitAll() {
+    var pts = visible().map(function (f) { return centroid(f.geometry && f.geometry.coordinates); }).filter(Boolean);
+    if (!pts.length) return;
+    var b = pts.reduce(function (acc, p) {
+      acc[0] = Math.min(acc[0], p[0]); acc[1] = Math.min(acc[1], p[1]);
+      acc[2] = Math.max(acc[2], p[0]); acc[3] = Math.max(acc[3], p[1]);
+      return acc;
+    }, [180, 90, -180, -90]);
+    if (b[0] === b[2] && b[1] === b[3]) map.flyTo({ center: b, zoom: 12 });
+    else map.fitBounds([[b[0], b[1]], [b[2], b[3]]], { padding: 64, duration: 900 });
+  }
+
+  map.on("load", function () {
+    baseLayers.forEach(function (l) {
+      map.addSource("src-" + l.id, { type: "geojson", data: l.data });
+      var line = { id: "lyr-" + l.id + "-line", type: "line", source: "src-" + l.id,
+        paint: { "line-color": l.color || "#3b82f6", "line-width": 1.4, "line-opacity": 0.75 } };
+      var fill = { id: "lyr-" + l.id + "-fill", type: "fill", source: "src-" + l.id,
+        paint: { "fill-color": l.color || "#3b82f6", "fill-opacity": 0.08 } };
+      var circ = { id: "lyr-" + l.id + "-circle", type: "circle", source: "src-" + l.id,
+        paint: { "circle-color": l.color || "#3b82f6", "circle-radius": 2.5, "circle-opacity": 0.7 } };
+      [fill, line, circ].forEach(function (spec) {
+        try { map.addLayer(spec); } catch (e) { /* geometry type not present */ }
+      });
+    });
+
+    paintFindings();
+    map.on("click", "circle", function (e) {
+      var f = e.features && e.features[0];
+      if (!f) return;
+      new maplibregl.Popup({ maxWidth: "380px", closeButton: true })
+        .setLngLat(e.lngLat)
+        .setHTML(popupHTML(f.properties))
+        .addTo(map);
+    });
+    map.on("click", "lines", function (e) {
+      var f = e.features && e.features[0];
+      if (!f) return;
+      new maplibregl.Popup({ maxWidth: "380px" }).setLngLat(e.lngLat)
+        .setHTML(popupHTML(f.properties)).addTo(map);
+    });
+    ["circle", "lines"].forEach(function (id) {
+      map.on("mouseenter", id, function () { map.getCanvas().style.cursor = "pointer"; });
+      map.on("mouseleave", id, function () { map.getCanvas().style.cursor = ""; });
+    });
+
+    if (!findings.length) document.getElementById("empty").style.display = "grid";
+    else fitAll();
+
+    if (DATA.auto_play && DATA.auto_play.length) playStory(DATA.auto_play);
+  });
+
+  /* Declarative storyboard: a sequence of camera + filter steps, played like a
+     guided tour. Supplied as data by the caller so the same map can present a
+     different narrative for a different dataset. */
+  function playStory(steps) {
+    var i = 0;
+    (function next() {
+      if (i >= steps.length) return;
+      var s = steps[i++];
+      severityOrder.forEach(function (sev) { active[sev] = !s.severity || s.severity.indexOf(sev) !== -1; });
+      if (s.query != null) { query = s.query; document.getElementById("q").value = query; }
+      if (s.center) map.flyTo({ center: s.center, zoom: s.zoom || 9, duration: 1600, essential: true });
+      else if (s.fit !== false) fitAll();
+      paintFindings();
+      if (s.hold) setTimeout(next, s.hold);
+      else next();
+    })();
+  }
+
+  document.getElementById("fit").onclick = fitAll;
+  document.getElementById("q").addEventListener("input", function (e) {
+    query = e.target.value.trim().toLowerCase();
+    paintFindings();
+  });
+})();
+</script>
+</body>
+</html>

@@ -54,12 +54,23 @@ app = [
     "streamlit-folium",
     "folium",
 ]
+web = [
+    "pandas",
+    "xlsxwriter",
+]
+charts = [
+    "plotly",
+    "matplotlib",
+]
 all = [
     "pandas",
     "numpy",
     "rasterio",
     "openpyxl",
     "h5py",
+    "xlsxwriter",
+    "plotly",
+    "matplotlib",
 ]
 dev = [
     "jupyter",
@@ -74,4 +85,11 @@ geoai-jax = [
 geoqa = "geoqa.cli.main:run"
 
 [tool.setuptools.packages.find]
-include = ["geoqa*", "geoai*"]
+include = ["geoqa*", "geoai*", "geoqa_web*"]
+
+# The site and slide templates are read from disk at runtime, so they must ship
+# inside the wheel. Without this, geoqa_web imports fine and then fails with
+# FileNotFoundError the moment a site is built.
+[tool.setuptools.package-data]
+geoqa_web = ["templates/*.html"]
+"*" = ["*.json", "*.css"]
