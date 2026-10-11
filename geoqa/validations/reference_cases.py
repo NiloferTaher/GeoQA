@@ -103,6 +103,7 @@ class ReferenceCase:
     published_components: Mapping[str, float] = field(default_factory=dict)
     #: Set when the publication's own rounding does not close exactly.
     rounding_note: str | None = None
+    exercises_library: bool = True
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -115,6 +116,7 @@ class ReferenceCase:
             "components": dict(self.published_components),
             "citation": self.citation,
             "rounding_note": self.rounding_note,
+            "exercises_library": self.exercises_library,
         }
 
 
@@ -166,7 +168,7 @@ def aqua1999_uarl_example() -> ReferenceCase:
         },
         published_value=826.0,
         published_units="10^3 m3/year",
-        tolerance=0.01,
+        tolerance=0.005,
         published_components={
             "mains": 266.0,
             "connections": 473.0,
@@ -215,6 +217,27 @@ def aqua1999_ili_case() -> ReferenceCase:
     )
 
 
+def aqua1999_ili_end_to_end_case() -> ReferenceCase:
+    """End-to-end ILI from the AQUA network and real-loss inputs."""
+    return ReferenceCase(
+        name="aqua1999_ili_end_to_end",
+        citation=AQUA_1999,
+        quantity="infrastructure leakage index",
+        inputs={
+            "mains_length_km": 1500.0,
+            "service_connections": 60_000.0,
+            "private_length_km": 360.0,
+            "average_pressure_m": 30.0,
+            "annual_real_losses_m3": 4_000_000.0,
+            "days": 328.5,
+        },
+        published_value=4.8,
+        published_units="dimensionless",
+        tolerance=0.01,
+        rounding_note="The published ILI is rounded to one decimal place.",
+    )
+
+
 def iwa_taskforce_uarl_case() -> ReferenceCase:
     """The IWA Task Force worked example, which reproduces exactly."""
     return ReferenceCase(
@@ -253,6 +276,7 @@ def lambert2009_background_leakage_case() -> ReferenceCase:
         published_value=3.25,
         published_units="litres/hour",
         tolerance=0.005,
+        exercises_library=False,
     )
 
 
@@ -262,6 +286,7 @@ def all_reference_cases() -> list[ReferenceCase]:
         aqua1999_uarl_example(),
         aqua1999_tirl_case(),
         aqua1999_ili_case(),
+        aqua1999_ili_end_to_end_case(),
         iwa_taskforce_uarl_case(),
         lambert2009_background_leakage_case(),
     ]
@@ -283,11 +308,26 @@ def _coefficient(source: str, name: str):
 
         for template in lambert_coefficient_templates():
             if template["role"] == name:
-                return template["constant"]
+                return template["published_value"]
         return None
     if source == LAMBERT_2009:
         return {"mains_coefficient": 2.0, "connections_coefficient": 1.25}.get(name)
     return None
+
+
+def _aqua_coefficient_declarations():
+    from .night_flow import CoefficientDeclaration
+    from .water_loss import lambert_coefficient_templates
+
+    return {
+        template["role"]: CoefficientDeclaration(
+            constant=template["published_value"],
+            meaning=template["meaning"],
+            unit=template["unit"],
+            source=template["source"],
+        )
+        for template in lambert_coefficient_templates()
+    }
 
 
 def compute_reference_case(case: ReferenceCase) -> float | None:
@@ -295,29 +335,100 @@ def compute_reference_case(case: ReferenceCase) -> float | None:
     inputs = case.inputs
 
     if case.name == "aqua1999_uarl_example":
-        lpd_day = (
-            18.0 * inputs["mains_length_km"]
-            + 0.80 * inputs["service_connections"]
-            + 25.0 * inputs["private_length_km"]
-        ) * inputs["average_pressure_m"]
-        # L/day -> L/yr -> m3/yr -> 10^3 m3/yr. The divisor is 1e6 in total.
+        from .water_loss import PressureFactor, UarlInputs, compute_uarl_l_per_day
+
+        network_inputs = UarlInputs(
+            mains_length_km=inputs["mains_length_km"],
+            service_connections=int(inputs["service_connections"]),
+            private_pipe_length_km=inputs["private_length_km"],
+            pressure_factor=PressureFactor(
+                average_pressure_m=inputs["average_pressure_m"],
+                method="published reference case",
+                measured=True,
+            ),
+        )
+        coefficients = _aqua_coefficient_declarations()
+        lpd_day = compute_uarl_l_per_day(
+            network_inputs,
+            main_length_coefficient=coefficients["mains"],
+            connections_coefficient=coefficients["connections"],
+            private_length_coefficient=coefficients["private"],
+        )
         return lpd_day * inputs["days"] / 1_000_000.0
 
     if case.name == "aqua1999_tirl_case":
-        litres = inputs["annual_real_losses_m3"] * 1000.0
-        # ``days`` already carries the 0.9 pressurised fraction. Applying it a
-        # second time would silently overstate the denominator.
-        return litres / (inputs["service_connections"] * inputs["days"])
+        from .water_loss import ili_assessment
+
+        assessment = ili_assessment(
+            annual_real_loss_m3=inputs["annual_real_losses_m3"],
+            input_volume_m3_per_year=inputs["annual_real_losses_m3"],
+            uarl_l_per_day=None,
+            accounting_days=inputs["days"],
+        )
+        return assessment.carl_l_per_day / inputs["service_connections"]
 
     if case.name == "aqua1999_ili_case":
-        return inputs["tirl_l_per_connection_day"] / inputs["uarl_l_per_connection_day"]
+        from .water_loss import infrastructure_leakage_index
+
+        return infrastructure_leakage_index(
+            carl_l_per_day=inputs["tirl_l_per_connection_day"],
+            uarl_l_per_day=inputs["uarl_l_per_connection_day"],
+        )
+
+    if case.name == "aqua1999_ili_end_to_end":
+        from .water_loss import (
+            PressureFactor,
+            UarlInputs,
+            compute_uarl_l_per_day,
+            ili_assessment,
+        )
+
+        network_inputs = UarlInputs(
+            mains_length_km=inputs["mains_length_km"],
+            service_connections=int(inputs["service_connections"]),
+            private_pipe_length_km=inputs["private_length_km"],
+            pressure_factor=PressureFactor(
+                average_pressure_m=inputs["average_pressure_m"],
+                method="published reference case",
+                measured=True,
+            ),
+        )
+        coefficients = _aqua_coefficient_declarations()
+        uarl_l_per_day = compute_uarl_l_per_day(
+            network_inputs,
+            main_length_coefficient=coefficients["mains"],
+            connections_coefficient=coefficients["connections"],
+            private_length_coefficient=coefficients["private"],
+        )
+        assessment = ili_assessment(
+            annual_real_loss_m3=inputs["annual_real_losses_m3"],
+            input_volume_m3_per_year=inputs["annual_real_losses_m3"],
+            uarl_l_per_day=uarl_l_per_day,
+            pressure_factor=network_inputs.pressure_factor,
+            accounting_days=inputs["days"],
+        )
+        return assessment.ili
 
     if case.name == "iwa_taskforce_uarl_case":
-        lpd_day = (
-            18.0 * inputs["mains_length_km"]
-            + 0.80 * inputs["service_connections"]
-            + 25.0 * inputs["private_length_km"]
-        ) * inputs["average_pressure_m"]
+        from .water_loss import PressureFactor, UarlInputs, compute_uarl_l_per_day
+
+        network_inputs = UarlInputs(
+            mains_length_km=inputs["mains_length_km"],
+            service_connections=int(inputs["service_connections"]),
+            private_pipe_length_km=inputs["private_length_km"],
+            pressure_factor=PressureFactor(
+                average_pressure_m=inputs["average_pressure_m"],
+                method="published reference case",
+                measured=True,
+            ),
+        )
+        coefficients = _aqua_coefficient_declarations()
+        lpd_day = compute_uarl_l_per_day(
+            network_inputs,
+            main_length_coefficient=coefficients["mains"],
+            connections_coefficient=coefficients["connections"],
+            private_length_coefficient=coefficients["private"],
+        )
         return lpd_day / 1000.0
 
     if case.name == "lambert2009_background_leakage_case":

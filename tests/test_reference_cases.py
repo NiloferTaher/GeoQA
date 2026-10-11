@@ -130,7 +130,7 @@ def test_out_of_range_arithmetic_would_be_caught():
 
 def test_all_cases_pass_and_are_reported_as_evidence():
     issues = validate_reference_cases()
-    assert _names(issues) == ["coefficient_reference_case_passed"] * 5
+    assert _names(issues) == ["coefficient_reference_case_passed"] * 6
     assert all(str(i.severity) == "info" for i in issues)
 
 
