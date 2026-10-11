@@ -84,4 +84,4 @@ docs/release_checklist.md
 docs/dma_plugin_analysis.md
 docs/solo_operator_guide.md
 
-# Genuinely local: caches, build output, and datasets too large to host.
+# Genuinely local: caches, build output, and datasets too large to host.egg-info/
