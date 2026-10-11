@@ -36,7 +36,7 @@ def _collect_registry() -> tuple[list[dict[str, Any]], dict[str, int]]:
                 "issue_class": getattr(definition, "issue_class", "data_issue"),
                 "confidence": str(definition.default_confidence),
                 "actionable": "yes" if definition.default_actionable else "no",
-                "iso_category": definition.iso_category or "",
+                "iso_category": definition.iso_category or "Unmapped",
                 "description": definition.description,
                 "repair_hint": definition.repair_hint,
                 "source": definition.source_name or "",
