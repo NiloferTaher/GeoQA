@@ -9,8 +9,16 @@ description = "Geospatial data quality validation, conservative fixes, reporting
 readme = "README.md"
 requires-python = ">=3.12"
 license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+# The License :: classifier is deliberately absent. PEP 639 superseded it with
+# the SPDX expression above, and setuptools refuses to configure a project that
+# declares both. That refusal is the whole reason CI could not install this
+# package.
 classifiers = [
-    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: GIS",
 ]
 dependencies = [
     "geopandas",
