@@ -169,6 +169,50 @@ class TestDeclaredDomain:
 
 
 class TestGeometryParts:
+    @staticmethod
+    def _multipolygon_with_empty_part():
+        """Build the state by decoding stored bytes, which is the only way it occurs.
+
+        Constructing ``MultiPolygon([box(...), Polygon()])`` succeeds and silently
+        drops the empty part, so a test built that way would prove nothing. Every
+        delivered format arrives through a decoder, and the decoder keeps it.
+        """
+        import struct
+
+        from shapely import wkb
+
+        def polygon_wkb(rings):
+            out = struct.pack("<BII", 1, 3, len(rings))
+            for ring in rings:
+                out += struct.pack("<I", len(ring))
+                for x, y in ring:
+                    out += struct.pack("<dd", x, y)
+            return out
+
+        square = polygon_wkb([[(0, 0), (1, 0), (1, 1), (0, 1), (0, 0)]])
+        empty = polygon_wkb([])
+        return wkb.loads(struct.pack("<BII", 1, 6, 2) + square + empty)
+
+    def test_empty_part_is_reported(self):
+        geometry = self._multipolygon_with_empty_part()
+        parts = list(geometry.geoms)
+        assert len(parts) == 2 and sum(1 for p in parts if p.is_empty) == 1, (
+            "fixture must actually contain an empty part for this test to mean anything"
+        )
+
+        layer = gpd.GeoDataFrame({"geometry": [geometry]}, crs="EPSG:4326")
+        names = [i.problem_name for i in validate_geometry_parts(layer)]
+        assert "geometry_empty_part" in names
+
+    def test_clean_multipolygon_has_no_empty_part(self):
+        layer = _frame([{"geometry": MultiPolygon([box(0, 0, 1, 1), box(2, 2, 3, 3)])}])
+        assert "geometry_empty_part" not in [i.problem_name for i in validate_geometry_parts(layer)]
+
+    def test_empty_part_can_be_suppressed_by_the_caller(self):
+        geometry = self._multipolygon_with_empty_part()
+        layer = gpd.GeoDataFrame({"geometry": [geometry]}, crs="EPSG:4326")
+        assert validate_geometry_parts(layer, reject_empty_parts=False) == []
+
     def test_single_and_multi_are_counted_separately(self):
         layer = _frame([
             {"geometry": LineString([(0, 0), (1, 1)])},

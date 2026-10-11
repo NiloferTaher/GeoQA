@@ -162,16 +162,9 @@ def validate_geometry_parts(
     *,
     declared_type: str | None = None,
     require_uniform: bool = True,
+    reject_empty_parts: bool = True,
 ) -> list[ValidationIssue]:
-    """Report mixed geometry part structure and a declared type that will not accept it.
-
-    No check for empty parts inside a multi-part geometry, because shapely 2
-    refuses to construct one and geopandas refuses to load one. The state
-    cannot arrive from either, so a condition for it would never fire and
-    would only make the registry less trustworthy. A multi-part geometry
-    whose parts were emptied by a failed dissolve arrives instead as a
-    smaller geometry, which the part-count check does see.
-    """
+    """Report mixed geometry part structure and a declared type that will not accept it."""
     issues: list[ValidationIssue] = []
     profile = profile_geometry_parts(layer)
 
@@ -218,6 +211,19 @@ def validate_geometry_parts(
                            **profile.to_dict()},
                 )
             )
+
+    if reject_empty_parts and profile.empty_part_count:
+        issues.append(
+            build_issue(
+                "geometry_empty_part",
+                description=(
+                    f"{profile.empty_part_count} feature part(s) are empty inside a "
+                    "multi-part geometry. The empty part contributes nothing and is "
+                    "the signature of a dissolve that did not complete."
+                ),
+                extra=profile.to_dict(),
+            )
+        )
     return issues
 
 

@@ -43,6 +43,14 @@ The geometry column is declared as one type but the layer contains another, so t
 
 **Repair.** Either widen the declared column to accept the observed type or convert the data. Widening to a generic geometry column accepts everything and constrains nothing, so prefer the conversion.
 
+### `geometry_empty_part`
+
+**Severity** medium &nbsp;|&nbsp; **Class** `data_issue` &nbsp;|&nbsp; **Confidence** high
+
+A multi-part geometry contains an empty part, which contributes nothing and is the signature of a dissolve that did not complete.
+
+**Repair.** Drop the empty part, or redo the operation that produced it. Note that constructing such a geometry through shapely silently discards the empty part, so one can only arrive here by being decoded from stored bytes.
+
 ### `geometry_family_mixed`
 
 **Severity** high &nbsp;|&nbsp; **Class** `data_issue` &nbsp;|&nbsp; **Confidence** high

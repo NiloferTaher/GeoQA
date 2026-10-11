@@ -892,6 +892,15 @@ _SUPPLEMENTAL_DEFINITIONS: dict[str, dict[str, Any]] = {
         "default_confidence": "high",
         "default_actionable": True,
     },
+    "geometry_empty_part": {
+        "category": "dimension",
+        "description": "A multi-part geometry contains an empty part, which contributes nothing and is the signature of a dissolve that did not complete.",
+        "severity": "medium",
+        "repair_hint": "Drop the empty part, or redo the operation that produced it. Note that constructing such a geometry through shapely silently discards the empty part, so one can only arrive here by being decoded from stored bytes.",
+        "issue_class": "data_issue",
+        "default_confidence": "high",
+        "default_actionable": True,
+    },
     "geometry_part_type_mixed": {
         "category": "dimension",
         "description": "A single layer contains more than one geometry type, or a multi-part geometry holds parts of unlike type.",
