@@ -120,7 +120,7 @@ gate = HITL("release", gates=[
 
 decision = gate.evaluate_and_record(issues, expected_outcome="halt")
 decision.hold(by="reviewer@example.org", note="licence confirmed offline")
-gate.recall().halt_recall_pct
+gate.recall().halt_recall
 ```
 
 Four properties, each covered by a test that fails if it stops being true:
