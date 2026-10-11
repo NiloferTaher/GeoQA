@@ -40,5 +40,6 @@ One page per module, generated from the registry.
 - [`keys`](keys.md) — `keys`
 - [`metadata`](metadata.md) — `metadata`
 - [`sentinels`](sentinels.md) — `sentinels`
+- [`shape`](shape.md) — `shape`
 - [`spectral`](spectral.md) — `spectral`
 - [`transform_audit`](transform_audit.md) — `transform_audit`
