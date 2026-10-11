@@ -99,7 +99,7 @@ class TestReferentialIntegrity:
         assert "cross_layer_key_missing" in names
 
     def test_text_and_numeric_keys_join(self):
-        """The wvt_id cast in the original join was the defect this prevents."""
+        """The cast on the join key in the original query was the defect this prevents."""
         parent = _frame([{"asset_id": "70677", "geometry": Point(0, 0)}])
         child = _frame([{"asset_id": 70677, "geometry": Point(0, 0)}])
         assert referential_integrity(
