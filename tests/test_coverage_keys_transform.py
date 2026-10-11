@@ -201,22 +201,22 @@ class TestCompoundKeyDuplicates:
 
 class TestFieldResolution:
     def test_single_alias_resolves(self):
-        assert resolve_field(["utilis_id"], ["asset_id", "utilis_id"])["status"] == "resolved"
+        assert resolve_field(["legacy_asset_id"], ["asset_id", "legacy_asset_id"])["status"] == "resolved"
 
     def test_two_aliases_present_is_ambiguous(self):
         """First-match wins here is what hid the problem."""
-        result = resolve_field(["asset_id", "utilis_id"], ["asset_id", "utilis_id"])
+        result = resolve_field(["asset_id", "legacy_asset_id"], ["asset_id", "legacy_asset_id"])
         assert result["status"] == "ambiguous"
         assert result["column"] is None
-        assert set(result["candidates"]) == {"asset_id", "utilis_id"}
+        assert set(result["candidates"]) == {"asset_id", "legacy_asset_id"}
 
     def test_no_alias_is_missing(self):
-        assert resolve_field(["other"], ["asset_id", "utilis_id"])["status"] == "missing"
+        assert resolve_field(["other"], ["asset_id", "legacy_asset_id"])["status"] == "missing"
 
     def test_schema_reports_both_failure_modes(self):
         issues = resolve_schema(
-            ["asset_id", "utilis_id", "unrelated"],
-            {"asset": ["asset_id", "utilis_id"], "length": ["pipe_len", "shape_len"]},
+            ["asset_id", "legacy_asset_id", "unrelated"],
+            {"asset": ["asset_id", "legacy_asset_id"], "length": ["measured_length", "stored_length"]},
         )
         names = sorted(i.problem_name for i in issues)
         assert names == ["schema_field_ambiguous", "schema_field_missing"]
