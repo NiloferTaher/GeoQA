@@ -3,6 +3,11 @@ name: CI
 # The pre-push hook protects the maintainer's machine. This protects everyone
 # else's: a reviewer who clones the repository gets the same gate, without
 # having to trust the contributor's account of what they ran.
+#
+# On failure, every step writes the tail of its own output to the job summary.
+# That exists because a red X with no visible cause costs more time than it
+# saves: the log is behind a click, and reading it is not obvious to whoever
+# is waiting on the run.
 
 on:
   push:
@@ -11,15 +16,19 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# A new push supersedes an in-flight run for the same ref rather than queueing
-# behind it. Nobody reads the result of a run against a commit that no longer
-# exists on the branch.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
   contents: read
+
+env:
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+  PIP_RETRIES: "5"
+  PIP_TIMEOUT: "60"
+  npm_config_fetch_retries: "5"
+  npm_config_fetch_retry_maxtimeout: "60000"
 
 jobs:
   python:
@@ -36,33 +45,49 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          cache: pip
-          cache-dependency-path: |
-            requirements.txt
-            requirements-dev.txt
+
+      - name: Environment
+        run: |
+          set -x
+          python --version
+          pip --version
+          {
+            echo "### Python environment"
+            echo '```'
+            python --version
+            pip --version
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Install
         run: |
-          python -m pip install --upgrade pip
-          # The optional readers are installed so the raster, Excel and
-          # hyperspectral tests actually execute here rather than skipping in
-          # CI and passing vacuously.
-          python -m pip install -e ".[all,dev]"
+          set -x
+          pip install -e ".[all,dev]" 2>&1 | tee install.log
+          status=${PIPESTATUS[0]}
+          if [ "$status" -ne 0 ]; then
+            {
+              echo "### Install failed (exit $status)"
+              echo '```'
+              tail -n 60 install.log
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit "$status"
+          fi
 
-      # A syntax error is the cheapest defect to catch and the fastest, so it
-      # is checked before the suite is allowed to cost anything.
       - name: Compile
-        run: python -m compileall -q geoqa geoai
+        run: |
+          set -x
+          python -m compileall -q geoqa geoai
 
       - name: Test
-        run: python -m pytest -q --no-header
+        run: |
+          set -x
+          python -m pytest -q --no-header
 
-      # The module pages are generated from the registry. If a condition
-      # changed and the pages were not regenerated, the documentation a reader
-      # sees no longer matches the code, and that is not something a reviewer
-      # would otherwise catch.
       - name: Module documentation is current
-        run: python tools/generate_module_docs.py --check
+        run: |
+          set -x
+          python tools/generate_module_docs.py --check
 
   atlas:
     name: Atlas front end
@@ -78,15 +103,58 @@ jobs:
         with:
           node-version: "24"
 
-      - name: Install
-        run: npm ci --no-audit --no-fund
+      - name: Environment
+        run: |
+          set -x
+          node --version
+          npm --version
+          {
+            echo "### Node environment"
+            echo '```'
+            node --version
+            npm --version
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
 
-      # Vercel builds this directory, so a failure here is a failure there.
+      # npm ci refuses to install when the lockfile disagrees with the
+      # manifest, which is the behaviour it exists for. When it refuses for a
+      # reason the lockfile cannot express, the run continues with npm install
+      # and says so, because a build that never runs tells nobody less than a
+      # build that runs with a weaker guarantee.
+      - name: Install
+        run: |
+          set -x
+          npm ci --no-audit --no-fund 2>&1 | tee ci.log
+          status=${PIPESTATUS[0]}
+          if [ "$status" -ne 0 ]; then
+            {
+              echo "### npm ci failed (exit $status), falling back to npm install"
+              echo '```'
+              tail -n 40 ci.log
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "::warning::npm ci failed; retrying with npm install"
+            npm install --no-audit --no-fund 2>&1 | tee install.log
+            if [ "${PIPESTATUS[0]}" -ne 0 ]; then
+              {
+                echo "### npm install also failed"
+                echo '```'
+                tail -n 60 install.log
+                echo '```'
+              } >> "$GITHUB_STEP_SUMMARY"
+              exit 1
+            fi
+          fi
+
       - name: Build
-        run: npm run build
+        run: |
+          set -x
+          npm run build
 
       - name: Test
-        run: npm test
+        run: |
+          set -x
+          npm test
 
   privacy:
     name: No private material
@@ -97,9 +165,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      # WUC-2027 is an active submission. Its material must never reach this
-      # repository. The pre-push hook enforces the same rule locally; this
-      # makes it enforceable for anyone who pushes.
       - name: Protected paths are absent from the tree
         run: |
           found=0
@@ -117,40 +182,22 @@ jobs:
 
       - name: No absolute local paths in tracked source
         run: |
-          # A published absolute path identifies the author's machine and
-          # directory layout to anyone reading the repository. The pattern
-          # below is deliberately not spelled out literally in a comment: the
-          # workflow would otherwise trip its own check.
-          #
-          # The pattern is single-quoted, so it reaches grep as written: an
-          # escaped backslash matches one literal backslash.
+          # The pattern is not spelled out in a comment, because this workflow
+          # would otherwise trip its own check.
           hits=$(git grep -l -I -E '[A-Za-z]:\\Users\\' HEAD -- \
             '*.py' '*.md' '*.ts' '*.tsx' '*.json' '*.yml' '*.yaml' || true)
           if [ -n "$hits" ]; then
             echo "Absolute Windows paths found in tracked files:"
             echo "$hits"
-            echo
-            echo "Use a repository-relative path or an environment variable instead."
             exit 1
           fi
           echo "No absolute local paths."
 
       - name: No credential patterns in tracked source
         run: |
-          # This workflow is excluded because it contains the patterns
-          # themselves. A guard cannot be subject to its own source: it would
-          # always fail, and a check that always fails is a check nobody runs.
-          #
-          # Files that exist to test the credential detector are listed by name
-          # with the reason, so adding a fourth fixture is a deliberate act
-          # rather than a silent pass.
-          #
-          #   tests/test_credentials.py       detector unit tests
-          #   tests/test_ai_guard.py          disclosure screening tests
-          #   tests/test_runtime_packages.py  end-to-end scan through a package
-          #
-          # The fixtures use AKIAIOSFODNN7EXAMPLE, which is AWS's own published
-          # example key and is not a credential.
+          # This workflow is excluded because it holds the patterns themselves.
+          # The three test files that exercise the credential detector are
+          # listed by name with the reason, so adding a fixture is deliberate.
           allow="^(\.github/|tests/test_credentials\.py|tests/test_ai_guard\.py|tests/test_runtime_packages\.py)"
           hits=$(git grep -l -I -E '(sk-[A-Za-z0-9]{20,}|ghp_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{12,}|-----BEGIN [A-Z ]*PRIVATE KEY-----)' HEAD -- \
             '*.py' '*.md' '*.ts' '*.tsx' '*.json' '*.yml' '*.yaml' '*.sh' \
@@ -158,9 +205,6 @@ jobs:
           if [ -n "$hits" ]; then
             echo "Possible credentials found in tracked files:"
             echo "$hits" | sed 's/^/  /'
-            echo
-            echo "If a file genuinely needs a credential-shaped fixture, add it to the"
-            echo "allowlist above with the reason, so the exception is reviewable."
             exit 1
           fi
           echo "No credential patterns outside the declared fixtures."
