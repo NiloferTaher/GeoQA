@@ -27,3 +27,15 @@ def test_per_finding_prior_is_marked_calibrated() -> None:
     result = assess_finding(_finding(), prior=0.95)
 
     assert result.calibrated is True
+
+
+def test_is_genuine_likely_requires_calibration() -> None:
+    default_result = assess_finding(_finding())
+    supplied_result = assess_finding(
+        _finding(), base_rates={"geometry_topology": 0.95}
+    )
+
+    assert default_result.posterior > 0.5
+    assert default_result.is_genuine_likely is False
+    assert supplied_result.posterior > 0.5
+    assert supplied_result.is_genuine_likely is True

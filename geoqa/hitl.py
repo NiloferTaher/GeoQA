@@ -113,20 +113,41 @@ def any_of(*problem_names: str) -> Callable[[Sequence[Any]], Sequence[Any]]:
     return predicate
 
 
-def count_at_least(threshold: int, *, problem_names: Iterable[str] | None = None) -> Callable[[Sequence[Any]], Sequence[Any]]:
+def count_at_least(
+    threshold: int,
+    *,
+    problem_names: Iterable[str] | None = None,
+    min_severity: str | None = None,
+    per_condition: bool = False,
+) -> Callable[[Sequence[Any]], Sequence[Any]]:
     """Predicate: fires once a condition occurs at least ``threshold`` times.
 
     Single occurrences are often noise. A repeated condition is a pattern, and
     a pattern is what a gate should stop for.
     """
     allowed = {str(name) for name in problem_names} if problem_names else None
+    severity_floor = _severity_rank(min_severity) if min_severity is not None else None
 
     def predicate(issues: Sequence[Any]) -> list[Any]:
         matched = [
             issue for issue in issues
             if allowed is None or str(getattr(issue, "problem_name", "")) in allowed
+            if severity_floor is None
+            or _severity_rank(getattr(issue, "severity", None)) >= severity_floor
         ]
-        return matched if len(matched) >= threshold else []
+        if not per_condition:
+            return matched if len(matched) >= threshold else []
+
+        grouped: dict[str, list[Any]] = {}
+        for issue in matched:
+            name = str(getattr(issue, "problem_name", ""))
+            grouped.setdefault(name, []).append(issue)
+        return [
+            issue
+            for group in grouped.values()
+            if len(group) >= threshold
+            for issue in group
+        ]
 
     predicate.__name__ = f"count_at_least_{threshold}"
     return predicate
@@ -411,7 +432,7 @@ def preset_gate(name: str = "default") -> Gate:
             GateSpec(
                 name="no_repeated_high_severity",
                 requirement="the same high-severity condition three times is a pattern, not noise",
-                predicate=count_at_least(3, problem_names=None),
+                predicate=count_at_least(3, min_severity="high", per_condition=True),
                 outcome=PROCEED_WITH_WARNINGS,
             ),
         ],

@@ -116,7 +116,8 @@ class ConfidenceResult:
 
     @property
     def is_genuine_likely(self) -> bool:
-        return self.posterior >= 0.5
+        """False means not established, so check the calibrated field."""
+        return self.calibrated and self.posterior >= 0.5
 
     def to_dict(self) -> dict[str, Any]:
         return {
