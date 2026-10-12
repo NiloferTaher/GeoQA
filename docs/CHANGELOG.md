@@ -22,6 +22,8 @@ the project uses semantic versioning.
   `has_geometry = False`, rather than dropped.
 - `py.typed` marker, so type checkers read the annotations the package ships
   (PEP 561).
+- A `parquet` extra (`pyarrow`) for GeoParquet read/write, also included in the
+  `all` extra. GeoParquet support existed but was previously undeclared.
 
 ### Changed
 
@@ -53,6 +55,11 @@ the project uses semantic versioning.
   uncalibrated instead of presented as calibrated.
 - The preset gate counts repeated high-severity conditions only, and
   `is_genuine_likely` requires calibration.
+- Robustness against newer pandas/numpy/shapely, which surfaced on CI only:
+  a missing (null/NaN) geometry is skipped by repeat-incident detection instead
+  of raising `AttributeError`; a missing payload cell reads as empty rather than
+  as the string `"nan"`; and AI-guard redaction treats pandas 3.x string columns
+  as text (`dtype == object` missed them, so they were sent unredacted).
 
 ## 0.3.0
 

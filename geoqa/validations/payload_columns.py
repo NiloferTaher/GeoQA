@@ -50,7 +50,18 @@ _VENDOR_MARKERS = ("___json", "__json", "json:")
 def _as_text(value: Any) -> str:
     if value is None:
         return ""
-    return str(value).strip()
+    try:
+        # NaN, NaT and pandas' NA scalars are all self-unequal. A missing cell
+        # must read as empty, not as the string "nan".
+        if value != value:
+            return ""
+    except (TypeError, ValueError):
+        # Non-scalar (array) or ambiguous comparison; treat as opaque text.
+        pass
+    text = str(value).strip()
+    if text.lower() in {"nan", "nat", "<na>"}:
+        return ""
+    return text
 
 
 def _looks_structured(value: Any) -> bool:

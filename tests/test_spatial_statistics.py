@@ -94,7 +94,7 @@ class TestMoransI:
 
     def test_missing_values_are_refused_not_ignored(self):
         layer = _grid(lambda r, c: float(r + c))
-        values = numpy.asarray(layer["reading"].values, dtype=float)
+        values = layer["reading"].to_numpy(dtype=float, copy=True)
         values[0] = numpy.nan
         with pytest.raises(ValueError):
             morans_i(values, build_weights(layer, method="knn", k=4))

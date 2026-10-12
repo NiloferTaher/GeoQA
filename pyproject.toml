@@ -42,6 +42,11 @@ raster = [
 excel = [
     "openpyxl",
 ]
+# GeoParquet read/write needs pyarrow. It is a hard requirement of the format,
+# not of the library, so it stays optional and named here.
+parquet = [
+    "pyarrow",
+]
 hyperspectral = [
     "numpy",
     "h5py",
@@ -67,6 +72,7 @@ all = [
     "numpy",
     "rasterio",
     "openpyxl",
+    "pyarrow",
     "h5py",
     "xlsxwriter",
     "plotly",

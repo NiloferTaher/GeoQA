@@ -205,7 +205,7 @@ def profile_repeats(
     for index, row in layer.iterrows():
         geometry = _geometry(row)
         period = row[period_column]
-        if geometry is None or geometry.is_empty or period is None:
+        if geometry is None or period is None or getattr(geometry, "is_empty", True):
             continue
         observations.append(
             {

@@ -16,5 +16,6 @@ pandas
 numpy
 rasterio
 openpyxl
+pyarrow
 h5py
 xlsxwriter

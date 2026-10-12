@@ -304,6 +304,27 @@ def redact_mapping(
     return result
 
 
+def _is_text_column(series: Any) -> bool:
+    """True for object or string columns, including pandas' new ``str`` dtype.
+
+    pandas 3.x infers a dedicated string dtype, so a ``dtype == object`` test
+    silently misses text cells and leaves them unredacted. Ask pandas instead.
+    """
+    dtype = getattr(series, "dtype", None)
+    if dtype is None:
+        return False
+    if dtype == object:
+        return True
+    try:
+        import pandas as pd
+
+        return bool(
+            pd.api.types.is_string_dtype(dtype) or pd.api.types.is_object_dtype(dtype)
+        )
+    except Exception:
+        return str(dtype) in {"string", "str"}
+
+
 def redact_frame(
     frame: Any,
     policy: RedactionPolicy | None = None,
@@ -351,7 +372,7 @@ def redact_frame(
     for column in keep:
         if any(f.category == "sensitive_column" and f.location == f"column:{column}" for f in result.findings):
             safe[column] = active.placeholder_for("sensitive")
-        elif safe[column].dtype == object:
+        elif _is_text_column(safe[column]):
             safe[column] = safe[column].map(
                 lambda v: redact_text(v, active, location=f"column:{column}").payload
                 if isinstance(v, str) else v
