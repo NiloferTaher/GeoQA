@@ -77,26 +77,28 @@ class UarlInputs:
             raise ValueError(
                 f"service_connections cannot be negative: {self.service_connections}"
             )
-        # pressure_factor is optional and the IWA guidance is to use a factor
-        # of one when the pressure regime is not known. Defaulting to the
-        # neutral factor here rather than dereferencing None is what makes the
-        # documented default usable at all.
-        if self.average_pressure <= 0:
+        if (
+            self.pressure_factor is not None
+            and self.pressure_factor.average_pressure_m <= 0
+        ):
             raise ValueError(
                 "average_pressure_m must be positive: "
-                f"{getattr(self.pressure_factor, 'average_pressure_m', self.pressure_factor)}"
+                f"{self.pressure_factor.average_pressure_m}"
             )
 
     @property
     def average_pressure(self) -> float:
-        """Mean pressure in metres, or the neutral factor of one when unknown.
+        """Return the declared mean pressure in metres.
 
-        Applying a UARL under an unknown pressure regime is itself a
-        governance gap, and the caller is expected to report it, but it is not
-        a reason to refuse to compute anything.
+        UARL is proportional to pressure in metres, so no neutral default
+        exists. A PressureFactor must be supplied.
         """
         if self.pressure_factor is None:
-            return 1.0
+            raise ValueError(
+                "Average pressure was not declared. UARL is proportional to "
+                "pressure in meters, so no neutral default exists; a "
+                "PressureFactor must be supplied."
+            )
         return self.pressure_factor.average_pressure_m
 
     def as_dict(self) -> dict[str, Any]:
@@ -104,7 +106,9 @@ class UarlInputs:
             "mains_length_km": self.mains_length_km,
             "service_connections": self.service_connections,
             "private_pipe_length_km": self.private_pipe_length_km,
-            "pressure_factor": self.pressure_factor.as_dict(),
+            "pressure_factor": (
+                self.pressure_factor.as_dict() if self.pressure_factor is not None else None
+            ),
         }
 
 
@@ -318,7 +322,18 @@ def validate_water_loss(
             )
         )
 
-    if uarl_inputs is not None and not uarl_inputs.pressure_factor.measured:
+    if uarl_inputs is not None and uarl_inputs.pressure_factor is None:
+        issues.append(
+            _issue(
+                "uarl_pressure_factor_estimated",
+                "high",
+                "Average pressure was not declared. UARL is proportional to "
+                "pressure in meters, so no neutral default exists; a "
+                "PressureFactor must be supplied",
+                uarl_inputs.as_dict(),
+            )
+        )
+    elif uarl_inputs is not None and not uarl_inputs.pressure_factor.measured:
         issues.append(
             _issue(
                 "uarl_pressure_factor_estimated",
