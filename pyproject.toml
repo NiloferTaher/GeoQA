@@ -21,10 +21,10 @@ classifiers = [
     "Topic :: Scientific/Engineering :: GIS",
 ]
 dependencies = [
-    "geopandas",
-    "shapely",
-    "pyproj",
-    "psutil",
+    "geopandas>=0.14,<2",
+    "shapely>=2,<3",
+    "pyproj>=3.4,<4",
+    "psutil>=5.9,<8",
 ]
 
 [project.optional-dependencies]
@@ -32,24 +32,24 @@ dependencies = [
 # does not drag in a hyperspectral reader. Each module already imports its
 # own dependency lazily and raises a message naming the extra to install.
 tabular = [
-    "pandas",
-    "numpy",
+    "pandas>=2,<4",
+    "numpy>=1.26,<3",
 ]
 raster = [
-    "numpy",
-    "rasterio",
+    "numpy>=1.26,<3",
+    "rasterio>=1.3,<2",
 ]
 excel = [
-    "openpyxl",
+    "openpyxl>=3.1,<4",
 ]
 # GeoParquet read/write needs pyarrow. It is a hard requirement of the format,
 # not of the library, so it stays optional and named here.
 parquet = [
-    "pyarrow",
+    "pyarrow>=14,<25",
 ]
 hyperspectral = [
-    "numpy",
-    "h5py",
+    "numpy>=1.26,<3",
+    "h5py>=3.8,<4",
 ]
 # The Streamlit front end ships with the repository but is not part of the
 # library import graph, so the web stack stays optional. Install this to run
@@ -60,23 +60,23 @@ app = [
     "folium",
 ]
 web = [
-    "pandas",
-    "xlsxwriter",
+    "pandas>=2,<4",
+    "xlsxwriter>=3.1,<4",
 ]
 charts = [
-    "plotly",
-    "matplotlib",
+    "plotly>=5,<7",
+    "matplotlib>=3.7,<4",
 ]
 all = [
-    "pandas",
-    "numpy",
-    "rasterio",
-    "openpyxl",
-    "pyarrow",
-    "h5py",
-    "xlsxwriter",
-    "plotly",
-    "matplotlib",
+    "pandas>=2,<4",
+    "numpy>=1.26,<3",
+    "rasterio>=1.3,<2",
+    "openpyxl>=3.1,<4",
+    "pyarrow>=14,<25",
+    "h5py>=3.8,<4",
+    "xlsxwriter>=3.1,<4",
+    "plotly>=5,<7",
+    "matplotlib>=3.7,<4",
 ]
 dev = [
     "jupyter",

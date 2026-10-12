@@ -36,6 +36,9 @@ the project uses semantic versioning.
 - `requirements.txt` and `requirements-dev.txt` now mirror the dependency
   sets declared in `pyproject.toml`. The Streamlit/folium stack is an extra,
   not a core dependency; it was never imported by the library itself.
+- Dependencies now declare upper bounds (for example `pandas>=2,<4`,
+  `shapely>=2,<3`) so a future major release does not silently break an
+  install.
 
 ### Fixed
 
