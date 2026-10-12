@@ -3,7 +3,7 @@ from __future__ import annotations
 import math
 from typing import Any
 
-from .base import ValidationIssue, build_issue
+from .base import ValidationIssue, ValidatorSkipped, build_issue
 
 
 def _geometry(row: Any) -> Any | None:
@@ -369,10 +369,17 @@ def duplicate_geometry_same_layer(layer: Any) -> list[ValidationIssue]:
         geometry = _geometry(row)
         if geometry is None:
             continue
-        token = getattr(geometry, "wkb_hex", None) or getattr(geometry, "wkt", None)
+        token_geometry = geometry
+        try:
+            from shapely import normalize
+
+            token_geometry = normalize(geometry)
+        except Exception:
+            pass
+        token = getattr(token_geometry, "wkb_hex", None) or getattr(token_geometry, "wkt", None)
         if not isinstance(token, str):
             try:
-                token = geometry.wkt
+                token = token_geometry.wkt
             except Exception:
                 continue
         previous = seen.get(token)
@@ -516,18 +523,18 @@ def polygon_gap_same_layer(layer: Any, *, min_gap_area: float = 0.0) -> list[Val
             geometry = _geometry(row)
             if geometry is not None:
                 geometries.append(geometry)
-    except Exception:
-        return []
+    except Exception as error:
+        raise ValidatorSkipped("validator_error", str(error)) from error
     if not geometries:
         return []
     try:
         from shapely.ops import unary_union
-    except Exception:
-        return []
+    except Exception as error:
+        raise ValidatorSkipped("validator_error", str(error)) from error
     try:
         dissolved = unary_union(geometries)
-    except Exception:
-        return []
+    except Exception as error:
+        raise ValidatorSkipped("validator_error", str(error)) from error
 
     issues: list[ValidationIssue] = []
 

@@ -5,13 +5,14 @@ import hashlib
 import json
 from copy import deepcopy
 from dataclasses import dataclass, field
+from numbers import Real
 import time
 from pathlib import Path
 from typing import Any, Callable, Mapping
 
 from geoqa.validations.accuracy import coordinate_precision, positional_accuracy, xy_tolerance
 from geoqa.validations.attributes import domain_range_checks, required_nulls, uniqueness
-from geoqa.validations.base import ValidationIssue
+from geoqa.validations.base import ValidationIssue, ValidatorSkipped
 from geoqa.validations.crs import invalid_crs, missing_crs
 from geoqa.validations.geometry import (
     below_minimum_feature_length,
@@ -221,6 +222,16 @@ def _json_safe(value: Any) -> Any:
 
 def _layer_signature(layer: Any) -> dict[str, Any]:
     attrs = getattr(layer, "attrs", {}) or {}
+    source_path = attrs.get("source_path")
+    source_file: dict[str, int] | None = None
+    if source_path is not None:
+        try:
+            path = Path(source_path)
+            if path.is_file():
+                stat = path.stat()
+                source_file = {"mtime_ns": stat.st_mtime_ns, "size": stat.st_size}
+        except (OSError, TypeError, ValueError):
+            source_file = None
     geometry_types: dict[str, int] = {}
     if "geometry" in getattr(layer, "columns", []):
         try:
@@ -235,7 +246,8 @@ def _layer_signature(layer: Any) -> dict[str, Any]:
         "row_count": len(layer) if hasattr(layer, "__len__") else None,
         "columns": [str(column) for column in getattr(layer, "columns", [])],
         "crs": _json_safe(getattr(layer, "crs", None)),
-        "source_path": _json_safe(attrs.get("source_path")),
+        "source_path": _json_safe(source_path),
+        "source_file": source_file,
         "geometry_types": geometry_types,
     }
 
@@ -363,6 +375,11 @@ def _context_signature(context: dict[str, Any]) -> dict[str, Any]:
         "status_field": _json_safe(context.get("status_field")),
         "status_domain": _json_safe(context.get("status_domain")),
         "min_length": _json_safe(context.get("min_length")),
+        "max_decimal_places": _json_safe(context.get("max_decimal_places")),
+        "max_tolerance": _json_safe(context.get("max_tolerance")),
+        "tolerance": _json_safe(context.get("tolerance")),
+        "min_gap_area": _json_safe(context.get("min_gap_area")),
+        "mismatch_ratio_threshold": _json_safe(context.get("mismatch_ratio_threshold")),
         "min_angle_degrees": _json_safe(context.get("min_angle_degrees")),
         "snap_tolerance": _json_safe(context.get("snap_tolerance")),
         "near_miss_tolerance": _json_safe(context.get("near_miss_tolerance")),
@@ -447,7 +464,9 @@ def _run_duplicate_vertex(layer: Any, **_: Any) -> list[ValidationIssue]:
     return duplicate_vertex(layer)
 
 
-def _run_below_minimum_feature_length(layer: Any, *, min_length: float = 0.0, **_: Any) -> list[ValidationIssue]:
+def _run_below_minimum_feature_length(layer: Any, *, min_length: float | None = None, **_: Any) -> list[ValidationIssue]:
+    if not isinstance(min_length, Real) or isinstance(min_length, bool) or min_length <= 0:
+        raise ValidatorSkipped("missing_input", "min_length must be a positive number")
     return below_minimum_feature_length(layer, min_length=min_length)
 
 
@@ -458,17 +477,19 @@ def _run_sharp_angle_cutback(layer: Any, *, min_angle_degrees: float = 15.0, **_
 def _run_self_intersection(layer: Any, **_: Any) -> list[ValidationIssue]:
     try:
         return self_intersection(layer)
-    except (RuntimeError, TypeError, AttributeError):
-        return []
+    except (RuntimeError, TypeError, AttributeError) as error:
+        raise ValidatorSkipped("validator_error", str(error)) from error
 
 
 def _run_required_nulls(layer: Any, *, required_fields: list[str] | None = None, **_: Any) -> list[ValidationIssue]:
+    if not required_fields:
+        raise ValidatorSkipped("missing_input", "required_fields must be supplied")
     return required_nulls(layer, required_fields or [])
 
 
 def _run_uniqueness(layer: Any, *, unique_field: str | None = None, **_: Any) -> list[ValidationIssue]:
     if not unique_field:
-        return []
+        raise ValidatorSkipped("missing_input", "unique_field must be supplied")
     return uniqueness(layer, unique_field)
 
 
@@ -480,7 +501,8 @@ def _run_domain_range_checks(
     **_: Any,
 ) -> list[ValidationIssue]:
     if not domain_field or valid_domain is None:
-        return []
+        missing = "domain_field" if not domain_field else "valid_domain"
+        raise ValidatorSkipped("missing_input", f"{missing} must be supplied")
     return domain_range_checks(layer, domain_field, valid_domain)
 
 
@@ -492,7 +514,8 @@ def _run_diameter_domain(
     **_: Any,
 ) -> list[ValidationIssue]:
     if not diameter_field or diameter_domain is None:
-        return []
+        missing = "diameter_field" if not diameter_field else "diameter_domain"
+        raise ValidatorSkipped("missing_input", f"{missing} must be supplied")
     return domain_range_checks(layer, diameter_field, diameter_domain)
 
 
@@ -504,7 +527,8 @@ def _run_material_domain(
     **_: Any,
 ) -> list[ValidationIssue]:
     if not material_field or material_domain is None:
-        return []
+        missing = "material_field" if not material_field else "material_domain"
+        raise ValidatorSkipped("missing_input", f"{missing} must be supplied")
     return domain_range_checks(layer, material_field, material_domain)
 
 
@@ -516,7 +540,8 @@ def _run_status_domain(
     **_: Any,
 ) -> list[ValidationIssue]:
     if not status_field or status_domain is None:
-        return []
+        missing = "status_field" if not status_field else "status_domain"
+        raise ValidatorSkipped("missing_input", f"{missing} must be supplied")
     return domain_range_checks(layer, status_field, status_domain)
 
 
@@ -562,7 +587,7 @@ def _run_positional_accuracy(
     **_: Any,
 ) -> list[ValidationIssue]:
     if reference_layer is None:
-        return []
+        raise ValidatorSkipped("missing_input", "reference_layer must be supplied")
     return positional_accuracy(layer, reference_layer, tolerance=tolerance)
 
 
@@ -576,7 +601,7 @@ def _run_outdated_index(layer: Any, **_: Any) -> list[ValidationIssue]:
 
 def _run_non_rfc7946_geojson(layer: Any, *, geojson_input: Any | None = None, **_: Any) -> list[ValidationIssue]:
     if geojson_input is None:
-        return []
+        raise ValidatorSkipped("missing_input", "geojson_input must be supplied")
     return non_rfc7946_geojson(geojson_input)
 
 
@@ -620,18 +645,27 @@ def _run_isolated_network_segment(
     return isolated_network_segment(layer, role_field=role_field, allowed_terminal_values=allowed_terminal_values)
 
 
+def _positive_snap_tolerance(snap_tolerance: float | None) -> float:
+    if (
+        not isinstance(snap_tolerance, Real)
+        or isinstance(snap_tolerance, bool)
+        or snap_tolerance <= 0
+    ):
+        raise ValidatorSkipped("missing_input", "snap_tolerance must be a positive number")
+    return float(snap_tolerance)
+
+
 def _run_suspicious_near_miss_endpoints(
     layer: Any,
     *,
-    snap_tolerance: float = 0.0,
+    snap_tolerance: float | None = None,
     role_field: str | None = None,
     allowed_terminal_values: set[str] | None = None,
     **_: Any,
 ) -> list[ValidationIssue]:
-    resolved_tolerance = 0.0 if snap_tolerance is None else snap_tolerance
     return suspicious_near_miss_endpoints(
         layer,
-        snap_tolerance=resolved_tolerance,
+        snap_tolerance=_positive_snap_tolerance(snap_tolerance),
         role_field=role_field,
         allowed_terminal_values=allowed_terminal_values,
     )
@@ -640,15 +674,14 @@ def _run_suspicious_near_miss_endpoints(
 def _run_unsnapped_endpoints_within_tolerance(
     layer: Any,
     *,
-    snap_tolerance: float = 0.0,
+    snap_tolerance: float | None = None,
     role_field: str | None = None,
     allowed_terminal_values: set[str] | None = None,
     **_: Any,
 ) -> list[ValidationIssue]:
-    resolved_tolerance = 0.0 if snap_tolerance is None else snap_tolerance
     return unsnapped_endpoints_within_tolerance(
         layer,
-        snap_tolerance=resolved_tolerance,
+        snap_tolerance=_positive_snap_tolerance(snap_tolerance),
         role_field=role_field,
         allowed_terminal_values=allowed_terminal_values,
     )
@@ -666,7 +699,7 @@ def _run_boundary_mismatch_against_reference(
     **_: Any,
 ) -> list[ValidationIssue]:
     if reference_layer is None:
-        return []
+        raise ValidatorSkipped("missing_input", "reference_layer must be supplied")
     return boundary_mismatch_against_reference(
         layer,
         reference_layer,
@@ -873,7 +906,7 @@ def _run_water_loss(
     from .validations.water_loss import validate_water_loss
 
     if assessment is None:
-        return []
+        raise ValidatorSkipped("missing_input", "assessment must be supplied")
     return validate_water_loss(assessment, uarl_inputs=uarl_inputs)
 
 
@@ -895,7 +928,7 @@ def _run_repeat_incident(
     from .validations.repeat_incident import validate_repeats
 
     if not period_column:
-        return []
+        raise ValidatorSkipped("missing_input", "period_column must be supplied")
     kwargs: dict[str, Any] = {"period_column": period_column}
     if key_column is not None:
         kwargs["key_column"] = key_column
@@ -1168,7 +1201,16 @@ def _run_uarl_applicability(
     from .validations.reference_cases import validate_uarl_applicability
 
     if None in (service_connections, mains_length_km, average_pressure_m):
-        return []
+        missing = [
+            name
+            for name, value in (
+                ("service_connections", service_connections),
+                ("mains_length_km", mains_length_km),
+                ("average_pressure_m", average_pressure_m),
+            )
+            if value is None
+        ]
+        raise ValidatorSkipped("missing_input", f"missing inputs: {', '.join(missing)}")
     return validate_uarl_applicability(
         service_connections=float(service_connections),
         mains_length_km=float(mains_length_km),
@@ -1820,6 +1862,30 @@ def execute_validation_plan(
                 )
             )
 
+    def emit_skipped(index: int, spec: _ValidatorSpec, skipped: ValidatorSkipped) -> None:
+        validator_coverage.append(
+            _coverage_row(
+                spec,
+                "skipped",
+                reason=skipped.reason,
+                layer_geometry_types=layer_geometry_types,
+                profile=resolved_profile,
+                notes=skipped.detail,
+            )
+        )
+        if progress_callback is not None:
+            progress_callback(
+                ValidationProgressEvent(
+                    dataset_type=normalized_dataset_type,
+                    validator_name=spec.name,
+                    status="skipped",
+                    index=index,
+                    total=total,
+                    issue_count=0,
+                    message=skipped.reason,
+                )
+            )
+
     for index, spec in enumerate(specs, start=1):
         if not _geometry_types_compatible(layer_geometry_types, spec.expected_geometry_types):
             validator_coverage.append(
@@ -1910,7 +1976,11 @@ def execute_validation_plan(
             pending_parallel.append((index, spec, cache_key))
             continue
 
-        validator_result = spec.func(layer, **spec.context)
+        try:
+            validator_result = spec.func(layer, **spec.context)
+        except ValidatorSkipped as skipped:
+            emit_skipped(index, spec, skipped)
+            continue
         if cache is not None and cache_key is not None:
             cache.set(cache_key, validator_result)
         issues.extend(validator_result)
@@ -1939,7 +2009,11 @@ def execute_validation_plan(
             }
             for future in as_completed(futures):
                 index, spec, cache_key = futures[future]
-                validator_result = future.result()
+                try:
+                    validator_result = future.result()
+                except ValidatorSkipped as skipped:
+                    emit_skipped(index, spec, skipped)
+                    continue
                 if cache is not None and cache_key is not None:
                     cache.set(cache_key, validator_result)
                 ordered_results[index] = (spec, validator_result, cache_key)

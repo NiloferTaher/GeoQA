@@ -104,7 +104,9 @@ _BUILTIN_PROFILES: dict[str, GeoQAProfile] = {
             ),
             ValidationFamilyProfile(
                 dataset_type="topology",
-                enabled_validators=("line_intersection_same_layer", "feature_not_split_at_intersection", "line_dangle"),
+                # feature_not_split_at_intersection reports the same pairs as
+                # line_intersection_same_layer, so keeping both reports every crossing twice.
+                enabled_validators=("line_intersection_same_layer", "line_dangle"),
             ),
             ValidationFamilyProfile(
                 dataset_type="crs",

@@ -50,6 +50,12 @@ from typing import Any, Iterable, Mapping, Sequence
 
 from geoqa.validations.base import ValidationIssue
 
+# These findings exist only when the distance is within the tolerance, so a
+# distance-to-tolerance ratio below one is expected and is not evidence against them.
+WITHIN_TOLERANCE_CONDITIONS = frozenset(
+    {"suspicious_near_miss_endpoints", "unsnapped_endpoints_within_tolerance"}
+)
+
 __all__ = [
     "Evidence",
     "ConfidenceResult",
@@ -166,6 +172,8 @@ _MARGIN_RULES: tuple[tuple[str, float, float, float], ...] = (
 
 
 def _margin_evidence(issue: ValidationIssue) -> list[Evidence]:
+    if issue.problem_name in WITHIN_TOLERANCE_CONDITIONS:
+        return []
     extra = issue.extra or {}
     found: list[Evidence] = []
 

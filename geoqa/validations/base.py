@@ -14,6 +14,7 @@ _SEVERITY_SCORES = {
     "high": 75,
     "medium": 50,
     "low": 25,
+    "info": 10,
 }
 
 _CONFIDENCE_SCORES = {
@@ -21,6 +22,15 @@ _CONFIDENCE_SCORES = {
     "medium": 0.8,
     "low": 0.6,
 }
+
+
+class ValidatorSkipped(Exception):
+    """A validator could not run because a required input or operation was unavailable."""
+
+    def __init__(self, reason: str, detail: str | None = None) -> None:
+        super().__init__(detail or reason)
+        self.reason = reason
+        self.detail = detail
 
 
 @dataclass(slots=True)
@@ -222,4 +232,4 @@ def build_issue(
     )
 
 
-__all__ = ["ValidationIssue", "build_issue"]
+__all__ = ["ValidationIssue", "ValidatorSkipped", "build_issue"]
