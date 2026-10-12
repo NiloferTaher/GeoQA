@@ -84,4 +84,10 @@ docs/release_checklist.md
 docs/dma_plugin_analysis.md
 docs/solo_operator_guide.md
 
-# Genuinely local: caches, build output, and datasets too large to host.egg-info/
+# Genuinely local: caches, build output, and datasets too large to host.
+*.egg-info/
+
+# Working artifacts that are not part of the published record.
+bundle_code.py
+code_bundle/
+docs/OpenCode_TGIS_Papers_*.csv

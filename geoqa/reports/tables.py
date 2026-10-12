@@ -133,8 +133,8 @@ def write_xlsx(frame: Any, path: str | Path, *, sheet_name: str = "geoqa_finding
             worksheet = writer.sheets[sheet_name]
             for column_index, name in enumerate(payload.columns):
                 worksheet.write(0, column_index, str(name), header)
-                values = payload[name].astype(str).head(200)
-                widest = max([len(str(name))] + [len(v) for v in values]) if len(values) else len(str(name))
+                values = payload[name].map(str).head(200)
+                widest = max([len(str(name))] + [len(v) for v in values])
                 worksheet.set_column(column_index, column_index, min(max(widest + 2, 10), 60))
             worksheet.freeze_panes(1, 0)
             worksheet.autofilter(0, 0, max(len(payload), 1), max(len(payload.columns) - 1, 0))

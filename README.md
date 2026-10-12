@@ -70,7 +70,9 @@ single capability rather than breaking the package: `rasterio` for GeoTIFF,
 
 ## What it validates
 
-Full per-module detail is in [`docs/modules/`](docs/modules/). Summary:
+Full per-module detail is in [`docs/modules/`](docs/modules/). The Python source
+and function index is in [`docs/python_api_inventory.md`](docs/python_api_inventory.md).
+Summary:
 
 | Area | Module | What it does |
 |---|---|---|
@@ -153,6 +155,65 @@ recorded baseline.
 
 ---
 
+## No-code reporting: site, slides, charts, tables
+
+`geoqa_web` turns a validation result into finished outputs without opening
+QGIS, Folium, or a browser console. Everything it produces is a self-contained
+static file.
+
+```python
+import geoqa, geoqa_web
+
+report = geoqa.validate("mains.osm.pbf")          # OSM loads directly
+geoqa_web.build_site(report, "out/site")           # interactive web-GIS
+geoqa_web.build_slides(report, "out/slides")       # presentation deck
+```
+
+`build_site` writes an `index.html` where every finding is a map feature. Click
+one for a popup carrying the rule, severity, confidence, measured distance or
+tolerance, and the recommended fix. The legend toggles severity bands, the
+search box filters across rules and features, and the sites carry no third-party
+branding. A copy of the findings (`findings.geojson`) and a rollup
+(`summary.json`) are written alongside it.
+
+Pass `base_layers` to draw reference data beneath the findings, and
+`storyboard` to supply your own guided tour. GeoQA generates a default
+storyboard that opens on the full extent and narrows to each severity band.
+
+### Charts
+
+Chart descriptions are emitted as plain data, so the renderer is your choice:
+
+```python
+from geoqa_web.charts import save_chart_assets
+save_chart_assets(report, "out/charts")
+```
+
+This writes `charts.json` (the shared definition), `charts_d3.html`,
+`charts_plotly.html`, and `charts.png` via matplotlib. The same definition serves
+a web page and a journal figure.
+
+### Tables for analysis
+
+GeoJSON is a poor input for a database. Convert findings to a flat,
+spreadsheet-ready table with WKT and centroid coordinates:
+
+```python
+report.to_table("out/findings.xlsx")     # or .csv
+```
+
+Or from an existing file:
+
+```python
+from geoqa.reports.tables import geojson_to_table, geojson_to_pivot
+geojson_to_table("findings.geojson", "out/findings.xlsx")
+geojson_to_pivot("findings.geojson")     # severity x rule
+```
+
+Findings that carry no geometry are **not** dropped. They appear with blank
+coordinates and `has_geometry = False`, so CRS problems, missing indexes, and
+schema findings stay visible instead of silently vanishing from the table.
+
 ## GeoQA Atlas
 
 The library is the product. **Atlas** is the interface to it: a browser front
@@ -189,8 +250,12 @@ dependency of `geoqa` itself.
 
 ```
 geoqa/                  the library
-  problem_registry.py   253 named conditions with severity, class and repair hints
+  problem_registry.py   309 named conditions with severity, class and repair hints
   validation_runtime.py dataset-type dispatch, profiles, limits, cost ordering
+  chunking.py           halo-buffered spatial tiling
+  confidence.py         posterior confidence and calibration
+  conversion.py         loaders, including OSM and multi-layer sources
+  reports/              summaries, explanations, GeoJSON, tables
   validations/          one module per concern
   packs/                domain packs declaring which conditions apply where
   qgis_integration.py   QML, GeoPackage bundles, run manifests
@@ -200,12 +265,14 @@ geoqa/                  the library
   proj_env.py           PROJ database resolution
   ai_guard.py           disclosure screening
 geoai/                  the optional GeoAI layer
+geoqa_web/              no-code outputs: site, slides, charts
 apps/atlas/             the Atlas browser front end (not imported by the library)
 docs/modules/           one generated page per validation module
+docs/literature/        research notes with sources and verification status
 docs/assets/            Atlas screenshots
 tools/                  capability workbook and module documentation generators
 scripts/                evidence suite runner
-tests/                  969 tests
+tests/                  3074 tests
 ```
 
 ---

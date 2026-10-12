@@ -6,6 +6,54 @@ working documents are kept outside the repository and are not listed here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/);
 the project uses semantic versioning.
 
+## 0.4.0
+
+### Added
+
+- Spatial statistics: Moran's I, Geary's C, local Moran (LISA), Getis-Ord
+  Gi*, and empirical variograms, with permutation-based inference and an
+  interpretation string attached to each result. These describe the pattern
+  in data the validators have already cleared, rather than shapes.
+- No-code reporting outputs (`geoqa_web`): `build_site` writes an interactive
+  web-GIS page, `build_slides` a presentation deck, and `save_chart_assets`
+  chart definitions served to d3, Plotly or matplotlib from one definition.
+- `GeoQAReport.to_table()` and `geoqa.reports.tables` flatten findings to
+  CSV/Excel with WKT and centroids. Findings without geometry are kept, with
+  `has_geometry = False`, rather than dropped.
+- `py.typed` marker, so type checkers read the annotations the package ships
+  (PEP 561).
+
+### Changed
+
+- The PROJ repair no longer runs at import. Importing a library must not
+  mutate the process environment; the repair is now triggered lazily by the
+  functions that need a CRS (`geoqa.conversion.gpd_read`,
+  `geoqa.conversion.load_vector_dataset`,
+  `geoqa.validation_runtime.execute_validation_plan`) or explicitly through
+  `geoqa.proj_env.ensure_proj()`.
+- `requirements.txt` and `requirements-dev.txt` now mirror the dependency
+  sets declared in `pyproject.toml`. The Streamlit/folium stack is an extra,
+  not a core dependency; it was never imported by the library itself.
+
+### Fixed
+
+- Water-loss CARL: the m³ to L/day conversion factor was wrong, and the tests
+  that encoded the old factor were updated with it.
+- Validators that could not run are reported as skipped, with a reason, in the
+  coverage rows instead of producing an empty result that read as "clean".
+- Validation cache keys now include the threshold context, so two runs with
+  different tolerances no longer share a cache entry.
+- Duplicate-line detection treats a reversed-direction line as a duplicate.
+- `info` findings sort below `low` findings rather than above them.
+- Reference cases call the library functions rather than asserting against
+  hardcoded outputs, and an end-to-end ILI case was added.
+- UARL no longer defaults average pressure to 1 m; a `PressureFactor` must be
+  declared.
+- Confidence on a finding backed only by a default prior is marked
+  uncalibrated instead of presented as calibrated.
+- The preset gate counts repeated high-severity conditions only, and
+  `is_genuine_likely` requires calibration.
+
 ## 0.3.0
 
 ### Added

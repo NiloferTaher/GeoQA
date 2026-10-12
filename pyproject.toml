@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "geoqa"
-version = "0.3.0"
+version = "0.4.0"
 description = "Geospatial data quality validation, conservative fixes, reporting, and local QA workflows."
 readme = "README.md"
 requires-python = ">=3.12"
@@ -92,4 +92,6 @@ include = ["geoqa*", "geoai*", "geoqa_web*"]
 # FileNotFoundError the moment a site is built.
 [tool.setuptools.package-data]
 geoqa_web = ["templates/*.html"]
+# PEP 561 marker, so type checkers see the annotations the library ships.
+geoqa = ["py.typed"]
 "*" = ["*.json", "*.css"]

@@ -1,12 +1,21 @@
-# Core geospatial runtime
+# Core runtime dependencies.
+#
+# These mirror [project.dependencies] in pyproject.toml, which is the single
+# source of truth for the package. This file exists only as a convenience for
+# `pip install -r requirements.txt` in a checkout.
+#
+# Optional capabilities are declared as extras in pyproject.toml and are
+# deliberately NOT listed here, so installing the core does not drag in a
+# hyperspectral reader or a web stack. Install them by name, for example:
+#
+#   pip install -e ".[all]"       # every optional reader
+#   pip install -e ".[app]"       # Streamlit front end
+#   pip install -e ".[tabular]"   # pandas + numpy
+#   pip install -e ".[raster]"    # numpy + rasterio
+#
+# The Streamlit UI dependencies previously listed here were never imported by
+# the library itself; they belong to the optional [app] extra.
 geopandas
 shapely
 pyproj
 psutil
-openpyxl
-
-# Local UI and preview support
-streamlit
-folium
-streamlit-folium
-zstandard

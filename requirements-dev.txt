@@ -1,5 +1,20 @@
+# Development install.
+#
+# The library's dependency sets live in pyproject.toml. This file mirrors the
+# extras the test suite exercises plus the test tooling, so a fresh checkout can
+# run the full suite. CI uses `pip install -e ".[all,dev]"` instead; keep the
+# two in step.
 -r requirements.txt
 
-# Notebook and packaging helpers
+# Test and packaging helpers.
+pytest
 jupyter
 build
+
+# Optional readers the suite exercises ([all]).
+pandas
+numpy
+rasterio
+openpyxl
+h5py
+xlsxwriter

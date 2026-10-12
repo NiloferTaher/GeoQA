@@ -5,20 +5,19 @@ from __future__ import annotations
 from importlib import import_module
 from typing import Any
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 
-from . import expect, hitl, thermal
+from . import expect, hitl, proj_env, thermal
 from .api import GeoQAReport, score, validate
 from .reports.geojson import errors_summary, issues_to_geojson
 from .expect import *  # noqa: F401,F403
 from .hitl import Gate as HITL
-from .proj_env import ensure_proj as _ensure_proj
 
-# Repairs a PROJ_LIB that points somewhere without a proj.db in it, which makes
-# every EPSG lookup fail with an error that names neither the variable nor the
-# file. It is a no-op when PROJ is already resolvable, so a correctly configured
-# machine is untouched.
-_ensure_proj()
+# PROJ repair is deliberately NOT run at import time: importing a library must
+# not mutate the process environment. The repair is triggered lazily by the
+# functions that actually need a CRS (geoqa.conversion.gpd_read,
+# geoqa.conversion.load_vector_dataset, geoqa.validation_runtime.execute_validation_plan),
+# or explicitly via geoqa.proj_env.ensure_proj().
 
 _COMPAT_EXPORTS = {
     "GeoQAScriptBase": ("geoqa.script_base", "GeoQAScriptBase"),

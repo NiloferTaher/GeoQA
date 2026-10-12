@@ -295,6 +295,9 @@ def load_all_vector_layers(
 
 def gpd_read(dataset_path: Path, *, layer: str | None = None) -> Any:
     """Thin geopandas.read_file wrapper so multi-layer reads stay in one place."""
+    from geoqa.proj_env import ensure_proj
+
+    ensure_proj()
     gpd = _load_geopandas()
     if layer is None:
         return gpd.read_file(dataset_path)
@@ -311,6 +314,9 @@ def load_vector_dataset(
     archive_limits: ArchiveSafetyLimits | None = None,
 ) -> Any:
     """Load a vector dataset from common local formats."""
+    from geoqa.proj_env import ensure_proj
+
+    ensure_proj()
     gpd = _load_geopandas()
     dataset_path = Path(path)
     suffix = dataset_path.suffix.lower()

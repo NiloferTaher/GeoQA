@@ -1788,6 +1788,9 @@ def execute_validation_plan(
     return_result: bool = False,
     **extra_context: Any,
 ) -> list[ValidationIssue] | ValidationPlanResult:
+    from geoqa.proj_env import ensure_proj
+
+    ensure_proj()
     normalized_dataset_type = dataset_type.strip().lower()
     _enforce_validation_limits(layer, normalized_dataset_type, limits, label="Primary layer")
     if reference_layer is not None:
