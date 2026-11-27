@@ -42,11 +42,16 @@ export function buildDuplicateComparison(
   if (!isDuplicateIssue(issue) || !analyzed?.features.length) return null
   const leftFeature = findFeatureByIssueId(issue, analyzed) ?? findFeatureByGeometry(issue.geometry, analyzed)
   if (!leftFeature) return null
-  const relatedIds = relatedFeatureIds(issue)
+  const leftKey = geometryKey(leftFeature.geometry)
+  // Find the other feature with the same geometry but different source identity.
   const rightFeature =
-    relatedIds.map((id) => findFeatureByValue(analyzed, id)).find(Boolean) ??
-    findDuplicateGeometryFeature(analyzed, leftFeature) ??
-    findFeatureByGeometry(issue.geometry, analyzed, leftFeature)
+    analyzed.features.find((feature) => {
+      if (feature === leftFeature) return false
+      if (!feature.geometry || geometryKey(feature.geometry) !== leftKey) return false
+      return featureLabel(feature, -1) !== featureLabel(leftFeature, -1)
+    }) ??
+    analyzed.features.find((feature) => feature !== leftFeature && feature.geometry && geometryKey(feature.geometry) === leftKey) ??
+    null
   if (!rightFeature) return null
   const leftProps = leftFeature.properties ?? {}
   const rightProps = rightFeature.properties ?? {}
@@ -151,14 +156,16 @@ function findFeatureByValue(collection: FeatureCollection, value: unknown): Feat
   const match = collection.features.find((feature, index) => {
     const props = feature.properties ?? {}
     return [
-      props._geoqa_sample_index,
-      props._geoqa_original_index,
+      props.osm_id,
+      props.OSM_ID,
       props.id,
       props.ID,
       props.fid,
       props.FID,
       props.objectid,
       props.OBJECTID,
+      props._geoqa_sample_index,
+      props._geoqa_original_index,
       index,
       index + 1,
     ].some((candidate) => candidate !== undefined && candidate !== null && String(candidate) === wanted)
@@ -179,15 +186,27 @@ function findFeatureByGeometry(
 
 function findDuplicateGeometryFeature(collection: FeatureCollection, source: Feature): Feature<Geometry> | null {
   if (!source.geometry) return null
-  return findFeatureByGeometry(source.geometry, collection, source)
+  const key = geometryKey(source.geometry)
+  const match = collection.features.find((feature) => feature !== source && feature.geometry && geometryKey(feature.geometry) === key)
+  return match?.geometry ? (match as Feature<Geometry>) : null
 }
 
 function featureLabel(feature: Feature, index: number): string {
   const props = feature.properties ?? {}
   const value =
-    props._geoqa_original_index ?? props._geoqa_sample_index ?? props.id ?? props.ID ?? props.fid ?? props.FID ?? props.objectid ?? props.OBJECTID
+    props.osm_id ??
+    props.OSM_ID ??
+    props.id ??
+    props.ID ??
+    props.fid ??
+    props.FID ??
+    props.objectid ??
+    props.OBJECTID ??
+    props.feature_id ??
+    props._geoqa_original_index ??
+    props._geoqa_sample_index
   if (value !== undefined && value !== null) return String(value)
-  return index >= 0 ? String(index) : "unknown"
+  return index >= 0 ? `feature ${index + 1}` : "unknown"
 }
 
 function summarizeGeometry(geometry: Geometry | null | undefined): string {
