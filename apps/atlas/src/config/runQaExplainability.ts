@@ -43,14 +43,17 @@ export function buildDuplicateComparison(
   const leftFeature = findFeatureByIssueId(issue, analyzed) ?? findFeatureByGeometry(issue.geometry, analyzed)
   if (!leftFeature) return null
   const leftKey = geometryKey(leftFeature.geometry)
-  // Find the other feature with the same geometry but different source identity.
+  const leftLabel = featureLabel(leftFeature, -1)
+  // Find the OTHER feature with the same geometry (different source identity).
+  const candidates = analyzed.features.filter((feature) => {
+    if (feature === leftFeature) return false
+    if (!feature.geometry || geometryKey(feature.geometry) !== leftKey) return false
+    return true
+  })
+  // Prefer a candidate with a different label/id.
   const rightFeature =
-    analyzed.features.find((feature) => {
-      if (feature === leftFeature) return false
-      if (!feature.geometry || geometryKey(feature.geometry) !== leftKey) return false
-      return featureLabel(feature, -1) !== featureLabel(leftFeature, -1)
-    }) ??
-    analyzed.features.find((feature) => feature !== leftFeature && feature.geometry && geometryKey(feature.geometry) === leftKey) ??
+    candidates.find((feature) => featureLabel(feature, -1) !== leftLabel) ??
+    candidates[0] ??
     null
   if (!rightFeature) return null
   const leftProps = leftFeature.properties ?? {}
