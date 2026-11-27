@@ -7,7 +7,7 @@ from typing import Any
 
 from geoqa.problem_registry import VALIDATION_RULE_VERSION, get_problem_definition
 
-_DEFAULT_ID_FIELDS = ("ID", "id", "fid", "FID", "objectid", "OBJECTID")
+_DEFAULT_ID_FIELDS = ("osm_id", "OSM_ID", "ID", "id", "fid", "FID", "objectid", "OBJECTID")
 
 _SEVERITY_SCORES = {
     "critical": 100,

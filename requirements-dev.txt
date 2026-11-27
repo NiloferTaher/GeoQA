@@ -1,5 +1,0 @@
--r requirements.txt
-
-# Notebook and packaging helpers
-jupyter
-build

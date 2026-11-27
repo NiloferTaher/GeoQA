@@ -1,6 +1,0 @@
-case,status,issues,execution_status,path
-ds1,PASS,2,full,G:\My Drive\Python-G-drive\GeoQA\reports\wuc-2027\ds1.json
-ds2,PASS,2,full,G:\My Drive\Python-G-drive\GeoQA\reports\wuc-2027\ds2.json
-ds3,PASS,3,full,G:\My Drive\Python-G-drive\GeoQA\reports\wuc-2027\ds3.json
-ds4,PASS,1,full,G:\My Drive\Python-G-drive\GeoQA\reports\wuc-2027\ds4.json
-ds5-spectral,PASS,3,full,G:\My Drive\Python-G-drive\GeoQA\reports\wuc-2027\ds5-spectral.json
