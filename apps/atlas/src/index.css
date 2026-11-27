@@ -696,6 +696,10 @@ h2 {
   filter: none;
 }
 
+.dark-map-tiles {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+
 .readable-map-labels {
   filter: none;
 }

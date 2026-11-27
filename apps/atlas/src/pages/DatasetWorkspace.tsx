@@ -232,6 +232,7 @@ export default function DatasetWorkspace() {
           command={dataset.command}
           isOpen={drawerOpen}
           selectedIssueId={selectedIssueId}
+          rawFeatures={raw?.features}
           onToggle={() => setDrawerOpen((current) => !current)}
           onShowIssue={showIssueOnMap}
         />
@@ -272,6 +273,8 @@ function findRawFeatureForIssue(collection: FeatureCollection | undefined, issue
   const match = collection.features.find((feature, index) => {
     const props = feature.properties ?? {}
     return [
+      props._geoqa_original_index,
+      props._geoqa_sample_index,
       props.id,
       props.ID,
       props["@id"],

@@ -58,7 +58,7 @@ const workflow = [
 
 const command =
   "geoqa validate your-data.geojson --profile generic_quick --output-format json --report-path reports/your-data"
-const maxPreviewFeatures = 5000
+const maxPreviewFeatures = 150
 const backendZipPreviewThreshold = 80 * 1024 * 1024
 
 type ParsedShapefileLayer = FeatureCollection & {
@@ -83,25 +83,27 @@ function sameThermalStatus(previous: ThermalStatus | null, next: ThermalStatus) 
 
 function inferBounds(collection: FeatureCollection): [number, number, number, number] | undefined {
   const positions: Array<[number, number]> = []
-  const visit = (value: unknown) => {
-    if (!Array.isArray(value)) return
-    if (Number.isFinite(value[0]) && Number.isFinite(value[1])) {
-      positions.push([value[0], value[1]])
-      return
-    }
-    value.forEach(visit)
-  }
+  const stack: unknown[] = []
   collection.features.forEach((feature) => {
     const geometry = feature.geometry
     if (!geometry) return
     if (geometry.type === "GeometryCollection") {
       geometry.geometries.forEach((child) => {
-        if (child.type !== "GeometryCollection") visit(child.coordinates)
+        if (child.type !== "GeometryCollection") stack.push(child.coordinates)
       })
       return
     }
-    visit(geometry.coordinates)
+    stack.push(geometry.coordinates)
   })
+  while (stack.length) {
+    const value = stack.pop()
+    if (!Array.isArray(value)) continue
+    if (value.length >= 2 && Number.isFinite(value[0]) && Number.isFinite(value[1]) && !Array.isArray(value[0])) {
+      positions.push([value[0] as number, value[1] as number])
+      continue
+    }
+    for (const item of value) stack.push(item)
+  }
   if (!positions.length) return undefined
   const lngs = positions.map(([lng]) => lng)
   const lats = positions.map(([, lat]) => lat)
@@ -401,7 +403,7 @@ export default function RunQaPage() {
         <h1>Run QA on your own layer</h1>
         <p>
           Preview a browser-readable layer, choose a GeoQA profile, and see how the backend-connected validation flow
-          will return findings, reports, and any conservative cleaned output.
+          will return findings, reports, and any conservative cleaned output. Shapefiles must be uploaded as a .zip archive.
         </p>
       </section>
 
@@ -432,11 +434,11 @@ export default function RunQaPage() {
           <label className="upload-drop">
             <input
               type="file"
-              accept=".geojson,.json,.zip,application/geo+json,application/json,application/zip"
+              accept=".geojson,.json,.zip,.osm,.pbf,application/geo+json,application/json,application/zip,application/xml,text/xml"
               onChange={(event) => handleUpload(event.target.files?.[0])}
             />
             <FileJson size={28} />
-            <span>{fileName || "Choose a GeoJSON FeatureCollection or zipped Shapefile"}</span>
+            <span>{fileName || "Choose a GeoJSON file or a zipped Shapefile (.zip with .shp/.shx/.dbf)"}</span>
           </label>
           {processing ? <p className="upload-note">Reading layer preview...</p> : null}
           {previewLabel ? <p className="upload-note">{previewLabel}</p> : null}
@@ -463,10 +465,7 @@ export default function RunQaPage() {
                   </option>
                 ))}
               </select>
-              <button className="mini-button run-all-placeholder" type="button" disabled>
-                Run QA on all layers
-              </button>
-              <p className="upload-note muted">All-layer batch validation is planned for a future Atlas workflow.</p>
+              <p className="upload-note muted">Atlas validates one selected layer at a time to keep results clear and reviewable.</p>
             </div>
           ) : null}
           <label className="field-label" htmlFor="profile-select">
@@ -517,7 +516,7 @@ export default function RunQaPage() {
             }
           >
             <PlayCircle size={19} />
-            {running ? "Running GeoQA..." : "Run QA"}
+            {running ? "Running GeoQA..." : "Run GeoQA"}
           </button>
           {runError ? <ErrorState message={runError} /> : null}
           {result ? (
@@ -545,6 +544,7 @@ export default function RunQaPage() {
                   raw={preview}
                   analyzed={geoqaAnalyzedFeatureCollection}
                   issues={issueOverlay}
+                  basemapKey="satellite"
                   bounds={bounds}
                   showRaw={layerVisibility.raw}
                   showAnalyzed={layerVisibility.analyzed}
@@ -616,6 +616,9 @@ export default function RunQaPage() {
               onPrevious={() => focusRelativeIssue(-1)}
               onNext={() => focusRelativeIssue(1)}
             />
+          ) : null}
+          {selectedIssue && isDuplicateIssue(selectedIssue) && buildDuplicateComparison(selectedIssue, geoqaAnalyzedFeatureCollection) ? (
+            <DuplicateComparisonPanel comparison={buildDuplicateComparison(selectedIssue, geoqaAnalyzedFeatureCollection)!} />
           ) : null}
         </article>
       </section>
@@ -713,6 +716,33 @@ export default function RunQaPage() {
                               </small>
                               {example.issueCount > 1 ? <p>{runGroupedIssueCopy(example)}</p> : null}
                               <p>{example.representative.description}</p>
+                              {(() => {
+                                const fid = example.representative.feature_id
+                                const feature = geoqaAnalyzedFeatureCollection?.features.find((f, index) => {
+                                  const props = f.properties ?? {}
+                                  return [props.id, props.ID, props.fid, props.FID, props.osm_id, index, index + 1].some(
+                                    (candidate) => candidate !== undefined && candidate !== null && String(candidate) === String(fid),
+                                  )
+                                })
+                                const props = feature?.properties ?? {}
+                                const entries = Object.entries(props).filter(([key]) => !String(key).startsWith("_"))
+                                if (!entries.length) return null
+                                return (
+                                  <details className="feature-attributes">
+                                    <summary>Feature attributes</summary>
+                                    <table>
+                                      <tbody>
+                                        {entries.map(([key, value]) => (
+                                          <tr key={key}>
+                                            <th>{key}</th>
+                                            <td>{String(value ?? "")}</td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </details>
+                                )
+                              })()}
                               <p className="issue-interpretation">
                                 {getIssueInterpretation(example.representative, {
                                   selectedLayer,
@@ -796,7 +826,7 @@ async function parsePreviewFile(file: File, layerName?: string): Promise<ParsedP
     } catch {
       if (file.size >= backendZipPreviewThreshold) {
         throw new Error(
-          "This large zipped Shapefile needs the local GeoQA Atlas backend preview. Smaller zipped Shapefiles can still be parsed in the browser.",
+          "This zipped Shapefile is too large to preview in the browser. Convert it to GeoJSON or use a smaller subset for the web demo.",
         )
       }
     }

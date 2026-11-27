@@ -34,7 +34,7 @@ const canvasRenderer = L.canvas({ padding: 0.35 })
 
 function fitMaxZoom(bounds: [number, number, number, number], mapMode: "dataset" | "runQa", configuredMaxZoom?: number) {
   if (configuredMaxZoom !== undefined) return configuredMaxZoom
-  if (mapMode !== "runQa") return isPointLikeBounds(bounds) ? 12 : 12
+  if (mapMode !== "runQa") return isPointLikeBounds(bounds) ? 17 : 15
   const span = boundsSpan(bounds)
   if (isPointLikeBounds(bounds) || span < 0.001) return 18
   if (span < 0.005) return 17
@@ -101,14 +101,19 @@ function FocusIssue({ feature, mapMode }: { feature?: Feature<Geometry> | null; 
     const bounds = featureBounds(feature)
     const endpointPair = feature.properties?.endpoint_pair === true
     if (bounds && (isPointLikeBounds(bounds) || boundsSpan(bounds) < 0.002)) {
-      map.flyTo(boundsCenter(bounds), endpointPair ? 18 : mapMode === "runQa" ? 15 : 14, { duration: 0.8 })
+      map.flyTo(boundsCenter(bounds), endpointPair ? 18 : mapMode === "runQa" ? 16 : 15, { duration: 0.8 })
       return
     }
     if (bounds) {
       const fitted = L.latLngBounds([bounds[1], bounds[0]], [bounds[3], bounds[2]])
       if (fitted.isValid()) {
+        const span = boundsSpan(bounds)
+        if (span >= 0.002) {
+          map.flyTo(boundsCenter(bounds), mapMode === "runQa" ? 16 : 15, { duration: 0.8 })
+          return
+        }
         map.flyToBounds(fitted.pad(endpointPair ? 1.2 : 0.2), {
-          maxZoom: endpointPair ? 19 : mapMode === "runQa" ? 15 : 14,
+          maxZoom: endpointPair ? 19 : mapMode === "runQa" ? 16 : 15,
           animate: true,
           duration: 0.8,
         })
@@ -176,14 +181,21 @@ function cleanedStyle(feature?: Feature<Geometry>) {
 function issueStyle(selectedIssueId?: string | null, lowCostPointRendering = false, mapMode: "dataset" | "runQa" = "dataset") {
   return (feature?: Feature<Geometry>) => {
   const severity = String(feature?.properties?.severity ?? "").toLowerCase()
+  const endpointRole = String(feature?.properties?.endpoint_role ?? "")
   const color =
-    severity === "high" || severity === "critical"
-      ? "#fb7185"
-      : mapMode === "runQa" && (severity === "low" || severity === "info")
-        ? "#7dd3fc"
-        : mapMode === "runQa"
-          ? "#ffd21f"
-          : "#facc15"
+    endpointRole === "a"
+      ? "#3b82f6"
+      : endpointRole === "b"
+        ? "#ef4444"
+        : endpointRole === "gap"
+          ? "#facc15"
+          : severity === "high" || severity === "critical"
+            ? "#fb7185"
+            : mapMode === "runQa" && (severity === "low" || severity === "info")
+              ? "#7dd3fc"
+              : mapMode === "runQa"
+                ? "#ffd21f"
+                : "#facc15"
     const selected = feature?.properties?.issue_id === selectedIssueId
     const endpointPair = feature?.properties?.endpoint_pair === true
     const lowCost = lowCostPointRendering && feature?.geometry?.type?.includes("Point")
@@ -254,6 +266,7 @@ function pointLayer(
         fillOpacity: endpointPair ? 0.95 : selected ? 0.94 : severity ? 0.78 : 0.58,
         weight: endpointPair ? 2.5 : selected ? 3 : 1,
         className: endpointPair ? "endpoint-marker-geometry" : selected ? "selected-issue-geometry" : "issue-geometry",
+        interactive: true,
       })
     }
   return L.circleMarker(latlng, {
@@ -263,7 +276,7 @@ function pointLayer(
     fillColor: color,
       fillOpacity: severity ? 0.06 : analyzed ? 0.1 : basemapKey === "light" ? 0.08 : 0.04,
       weight: severity ? (selected ? 4 : 3) : analyzed ? 2 : 1.75,
-      interactive: !lowCost || Boolean(severity),
+      interactive: true,
       className: lowCost ? "performance-point-geometry" : selected ? "selected-issue-geometry" : "issue-geometry",
   })
 }
@@ -299,7 +312,7 @@ function MapPanel({
         <TileLayer
           attribution={atlasBasemap.attribution}
           url={atlasBasemap.tileUrl}
-          className="readable-basemap"
+          className={atlasBasemap.className ? `readable-basemap ${atlasBasemap.className}` : "readable-basemap"}
           maxZoom={20}
           maxNativeZoom={18}
         />
@@ -332,6 +345,14 @@ function MapPanel({
               data={raw as GeoJsonObject}
               style={mapMode === "runQa" ? runQaRawStyleFactory(atlasBasemap.key) : datasetLayerStyle}
               pointToLayer={pointLayer(undefined, lowCostPointRendering, mapMode, atlasBasemap.key)}
+              onEachFeature={(feature, layer) => {
+                const props = (feature as Feature)?.properties || {}
+                const html = Object.entries(props)
+                  .filter(([key]) => !String(key).startsWith("_"))
+                  .map(([key, value]) => `<b>${key}:</b> ${value ?? ""}`)
+                  .join("<br/>")
+                layer.bindPopup(html || "Feature")
+              }}
             />
           </Pane>
         ) : null}
@@ -352,6 +373,14 @@ function MapPanel({
               data={analyzed as GeoJsonObject}
               style={runQaAnalyzedStyleFactory(atlasBasemap.key)}
               pointToLayer={pointLayer(undefined, lowCostPointRendering, "runQa", atlasBasemap.key)}
+              onEachFeature={(feature, layer) => {
+                const props = (feature as Feature)?.properties || {}
+                const html = Object.entries(props)
+                  .filter(([key]) => !String(key).startsWith("_"))
+                  .map(([key, value]) => `<b>${key}:</b> ${value ?? ""}`)
+                  .join("<br/>")
+                layer.bindPopup(html || "Feature")
+              }}
             />
           </Pane>
         ) : null}

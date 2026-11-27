@@ -1,5 +1,6 @@
 import { ChevronDown, ChevronRight, Copy, FileJson, LocateFixed, PanelRightClose, PanelRightOpen } from "lucide-react"
 import { useMemo, useState } from "react"
+import type { Feature, Geometry } from "geojson"
 import type { Issue } from "../types"
 import { displayIssueName, getIssueCopy } from "./issueCopy"
 import { endpointIssueDetails } from "../lib/endpointIssues"
@@ -10,6 +11,7 @@ type IssueDrawerProps = {
   command: string
   isOpen: boolean
   selectedIssueId?: string | null
+  rawFeatures?: Feature<Geometry>[]
   onToggle: () => void
   onShowIssue: (issue: Issue) => void
 }
@@ -20,7 +22,7 @@ type IssueGroup = {
   issues: Issue[]
 }
 
-export default function IssueDrawer({ issues, command, isOpen, selectedIssueId, onToggle, onShowIssue }: IssueDrawerProps) {
+export default function IssueDrawer({ issues, command, isOpen, selectedIssueId, rawFeatures, onToggle, onShowIssue }: IssueDrawerProps) {
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({})
   const groups = useMemo(() => groupIssues(issues), [issues])
 
@@ -90,6 +92,7 @@ export default function IssueDrawer({ issues, command, isOpen, selectedIssueId, 
                       <IssueDetail
                         example={example}
                         selected={example.representative.issue_id === selectedIssueId}
+                        rawFeatures={rawFeatures}
                         key={example.representative.issue_id ?? `${example.representative.problem_name}-${example.representative.feature_id}`}
                         onShowIssue={onShowIssue}
                       />
@@ -117,10 +120,12 @@ function InfoBlock({ title, value }: { title: string; value: string }) {
 function IssueDetail({
   example,
   selected,
+  rawFeatures,
   onShowIssue,
 }: {
   example: IssueExample
   selected: boolean
+  rawFeatures?: Feature<Geometry>[]
   onShowIssue: (issue: Issue) => void
 }) {
   const [showJson, setShowJson] = useState(false)
@@ -128,6 +133,16 @@ function IssueDetail({
   const copy = getIssueCopy(issue.problem_name)
   const operational = isOperationalIssue(issue)
   const featureLabel = issue.feature_id ?? "Layer"
+  const rawFeature = useMemo(() => {
+    if (!rawFeatures || issue.feature_id === undefined || issue.feature_id === null) return null
+    const wanted = String(issue.feature_id)
+    return rawFeatures.find((feature) => {
+      const props = feature.properties ?? {}
+      return [props.id, props.ID, props["@id"], props.osm_id, props.fid, props.FID, props.objectid, props.OBJECTID].some(
+        (candidate) => candidate !== undefined && candidate !== null && String(candidate) === wanted,
+      )
+    }) ?? null
+  }, [rawFeatures, issue.feature_id])
   const groupedCopy = groupedIssueCopy(example, featureLabel)
   const endpointDetails = endpointIssueDetails(issue)
   return (
@@ -150,8 +165,44 @@ function IssueDetail({
       ) : null}
       <p>{copy.description}</p>
       <p className="why-copy">{copy.why}</p>
+      {copy.ruleChecks || copy.doesNotEstablish || copy.investigate ? (
+        <div className="finding-explanation">
+          <h5>Notice → Investigate → Judge</h5>
+          {copy.ruleChecks ? (
+            <p><strong>Rule checks:</strong> {copy.ruleChecks}</p>
+          ) : null}
+          {copy.doesNotEstablish ? (
+            <p><strong>Does not establish:</strong> {copy.doesNotEstablish}</p>
+          ) : null}
+          {copy.investigate?.length ? (
+            <ul>
+              {copy.investigate.map((q) => (
+                <li key={q}>{q}</li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
+      ) : null}
       <p className="recommendation">{copy.recommendation}</p>
+      {copy.hint ? <p className="hint-copy">{copy.hint}</p> : null}
       {copy.note ? <p className="qa-note">{copy.note}</p> : null}
+      {rawFeature?.properties ? (
+        <details className="feature-attributes">
+          <summary>Feature attributes</summary>
+          <table>
+            <tbody>
+              {Object.entries(rawFeature.properties)
+                .filter(([key]) => !String(key).startsWith("_"))
+                .map(([key, value]) => (
+                  <tr key={key}>
+                    <th>{key}</th>
+                    <td>{String(value ?? "")}</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </details>
+      ) : null}
       <div className="issue-detail-actions">
         <button className="mini-button" type="button" disabled={operational} onClick={() => onShowIssue(issue)}>
           <LocateFixed size={15} />
