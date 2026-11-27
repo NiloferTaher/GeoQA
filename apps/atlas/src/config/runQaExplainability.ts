@@ -45,17 +45,21 @@ export function buildDuplicateComparison(
   const leftKey = geometryKey(leftFeature.geometry)
   const leftLabel = featureLabel(leftFeature, -1)
   // Find the OTHER feature with the same geometry (different source identity).
+  const leftOsmId = leftFeature.properties?.osm_id
+  // Find the OTHER feature with the same geometry (must be a different object AND different osm_id).
   const candidates = analyzed.features.filter((feature) => {
     if (feature === leftFeature) return false
     if (!feature.geometry || geometryKey(feature.geometry) !== leftKey) return false
-    return true
+    const rightOsmId = feature.properties?.osm_id
+    // Prefer features with a different osm_id.
+    return rightOsmId === undefined || rightOsmId !== leftOsmId
   })
-  // Prefer a candidate with a different label/id.
+  // If no osm_id-different candidate, take any different feature with same geometry.
   const rightFeature =
-    candidates.find((feature) => featureLabel(feature, -1) !== leftLabel) ??
     candidates[0] ??
+    analyzed.features.find((feature) => feature !== leftFeature && feature.geometry && geometryKey(feature.geometry) === leftKey) ??
     null
-  if (!rightFeature) return null
+  if (!rightFeature || rightFeature === leftFeature) return null
   const leftProps = leftFeature.properties ?? {}
   const rightProps = rightFeature.properties ?? {}
   const fields = Array.from(new Set([...Object.keys(leftProps), ...Object.keys(rightProps)]))
