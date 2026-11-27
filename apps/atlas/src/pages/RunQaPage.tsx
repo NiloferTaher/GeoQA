@@ -617,9 +617,7 @@ export default function RunQaPage() {
               onNext={() => focusRelativeIssue(1)}
             />
           ) : null}
-          {selectedIssue && isDuplicateIssue(selectedIssue) && buildDuplicateComparison(selectedIssue, geoqaAnalyzedFeatureCollection) ? (
-            <DuplicateComparisonPanel comparison={buildDuplicateComparison(selectedIssue, geoqaAnalyzedFeatureCollection)!} />
-          ) : null}
+          {/* Duplicate comparison panel removed per user request */}
         </article>
       </section>
 
@@ -751,7 +749,7 @@ export default function RunQaPage() {
                                   geometryType: activeGeometryType,
                                 })}
                               </p>
-                              {isDuplicateIssue(example.representative) ? <span className="compare-action">Compare rows</span> : null}
+                              {/* Duplicate comparison removed per user request */}
                               {example.representative.solution_hint ? <p className="recommendation">{example.representative.solution_hint}</p> : null}
                               <span className="show-map-action">Show on map</span>
                             </button>
@@ -971,7 +969,7 @@ function SelectedIssuePanel({
       </div>
       <p>{issue.description}</p>
       <p className="issue-interpretation">{interpretation}</p>
-      {duplicateComparison ? <DuplicateComparisonPanel comparison={duplicateComparison} /> : null}
+      {/* Duplicate comparison removed per user request */}
       <p className="map-focus-status">{focusNote || statusCopy}</p>
       <div className="selected-issue-actions">
         <button className="mini-button" type="button" onClick={onPrevious}>

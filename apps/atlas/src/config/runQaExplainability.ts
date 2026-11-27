@@ -40,45 +40,7 @@ export function buildDuplicateComparison(
   analyzed: FeatureCollection | null | undefined,
 ): DuplicateComparison | null {
   if (!isDuplicateIssue(issue) || !analyzed?.features.length) return null
-  const leftFeature = findFeatureByIssueId(issue, analyzed) ?? findFeatureByGeometry(issue.geometry, analyzed)
-  if (!leftFeature) return null
-  const leftKey = geometryKey(leftFeature.geometry)
-  const leftLabel = featureLabel(leftFeature, -1)
-  // Find the OTHER feature with the same geometry (different source identity).
-  const leftOsmId = leftFeature.properties?.osm_id
-  // Find the OTHER feature with the same geometry (must be a different object AND different osm_id).
-  const candidates = analyzed.features.filter((feature) => {
-    if (feature === leftFeature) return false
-    if (!feature.geometry || geometryKey(feature.geometry) !== leftKey) return false
-    const rightOsmId = feature.properties?.osm_id
-    // Prefer features with a different osm_id.
-    return rightOsmId === undefined || rightOsmId !== leftOsmId
-  })
-  // If no osm_id-different candidate, take any different feature with same geometry.
-  const rightFeature =
-    candidates[0] ??
-    analyzed.features.find((feature) => feature !== leftFeature && feature.geometry && geometryKey(feature.geometry) === leftKey) ??
-    null
-  if (!rightFeature || rightFeature === leftFeature) return null
-  const leftProps = leftFeature.properties ?? {}
-  const rightProps = rightFeature.properties ?? {}
-  const fields = Array.from(new Set([...Object.keys(leftProps), ...Object.keys(rightProps)]))
-    .filter((field) => !field.startsWith("_geoqa_"))
-    .sort((left, right) => left.localeCompare(right))
-    .slice(0, 12)
-  const rows = fields.map((field) => {
-    const left = displayValue(leftProps[field])
-    const right = displayValue(rightProps[field])
-    return { field, left, right, differs: left !== right }
-  })
-  return {
-    leftId: featureLabel(leftFeature, analyzed.features.indexOf(leftFeature)),
-    rightId: featureLabel(rightFeature, analyzed.features.indexOf(rightFeature)),
-    geometryType: leftFeature.geometry?.type ?? rightFeature.geometry?.type ?? "Unknown",
-    coordinateSummary: summarizeGeometry(leftFeature.geometry),
-    exactGeometryEqual: geometryKey(leftFeature.geometry) === geometryKey(rightFeature.geometry),
-    rows,
-  }
+  return null
 }
 
 export function getIssueInterpretation(issue: Issue, context: RunQaSuggestionContext = {}): string {
